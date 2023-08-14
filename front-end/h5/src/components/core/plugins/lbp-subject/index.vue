@@ -18,6 +18,10 @@
 <script>
 import PropTypes from '@luban-h5/plugin-common-props'
 import LbpFormRadioGroup from 'core/plugins/lbp-subject-radio-group'
+import { mapState, mapActions } from 'vuex'
+import { handleError } from '@/utils/http.js'
+import Element from 'core/models/element'
+import Page from 'core/models/page'
 // import LbpFormCheckboxGroup from 'core/plugins/lbp-form-checkbox-group'
 function getDefaultItems() {
   // defaultItems.slice(0)[0] === defaultItems.slice(0)[0] -> true
@@ -60,7 +64,13 @@ export default {
   data() {
     return {}
   },
-  computed: {},
+  computed: {
+    ...mapState('editor', {
+      questionbanks: state => state.questionbanks,
+      work:state => state.work,
+      activeIndex:state => state.activeIndex,
+    }),
+  },
   props: {
     aliasName: PropTypes.string({
       defaultValue: `标题演示`,
@@ -117,19 +127,42 @@ export default {
       }
     }
   },
-  methods: {},
+  methods: {
+    ...mapActions('editor', ['updateWork']),
+    setSubject () {
+            console.log('questionbanks');
+            const list = this.questionbanks
+            const work = this.work
+            const index = this.activeIndex
+            work.pages = work.pages.map(page => {
+              page.elements = page.elements.map(element => {
+                if(element.name === "lbp-subject"){
+                  element.pluginProps.aliasName = list[index].topic
+                  element.pluginProps.items = list[index].option.map((el)=>{
+                    return {value:el}
+                  })
+                  element.pluginProps.type = list[index].type
+                }
+                return new Element(element)
+              })
+              return new Page(page)
+            })
+            this.updateWork(work)
+    },
+  },
   mounted() {
-    if (this.type === 'judge') {
-      console.log(this.items)
-      this.items = [
-        {
-          value: '正确'
-        },
-        {
-          value: '错误'
-        }
-      ]
-    }
+    this.setSubject()
+    // if (this.type === 'judge') {
+    //   console.log(this.items)
+    //   this.items = [
+    //     {
+    //       value: '正确'
+    //     },
+    //     {
+    //       value: '错误'
+    //     }
+    //   ]
+    // }
   }
 }
 </script>

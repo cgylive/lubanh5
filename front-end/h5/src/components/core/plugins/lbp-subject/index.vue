@@ -60,7 +60,7 @@ export default {
   components: { LbpFormRadioGroup },
   data() {
     return {
-      answer: [0]
+      answer: [0, 1]
     }
   },
   computed: {},
@@ -98,7 +98,7 @@ export default {
           options: [
             { label: '单选', value: 'radio' },
             { label: '多选', value: 'checkbox' },
-            { label: '判断', value: 'judge' }
+            { label: '判断', value: 'judgement' }
           ],
           name: 'mode'
         }
@@ -124,7 +124,7 @@ export default {
   },
   watch: {
     type(type) {
-      if (type === 'judge') {
+      if (type === 'judgement') {
         console.log(this.items)
         // this.items = [
         //   {
@@ -140,7 +140,7 @@ export default {
   methods: {},
   mounted() {
     console.log(this, 'mounted')
-    if (this.type === 'judge') {
+    if (this.type === 'judgement') {
       console.log(this.items)
       this.items = [
         {

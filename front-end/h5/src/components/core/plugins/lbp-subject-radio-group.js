@@ -215,7 +215,7 @@ export default {
             borderWidth={this.borderWidth}
             borderRadius={this.borderRadius}
             color={this.color}
-            buttonClick={() => this.buttonClick}
+            onClick={this.buttonClick}
             onChange={this.onChange}
           >
             {item.value}

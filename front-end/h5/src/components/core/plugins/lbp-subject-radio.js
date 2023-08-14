@@ -110,8 +110,19 @@ export default {
     buttonClick(value, isAnswer) {
       console.log(value, 'buttonClick')
       console.log(isAnswer, 'buttonClick isAnswer')
-      this.isButtonClick = true
-      this.buttonClickArr.push(value)
+      this.isButtonClick = !this.isButtonClick
+      const index = this.buttonClickArr.findIndex(item => item === value)
+      if (index > -1) {
+        this.buttonClickArr.splice(index, 1)
+      } else {
+        if (this.type !== 'checkbox') {
+          if (this.buttonClickArr.length > 1) {
+            this.buttonClickArr.push(value)
+          }
+        } else {
+          this.buttonClickArr.push(value)
+        }
+      }
       this.$emit('buttonClick', value, isAnswer)
       console.log(this.buttonClickArr, 'buttonClick buttonClickArr')
     }

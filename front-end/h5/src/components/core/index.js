@@ -91,7 +91,7 @@ const CoreEditor = {
     ])
   },
   methods: {
-    ...mapActions('editor', ['fetchWork','fetchQuestionbanks']),
+    ...mapActions('editor', ['fetchWork','fetchQuestionbanks','fetchImageText']),
     ...mapMutations('dialog', ['updateDialog']),
     handlePreview () { this.previewDialogVisible = true }
   },
@@ -132,6 +132,7 @@ const CoreEditor = {
     console.log(this.workId,'workId');
     if (this.workId) {
       this.fetchQuestionbanks()
+      this.fetchImageText()
       this.fetchWork(this.workId)
     } else {
       this.$message.error('no work id!')

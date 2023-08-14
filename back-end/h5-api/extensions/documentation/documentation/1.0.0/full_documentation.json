@@ -14,7 +14,7 @@
       "name": "Apache 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "x-generation-date": "08/14/2023 10:20:38 AM"
+    "x-generation-date": "08/14/2023 8:01:27 PM"
   },
   "x-strapi-config": {
     "path": "/documentation",
@@ -5525,7 +5525,8 @@
             "enum": [
               "judgement",
               "radio",
-              "multi"
+              "checkbox",
+              "imagetext"
             ]
           },
           "image": {
@@ -5623,7 +5624,8 @@
             "enum": [
               "judgement",
               "radio",
-              "multi"
+              "checkbox",
+              "imagetext"
             ]
           },
           "tips": {

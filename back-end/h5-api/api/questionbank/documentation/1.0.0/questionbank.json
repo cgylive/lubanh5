@@ -536,7 +536,8 @@
             "enum": [
               "judgement",
               "radio",
-              "multi"
+              "checkbox",
+              "imagetext"
             ]
           },
           "image": {
@@ -634,7 +635,8 @@
             "enum": [
               "judgement",
               "radio",
-              "multi"
+              "checkbox",
+              "imagetext"
             ]
           },
           "tips": {

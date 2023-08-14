@@ -12,9 +12,22 @@ export const actions = {
           customRequest: strapi.getEntries.bind(strapi)
         }).get('questionbanks')
       },
+      fetchImageText ({ commit, dispatch, state }) {
+        return new AxiosWrapper({
+          dispatch,
+          commit,
+          name: 'editor/setImageText',
+          loading_name: 'fetchQuestionbanks_loading',
+          successMsg: '获取数据源成功',
+          customRequest: strapi.getEntries.bind(strapi)
+        }).get('questionbanks',{type:'imagetext'})
+      },
 }
 export const mutations = {
     setQuestionbanks (state, questionbanks) {
       state.questionbanks = questionbanks.value.data
+    },
+    setImageText(state, imagetext){
+      state.imagetext = imagetext.value.data
     }
 }

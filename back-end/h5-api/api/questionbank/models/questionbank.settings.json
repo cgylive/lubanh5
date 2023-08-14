@@ -25,7 +25,8 @@
       "enum": [
         "judgement",
         "radio",
-        "multi"
+        "checkbox",
+        "imagetext"
       ]
     },
     "image": {

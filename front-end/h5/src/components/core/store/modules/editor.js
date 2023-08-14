@@ -21,7 +21,8 @@ const state = {
   scaleRate: 1,
   scripts: [],
   questionbanks:[],
-  activeIndex:3
+  activeIndex:0,
+  imagetext:[]
 }
 
 // getters

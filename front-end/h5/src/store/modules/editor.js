@@ -1,7 +1,6 @@
 // initial state
 import Work from 'core/models/work'
 import { actions as workActions, mutations as workMutations } from './work'
-
 const state = {
   works: [],
   work: new Work(),

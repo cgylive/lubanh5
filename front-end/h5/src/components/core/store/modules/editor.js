@@ -6,6 +6,7 @@ import { actions as elementActions, mutations as elementMutations } from './elem
 import { actions as workActions, mutations as workMutations } from './work'
 import { actions as dataSourceActions, mutations as dataSourceMutations } from './data-source'
 import { actions as scriptActions, mutations as scriptMutations } from './script'
+import { actions as questionbanksActions, mutations as questionbanksMutations } from './questionbanks'
 
 const state = {
   works: [],
@@ -18,7 +19,9 @@ const state = {
   },
   workTemplates: [],
   scaleRate: 1,
-  scripts: []
+  scripts: [],
+  questionbanks:[],
+  activeIndex:3
 }
 
 // getters
@@ -31,7 +34,8 @@ const actions = {
   ...workActions,
   ...canvasActions,
   ...scriptActions,
-  ...dataSourceActions
+  ...dataSourceActions,
+  ...questionbanksActions
 }
 
 // mutations
@@ -41,7 +45,11 @@ const mutations = {
   ...workMutations,
   ...canvasMutations,
   ...scriptMutations,
-  ...dataSourceMutations
+  ...dataSourceMutations,
+  ...questionbanksMutations,
+  setIndex(state, activeIndex) {
+    state.activeIndex = activeIndex
+  }
 }
 
 export default {

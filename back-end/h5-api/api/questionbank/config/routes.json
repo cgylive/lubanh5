@@ -1,0 +1,52 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/questionbanks",
+      "handler": "questionbank.find",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/questionbanks/count",
+      "handler": "questionbank.count",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/questionbanks/:id",
+      "handler": "questionbank.findOne",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/questionbanks",
+      "handler": "questionbank.create",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/questionbanks/:id",
+      "handler": "questionbank.update",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/questionbanks/:id",
+      "handler": "questionbank.delete",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}

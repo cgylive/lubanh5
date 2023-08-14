@@ -167,18 +167,18 @@ export default {
           big = false;
        }
       const special = /[^a-zA-Z0-9]/.test(string)
-      this.checkResult = [big,letter,num,special]
-      if(num && letter && big && special && this.password.length>=12){
+      this.checkResult = [big, letter, num, special]
+      if(num && letter && big && special && this.password.length >= 12){
         this.checkResult.push(true)
       }
       this.setup++
     },
-    reCheck(){
+    reCheck() {
       this.password=''
       this.checkResult = []
       this.setup = 1
     },
-    submit(){
+    submit() {
 
     }
   }
@@ -298,7 +298,7 @@ export default {
   padding: 0 20px;
   button{
     width: 80px;
-    height: 35px; 
+    height: 35px;
     background-color: rgb(216,191,37);
     border-radius:12px;
     font-size:14px;

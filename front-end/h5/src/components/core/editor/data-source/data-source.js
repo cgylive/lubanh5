@@ -227,7 +227,6 @@ export default {
           visible={this.dialog.visible}
           onOk={() => {
             this.$refs.form.checkForm().then(dataSourceForm => {
-              debugger
               const actionType = dataSourceForm.id ? 'edit' : 'add'
               this.manageDataSource(actionType, dataSourceForm)
               this.activeDataSource = {}

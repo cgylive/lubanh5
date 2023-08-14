@@ -70,9 +70,9 @@ export default {
   computed: {
     ...mapState('editor', {
       questionbanks: state => state.questionbanks,
-      work:state => state.work,
-      activeIndex:state => state.activeIndex,
-    }),
+      work: state => state.work,
+      activeIndex: state => state.activeIndex
+    })
   },
   props: {
     aliasName: PropTypes.string({
@@ -145,65 +145,67 @@ export default {
           }
         ]
       }
-  },
-  methods: {
-    ...mapActions('editor', ['updateWork']),
-    setSubject () {
-            console.log('questionbanks');
-            const list = this.questionbanks
-            const work = this.work
-            const index = this.activeIndex
-            work.pages = work.pages.map(page => {
-              page.elements = page.elements.map(element => {
-                if(element.name === "lbp-subject"){
-                  element.pluginProps.aliasName = list[index].topic
-                  element.pluginProps.items = list[index].option.map((el)=>{
-                    return {value:el}
-                  })
-                  element.pluginProps.type = list[index].type
-                }
-                return new Element(element)
-              })
-              return new Page(page)
-            })
-            this.updateWork(work)
-  },
-  methods: {
-    ...mapActions('editor', ['updateWork']),
-    setSubject () {
-            console.log('questionbanks');
-            const list = this.questionbanks
-            const work = this.work
-            const index = this.activeIndex
-            work.pages = work.pages.map(page => {
-              page.elements = page.elements.map(element => {
-                if(element.name === "lbp-subject"){
-                  element.pluginProps.aliasName = list[index].topic
-                  element.pluginProps.items = list[index].option.map((el)=>{
-                    return {value:el}
-                  })
-                  element.pluginProps.type = list[index].type
-                }
-                return new Element(element)
-              })
-              return new Page(page)
-            })
-            this.updateWork(work)
     },
-  },
-  mounted() {
-    this.setSubject()
-    // if (this.type === 'judge') {
-    //   console.log(this.items)
-    //   this.items = [
-    //     {
-    //       value: '正确'
-    //     },
-    //     {
-    //       value: '错误'
-    //     }
-    //   ]
-    // }
+    methods: {
+      ...mapActions('editor', ['updateWork']),
+      setSubject() {
+        console.log('questionbanks')
+        const list = this.questionbanks
+        const work = this.work
+        const index = this.activeIndex
+        work.pages = work.pages.map(page => {
+          page.elements = page.elements.map(element => {
+            if (element.name === 'lbp-subject') {
+              element.pluginProps.aliasName = list[index].topic
+              element.pluginProps.items = list[index].option.map(el => {
+                return { value: el }
+              })
+              element.pluginProps.type = list[index].type
+            }
+            return new Element(element)
+          })
+          return new Page(page)
+        })
+        this.updateWork(work)
+      },
+      methods: {
+        ...mapActions('editor', ['updateWork']),
+        setSubject() {
+          console.log('questionbanks')
+          const list = this.questionbanks
+          const work = this.work
+          const index = this.activeIndex
+          work.pages = work.pages.map(page => {
+            page.elements = page.elements.map(element => {
+              if (element.name === 'lbp-subject') {
+                element.pluginProps.aliasName = list[index].topic
+                element.pluginProps.items = list[index].option.map(el => {
+                  return { value: el }
+                })
+                element.pluginProps.type = list[index].type
+              }
+              return new Element(element)
+            })
+            return new Page(page)
+          })
+          this.updateWork(work)
+        }
+      },
+      mounted() {
+        this.setSubject()
+        // if (this.type === 'judge') {
+        //   console.log(this.items)
+        //   this.items = [
+        //     {
+        //       value: '正确'
+        //     },
+        //     {
+        //       value: '错误'
+        //     }
+        //   ]
+        // }
+      }
+    }
   }
 }
 </script>

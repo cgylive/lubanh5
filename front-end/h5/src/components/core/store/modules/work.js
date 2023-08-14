@@ -6,18 +6,22 @@ import { AxiosWrapper, handleError } from '@/utils/http.js'
 // import router from '@/router.js'
 import { takeScreenshot, downloadPoster } from '@/utils/canvas-helper.js'
 
-function setLoading (commit, loadingName, isLoading) {
-  commit('loading/update', { type: loadingName, payload: isLoading }, { root: true })
+function setLoading(commit, loadingName, isLoading) {
+  commit(
+    'loading/update',
+    { type: loadingName, payload: isLoading },
+    { root: true }
+  )
 }
 
 export const actions = {
-  previewWork ({ commit }, payload = {}) {
+  previewWork({ commit }, payload = {}) {
     commit('previewWork', payload)
   },
-  deployWork ({ commit }, payload = {}) {
+  deployWork({ commit }, payload = {}) {
     commit('previewWork', payload)
   },
-  updateWork ({ commit, state }, payload = {}) {
+  updateWork({ commit, state }, payload = {}) {
     // update work with strapi
     const work = {
       ...state.work,
@@ -31,15 +35,24 @@ export const actions = {
    * 预览作品之前需要先保存，但希望 用户点击保存按钮 和 点击预览按钮 loading_name 能够不同（虽然都调用了 saveWork）
    * 因为 loading 效果要放在不同的按钮上
    */
-  saveWork ({ commit, dispatch, state }, { isSaveCover = false, loadingName = 'saveWork_loading', successMsg = '保存作品成功' } = {}) {
-    const fn = (callback) => {
+  saveWork(
+    { commit, dispatch, state },
+    {
+      isSaveCover = false,
+      loadingName = 'saveWork_loading',
+      successMsg = '保存作品成功'
+    } = {}
+  ) {
+    const fn = callback => {
       new AxiosWrapper({
         dispatch,
         commit,
         loading_name: loadingName,
         successMsg,
         customRequest: strapi.updateEntry.bind(strapi)
-      }).put('works', state.work.id, state.work).then(callback)
+      })
+        .put('works', state.work.id, state.work)
+        .then(callback)
     }
     return new Promise((resolve, reject) => {
       if (isSaveCover) {
@@ -55,13 +68,17 @@ export const actions = {
       }
     })
   },
-  fetchWork ({ commit, dispatch, state }, workId) {
-    return strapi.getEntry('works', workId).then(entry => {
-      commit('setWork', entry)
-      commit('setEditingPage')
-    }).catch(handleError)
+  fetchWork({ commit, dispatch, state }, workId) {
+    return strapi
+      .getEntry('works', workId)
+      .then(entry => {
+        console.log(entry, 'fetchWork entry')
+        commit('setWork', entry)
+        commit('setEditingPage')
+      })
+      .catch(handleError)
   },
-  setWorkAsTemplate ({ commit, state, dispatch }, workId) {
+  setWorkAsTemplate({ commit, state, dispatch }, workId) {
     new AxiosWrapper({
       dispatch,
       commit,
@@ -70,7 +87,7 @@ export const actions = {
       successMsg: '设置为模板成功'
     }).post(`/works/set-as-template/${workId || state.work.id}`)
   },
-  uploadCover ({ commit, state, dispatch }, { file } = {}) {
+  uploadCover({ commit, state, dispatch }, { file } = {}) {
     const formData = new FormData()
     formData.append('files', file, `${+new Date()}.png`)
     formData.append('workId', state.work.id)
@@ -80,10 +97,10 @@ export const actions = {
       name: 'editor/setWorkCover',
       loading_name: 'uploadWorkCover_loading',
       successMsg: '上传封面图成功!'
-    // }).post(`/works/uploadCover/${state.work.id}`, formData)
+      // }).post(`/works/uploadCover/${state.work.id}`, formData)
     }).post(`/upload/`, formData)
   },
-  downloadPoster ({ commit, state, dispatch }) {
+  downloadPoster({ commit, state, dispatch }) {
     downloadPoster()
   }
 }
@@ -113,11 +130,11 @@ export const mutations = {
       }
     ]
    */
-  setWorkCover (state, { type, value }) {
+  setWorkCover(state, { type, value }) {
     const [cover] = value
     state.work.cover_image_url = cover.url
   },
-  setWork (state, work) {
+  setWork(state, work) {
     window.__work = work
     work.pages = work.pages.map(page => {
       page.elements = page.elements.map(element => new Element(element))
@@ -125,9 +142,9 @@ export const mutations = {
     })
     state.work = new Work(work)
   },
-  previewWork (state, { type, value }) {},
-  deployWork (state, { type, value }) {},
-  formDetailOfWork (state, { type, value }) {
+  previewWork(state, { type, value }) {},
+  deployWork(state, { type, value }) {},
+  formDetailOfWork(state, { type, value }) {
     state.formDetailOfWork = value
   }
 }

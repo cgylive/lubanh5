@@ -11,14 +11,16 @@
       :borderWidth="borderWidth"
       :borderRadius="borderRadius"
       :items="items"
+      :answer="answer"
       :type="type"
+      @submit="submit"
     ></LbpFormRadioGroup>
   </div>
 </template>
 <script>
 import PropTypes from '@luban-h5/plugin-common-props'
 import LbpFormRadioGroup from 'core/plugins/lbp-subject-radio-group'
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapMutations } from 'vuex'
 import { handleError } from '@/utils/http.js'
 import Element from 'core/models/element'
 import Page from 'core/models/page'
@@ -62,14 +64,22 @@ export default {
   name: 'lbp-subject',
   components: { LbpFormRadioGroup },
   data() {
-    return {}
+    return {
+      // answer: []
+    }
   },
   computed: {
     ...mapState('editor', {
       questionbanks: state => state.questionbanks,
-      work:state => state.work,
-      activeIndex:state => state.activeIndex,
-    }),
+      work: state => state.work,
+      activeIndex: state => state.activeIndex
+    })
+  },
+  extra: {
+    defaultStyle: {
+      width: 320,
+      height: 456
+    }
   },
   props: {
     aliasName: PropTypes.string({
@@ -105,16 +115,20 @@ export default {
           options: [
             { label: '单选', value: 'radio' },
             { label: '多选', value: 'checkbox' },
-            { label: '判断', value: 'judge' }
+            { label: '判断', value: 'judgement' }
           ],
           name: 'mode'
         }
       }
+    },
+    answer: {
+      type: Array,
+      default: () => []
     }
   },
   watch: {
     type(type) {
-      if (type === 'judge') {
+      if (type === 'judgement') {
         console.log(this.items)
         this.items = [
           {
@@ -128,27 +142,42 @@ export default {
     }
   },
   methods: {
-    ...mapActions('editor', ['updateWork']),
-    setSubject () {
-            console.log('questionbanks');
-            const list = this.questionbanks
-            const work = this.work
-            const index = this.activeIndex
-            work.pages = work.pages.map(page => {
-              page.elements = page.elements.map(element => {
-                if(element.name === "lbp-subject"){
-                  element.pluginProps.aliasName = list[index].topic
-                  element.pluginProps.items = list[index].option.map((el)=>{
-                    return {value:el}
-                  })
-                  element.pluginProps.type = list[index].type
-                }
-                return new Element(element)
-              })
-              return new Page(page)
+    ...mapActions('editor', ['updateWork', 'setIndex']),
+    // ...mapMutations('editor', ),
+    setSubject() {
+      console.log('questionbanks')
+      const list = this.questionbanks
+      const work = this.work
+      let answer = []
+      console.log(work.pages, 'work.pages')
+      work.pages = work.pages.map((page, idx) => {
+        console.log(idx)
+        page.elements = page.elements.map(element => {
+          if (element.name === 'lbp-subject') {
+            console.log(idx)
+            if (list[idx].type === 'checkbox' || list[idx].type === 'multi') {
+              answer = list[idx].answer.split(',')
+            } else {
+              answer.push(Number(list[idx].answer))
+            }
+            element.pluginProps.aliasName = list[idx].topic
+            element.pluginProps.items = list[idx].option.map(el => {
+              return { value: el }
             })
-            this.updateWork(work)
+            element.pluginProps.type = list[idx].type
+            element.pluginProps.answer = answer
+          }
+          return new Element(element)
+        })
+        return new Page(page)
+      })
+      // this.updateWork(work)
     },
+    submit() {
+      console.log(999)
+      // let index = 0
+      // this.setIndex(index++)
+    }
   },
   mounted() {
     this.setSubject()
@@ -163,6 +192,13 @@ export default {
     //     }
     //   ]
     // }
+  },
+  updated() {
+    const query = new URLSearchParams(window.location.search)
+    const canRender = query.get('view_mode') === 'preview'
+    console.log(canRender, 'canRender')
+    // this.setSubject()
+    console.log(this.work.pages, 'work.pages updated')
   }
 }
 </script>

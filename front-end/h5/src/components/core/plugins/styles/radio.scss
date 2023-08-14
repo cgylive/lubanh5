@@ -41,8 +41,19 @@ $checkbox-check-height: math.div($checkbox-size, 4) * 5;
 
 .lbp-sub-wrapper {
   position: relative;
-  height: 50px;
+  display: flex;
+  justify-content: center;
+  min-height: 50px;
+  margin-bottom: 20px;
   clear: both;
+  img {
+    width: 30px;
+    height: 30px;
+    margin-top: 10px;
+    z-index: 1;
+    right: 0;
+    position: absolute;
+  }
 
   .lbp-sub-input {
     display: none;

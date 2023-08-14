@@ -12,14 +12,26 @@ import './styles/radio.scss'
 // https://github.com/luban-h5-components/plugin-common-props
 import { genUUID } from '@/utils/element.js'
 import LbpButton from 'core/plugins/lbp-button'
-import PropTypes from '@luban-h5/plugin-common-props'
+// import PropTypes from '@luban-h5/plugin-common-props'
+import checkImg from './lbp-subject/img/check.png'
+import closeImg from './lbp-subject/img/close.png'
 export default {
   name: 'lbp-subject-radio',
   components: { LbpButton },
+  data() {
+    return {
+      isButtonClick: false,
+      buttonClickArr: []
+    }
+  },
   props: {
     value: {
       type: [String, Number],
       default: '选项值'
+    },
+    answer: {
+      type: Array,
+      default: () => []
     },
     aliasName: {
       type: String,
@@ -30,6 +42,14 @@ export default {
       default: 'radio'
     },
     checked: {
+      type: Boolean,
+      default: false
+    },
+    isAnswer: {
+      type: Boolean,
+      default: false
+    },
+    isClick: {
       type: Boolean,
       default: false
     },
@@ -86,19 +106,50 @@ export default {
     handleChange(e) {
       if (this.disabled) return
       this.$emit('change', e.target.value)
+    },
+    buttonClick(value, isAnswer) {
+      // console.log(value, 'buttonClick')
+      // console.log(isAnswer, 'buttonClick isAnswer')
+      this.isButtonClick = !this.isButtonClick
+      // const index = this.buttonClickArr.findIndex(item => item === value)
+      // if (index > -1) {
+      //   this.buttonClickArr.splice(index, 1)
+      // } else {
+      //   if (this.type !== 'checkbox') {
+      //     if (this.buttonClickArr.length > 1) {
+      //       this.buttonClickArr.push(value)
+      //     }
+      //   } else {
+      //     this.buttonClickArr.push(value)
+      //   }
+      // }
+      this.$emit('buttonClick', value, isAnswer)
+      // console.log(this.buttonClickArr, 'buttonClick buttonClickArr')
     }
   },
   render() {
-    const { aliasName, type, disabled, checked, value } = this
+    const {
+      aliasName,
+      type,
+      disabled,
+      checked,
+      value,
+      isAnswer,
+      isButtonClick
+    } = this
 
     const uuid = +new Date() + genUUID()
     return (
       <div class={['lbp-' + this.type + '-wrapper', 'lbp-sub-wrapper']}>
         {/* <span class="tag">{value}11</span> */}
+        {isAnswer && isButtonClick && <img class="left-img" src={checkImg} />}
+        {!isAnswer && isButtonClick && <img class="left-img" src={closeImg} />}
+        {!!checked}
         <LbpButton
           style={{
-            height: `40px`,
+            minHeight: `40px`,
             minWidth: `100px`,
+            padding: '10px',
             paddingLeft: '20px',
             paddingRight: '20px'
           }}
@@ -111,7 +162,7 @@ export default {
           borderWidth={this.borderWidth}
           borderRadius={this.borderRadius}
           color={this.color}
-         
+          onClick={() => this.buttonClick(value, isAnswer)}
         ></LbpButton>
         <input
           class={['lbp-' + this.type, 'lbp-sub-input']}

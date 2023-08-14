@@ -124,7 +124,7 @@ const CoreEditor = {
           visible={this.allScriptList_dialog}
           handleClose={() => { this.updateDialog({ type: 'allScriptList_dialog', value: false }) }}
         />
-        <Feedback />
+        {/* <Feedback /> */}
       </a-layout>
     )
   },

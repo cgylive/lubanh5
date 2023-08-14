@@ -1,0 +1,49 @@
+{
+  "kind": "collectionType",
+  "collectionName": "questionbanks",
+  "info": {
+    "name": "questionbank",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "topic": {
+      "type": "text"
+    },
+    "option": {
+      "type": "json"
+    },
+    "answer": {
+      "type": "string"
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "judgement",
+        "radio",
+        "multi"
+      ]
+    },
+    "image": {
+      "model": "file",
+      "via": "related",
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos"
+      ],
+      "plugin": "upload",
+      "required": false
+    },
+    "tips": {
+      "type": "text"
+    },
+    "score": {
+      "type": "integer"
+    }
+  }
+}

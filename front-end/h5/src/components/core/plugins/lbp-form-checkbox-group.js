@@ -1,7 +1,7 @@
 import PropTypes from '@luban-h5/plugin-common-props'
 import LbpFormRadio from './lbp-form-radio.js'
 
-function getDefaultItems () {
+function getDefaultItems() {
   // defaultItems.slice(0)[0] === defaultItems.slice(0)[0] -> true
   // Object.assign(defaultItems)[0] === Object.assign(defaultItems)[0] -> true
   // clone = (val) => JSON.parse(JSON.stringify(val))
@@ -57,16 +57,31 @@ export default {
           name: 'mode'
         }
       }
+    },
+    answer: {
+      type: Array,
+      default: [],
+      editor: {
+        type: 'a-checkbox',
+        label: '正确答案',
+        require: true,
+        props: {
+          options: [
+            { label: '单选', value: 'radio' },
+            { label: '多选', value: 'checkbox' }
+          ]
+        }
+      }
     }
   },
-  data () {
+  data() {
     return {
       value: this.type === 'radio' ? '' : [],
       uuid: undefined
     }
   },
   computed: {
-    value_ () {
+    value_() {
       if (this.type === 'radio') {
         return this.value
       } else {
@@ -76,18 +91,18 @@ export default {
     }
   },
   watch: {
-    type (type) {
+    type(type) {
       this.value = type === 'radio' ? '' : []
     }
   },
-  mounted () {
+  mounted() {
     this.uuid = this.$el.dataset.uuid
   },
   methods: {
     /**
      * @param {String, Number} val radioValue or checkboxValue
      */
-    onChange (val) {
+    onChange(val) {
       switch (this.type) {
         case 'radio':
           this.toggleRadio(val)
@@ -99,7 +114,7 @@ export default {
           break
       }
     },
-    toggleCheckbox (val) {
+    toggleCheckbox(val) {
       const index = this.value.indexOf(val)
       if (index === -1) {
         this.value.push(val)
@@ -107,27 +122,37 @@ export default {
         this.value.splice(index, 1)
       }
     },
-    toggleRadio (val) {
+    toggleRadio(val) {
       this.value = val
     }
   },
-  render () {
+  render() {
     return (
       <div>
         <h3>{this.aliasName}</h3>
-        <input type="text" hidden value={this.value_} data-type="lbp-form-input" data-uuid={this.uuid} />
-        {
-          this.items.map(item => (
-            <lbp-form-radio
-              vertical
-              value={item.value}
-              checked={this.type === 'radio' ? this.value === item.value : this.value.includes(item.value)}
-              aliasName={this.uuid}
-              type={this.type}
-              onChange={this.onChange}
-            >{item.value}</lbp-form-radio>
-          ))
-        }
+        <input
+          type="text"
+          hidden
+          value={this.value_}
+          data-type="lbp-form-input"
+          data-uuid={this.uuid}
+        />
+        {this.items.map(item => (
+          <lbp-form-radio
+            vertical
+            value={item.value}
+            checked={
+              this.type === 'radio'
+                ? this.value === item.value
+                : this.value.includes(item.value)
+            }
+            aliasName={this.uuid}
+            type={this.type}
+            onChange={this.onChange}
+          >
+            {item.value}
+          </lbp-form-radio>
+        ))}
       </div>
     )
   }

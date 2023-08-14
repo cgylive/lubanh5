@@ -11,7 +11,7 @@
 
 import PropTypes from '@luban-h5/plugin-common-props'
 import LbpFormRadio from './lbp-subject-radio.js'
-
+import LbpButton from 'core/plugins/lbp-button'
 function getDefaultItems() {
   // defaultItems.slice(0)[0] === defaultItems.slice(0)[0] -> true
   // Object.assign(defaultItems)[0] === Object.assign(defaultItems)[0] -> true
@@ -40,6 +40,7 @@ export default {
     }
   },
   name: 'lbp-form-radio-group',
+  components: { LbpButton },
   props: {
     aliasName: PropTypes.string({
       defaultValue: `标题演示`,
@@ -49,6 +50,10 @@ export default {
       label: '选项列表',
       defaultValue: () => getDefaultItems()
     }),
+    answer: {
+      type: Array,
+      default: () => []
+    },
     type: {
       type: String,
       default: 'radio'
@@ -89,7 +94,8 @@ export default {
   data() {
     return {
       value: this.type === 'radio' ? '' : [],
-      uuid: undefined
+      uuid: undefined,
+      buttonClickArr: []
     }
   },
   computed: {
@@ -158,11 +164,15 @@ export default {
           this.toggleCheckbox(val)
           break
         case 'judge':
-          console.log()
+          this.toggleRadio(val)
           break
         default:
           break
       }
+    },
+    buttonClick(val, isAnswer) {
+      console.log(val, isAnswer)
+      this.buttonClickArr.push(val)
     },
     toggleCheckbox(val) {
       const index = this.value.indexOf(val)
@@ -172,6 +182,7 @@ export default {
         this.value.splice(index, 1)
       }
     },
+    submit() {},
     toggleRadio(val) {
       this.value = val
     }
@@ -187,10 +198,12 @@ export default {
           data-type="lbp-form-input"
           data-uuid={this.uuid}
         />
-        {this.items.map(item => (
+        {this.items.map((item, index) => (
           <LbpFormRadio
             vertical
             value={item.value}
+            isAnswer={this.answer.includes(index)}
+            isClick={this.buttonClickArr.includes(item.value)}
             checked={this.value === item.value}
             aliasName={this.uuid}
             type={this.type}
@@ -202,11 +215,27 @@ export default {
             borderWidth={this.borderWidth}
             borderRadius={this.borderRadius}
             color={this.color}
+            buttonClick={() => this.buttonClick}
             onChange={this.onChange}
           >
             {item.value}
           </LbpFormRadio>
         ))}
+        <LbpButton
+          class="result-next-button"
+          style={{
+            minHeight: `40px`,
+            minWidth: `200px`,
+            padding: '10px',
+            borderRadius: '15px',
+            color: '#fff',
+            backgroundColor: '#1890ff',
+            paddingLeft: '20px',
+            paddingRight: '20px'
+          }}
+          text={'提交'}
+          onClick={() => this.submit()}
+        ></LbpButton>
       </div>
     )
   }

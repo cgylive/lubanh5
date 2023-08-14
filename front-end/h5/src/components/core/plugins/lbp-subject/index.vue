@@ -11,6 +11,7 @@
       :borderWidth="borderWidth"
       :borderRadius="borderRadius"
       :items="items"
+      :answer="answer"
       :type="type"
     ></LbpFormRadioGroup>
   </div>
@@ -58,7 +59,9 @@ export default {
   name: 'lbp-subject',
   components: { LbpFormRadioGroup },
   data() {
-    return {}
+    return {
+      answer: [0]
+    }
   },
   computed: {},
   props: {
@@ -101,24 +104,42 @@ export default {
         }
       }
     }
+    // answer: {
+    //   type: Array,
+    //   default: () => ['单选'],
+    //   editor: {
+    //     type: 'a-checkbox-group',
+    //     label: '选择答案',
+    //     require: true,
+    //     props: {
+    //       options: [
+    //         { label: '单选', value: '单选' },
+    //         { label: '多选', value: '多选' }
+    //         // { label: '判断', value: '判断' }
+    //       ]
+    //       // name: 'mode'
+    //     }
+    //   }
+    // }
   },
   watch: {
     type(type) {
       if (type === 'judge') {
         console.log(this.items)
-        this.items = [
-          {
-            value: '正确'
-          },
-          {
-            value: '错误'
-          }
-        ]
+        // this.items = [
+        //   {
+        //     value: '正确'
+        //   },
+        //   {
+        //     value: '错误'
+        //   }
+        // ]
       }
     }
   },
   methods: {},
   mounted() {
+    console.log(this, 'mounted')
     if (this.type === 'judge') {
       console.log(this.items)
       this.items = [

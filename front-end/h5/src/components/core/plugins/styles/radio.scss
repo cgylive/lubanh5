@@ -49,11 +49,12 @@ $checkbox-check-height: math.div($checkbox-size, 4) * 5;
   img {
     width: 30px;
     height: 30px;
+    margin-top: 10px;
     z-index: 1;
     right: 0;
     position: absolute;
   }
-  
+
   .lbp-sub-input {
     display: none;
   }

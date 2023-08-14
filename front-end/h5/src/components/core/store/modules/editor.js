@@ -1,13 +1,31 @@
 // initial state
 import Work from 'core/models/work'
-import { actions as canvasActions, mutations as canvasMutations } from './canvas'
+import {
+  actions as canvasActions,
+  mutations as canvasMutations
+} from './canvas'
 import { actions as pageActions, mutations as pageMutations } from './page'
-import { actions as elementActions, mutations as elementMutations } from './element'
+import {
+  actions as elementActions,
+  mutations as elementMutations
+} from './element'
 import { actions as workActions, mutations as workMutations } from './work'
-import { actions as dataSourceActions, mutations as dataSourceMutations } from './data-source'
-import { actions as scriptActions, mutations as scriptMutations } from './script'
-import { actions as questionbanksActions, mutations as questionbanksMutations } from './questionbanks'
-
+import {
+  actions as dataSourceActions,
+  mutations as dataSourceMutations
+} from './data-source'
+import {
+  actions as scriptActions,
+  mutations as scriptMutations
+} from './script'
+import {
+  actions as questionbanksActions,
+  mutations as questionbanksMutations
+} from './questionbanks'
+import {
+  actions as activeIndexActions,
+  mutations as activeIndexMutations
+} from './activeIndex'
 const state = {
   works: [],
   work: new Work(),
@@ -20,8 +38,8 @@ const state = {
   workTemplates: [],
   scaleRate: 1,
   scripts: [],
-  questionbanks:[],
-  activeIndex:3
+  questionbanks: [],
+  activeIndex: 0
 }
 
 // getters
@@ -35,7 +53,8 @@ const actions = {
   ...canvasActions,
   ...scriptActions,
   ...dataSourceActions,
-  ...questionbanksActions
+  ...questionbanksActions,
+  ...activeIndexActions
 }
 
 // mutations
@@ -47,9 +66,7 @@ const mutations = {
   ...scriptMutations,
   ...dataSourceMutations,
   ...questionbanksMutations,
-  setIndex(state, activeIndex) {
-    state.activeIndex = activeIndex
-  }
+  ...activeIndexMutations
 }
 
 export default {

@@ -108,23 +108,23 @@ export default {
       this.$emit('change', e.target.value)
     },
     buttonClick(value, isAnswer) {
-      console.log(value, 'buttonClick')
-      console.log(isAnswer, 'buttonClick isAnswer')
+      // console.log(value, 'buttonClick')
+      // console.log(isAnswer, 'buttonClick isAnswer')
       this.isButtonClick = !this.isButtonClick
-      const index = this.buttonClickArr.findIndex(item => item === value)
-      if (index > -1) {
-        this.buttonClickArr.splice(index, 1)
-      } else {
-        if (this.type !== 'checkbox') {
-          if (this.buttonClickArr.length > 1) {
-            this.buttonClickArr.push(value)
-          }
-        } else {
-          this.buttonClickArr.push(value)
-        }
-      }
+      // const index = this.buttonClickArr.findIndex(item => item === value)
+      // if (index > -1) {
+      //   this.buttonClickArr.splice(index, 1)
+      // } else {
+      //   if (this.type !== 'checkbox') {
+      //     if (this.buttonClickArr.length > 1) {
+      //       this.buttonClickArr.push(value)
+      //     }
+      //   } else {
+      //     this.buttonClickArr.push(value)
+      //   }
+      // }
       this.$emit('buttonClick', value, isAnswer)
-      console.log(this.buttonClickArr, 'buttonClick buttonClickArr')
+      // console.log(this.buttonClickArr, 'buttonClick buttonClickArr')
     }
   },
   render() {
@@ -135,10 +135,9 @@ export default {
       checked,
       value,
       isAnswer,
-      isButtonClick,
-      isClick
+      isButtonClick
     } = this
-    console.log(isClick, 'isClick')
+
     const uuid = +new Date() + genUUID()
     return (
       <div class={['lbp-' + this.type + '-wrapper', 'lbp-sub-wrapper']}>

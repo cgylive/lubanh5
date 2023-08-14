@@ -35,8 +35,8 @@ function getDefaultItems() {
 export default {
   extra: {
     defaultStyle: {
-      width: 120,
-      height: 120
+      width: 320,
+      height: 456
     }
   },
   name: 'lbp-form-radio-group',
@@ -170,9 +170,23 @@ export default {
           break
       }
     },
-    buttonClick(val, isAnswer) {
-      console.log(val, isAnswer)
-      this.buttonClickArr.push(val)
+    onButtonClick(val, isAnswer) {
+      const index = this.buttonClickArr.findIndex(item => item === val)
+      console.log(index)
+      console.log(this.type)
+      if (index !== -1) {
+        this.buttonClickArr.splice(index, 1)
+      } else {
+        if (this.type !== 'checkbox') {
+          if (this.buttonClickArr.length < 1) {
+            this.buttonClickArr.push(val)
+          }
+        } else {
+          this.buttonClickArr.push(val)
+        }
+      }
+      // this.buttonClickArr.push(val)
+      console.log(this.buttonClickArr, 'buttonClickArr')
     },
     toggleCheckbox(val) {
       const index = this.value.indexOf(val)
@@ -182,7 +196,9 @@ export default {
         this.value.splice(index, 1)
       }
     },
-    submit() {},
+    submit() {
+      this.$emit('submit', this.buttonClickArr)
+    },
     toggleRadio(val) {
       this.value = val
     }
@@ -215,7 +231,7 @@ export default {
             borderWidth={this.borderWidth}
             borderRadius={this.borderRadius}
             color={this.color}
-            onClick={this.buttonClick}
+            onButtonClick={this.onButtonClick}
             onChange={this.onChange}
           >
             {item.value}

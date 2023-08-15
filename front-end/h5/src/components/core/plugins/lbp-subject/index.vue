@@ -153,6 +153,9 @@ export default {
         page.elements = page.elements.map(element => {
           if (element.name === 'lbp-subject') {
             console.log(idx)
+            if (idx > list.length) {
+              idx = idx - 5
+            }
             if (list[idx].type === 'checkbox' || list[idx].type === 'multi') {
               answer = list[idx].answer.split(',')
             } else {

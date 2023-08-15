@@ -29,6 +29,10 @@ export default {
       type: [String, Number],
       default: '选项值'
     },
+    index: {
+      type: Number,
+      default: 0
+    },
     answer: {
       type: Array,
       default: () => []
@@ -107,7 +111,7 @@ export default {
       if (this.disabled) return
       this.$emit('change', e.target.value)
     },
-    buttonClick(value, isAnswer) {
+    buttonClick(value, index) {
       // console.log(value, 'buttonClick')
       // console.log(isAnswer, 'buttonClick isAnswer')
       this.isButtonClick = !this.isButtonClick
@@ -123,7 +127,7 @@ export default {
       //     this.buttonClickArr.push(value)
       //   }
       // }
-      this.$emit('buttonClick', value, isAnswer)
+      this.$emit('buttonClick', value, index)
       // console.log(this.buttonClickArr, 'buttonClick buttonClickArr')
     }
   },
@@ -132,6 +136,7 @@ export default {
       aliasName,
       type,
       disabled,
+      index,
       checked,
       value,
       isAnswer,
@@ -162,7 +167,7 @@ export default {
           borderWidth={this.borderWidth}
           borderRadius={this.borderRadius}
           color={this.color}
-          onClick={() => this.buttonClick(value, isAnswer)}
+          onClick={() => this.buttonClick(value, index)}
         ></LbpButton>
         <input
           class={['lbp-' + this.type, 'lbp-sub-input']}

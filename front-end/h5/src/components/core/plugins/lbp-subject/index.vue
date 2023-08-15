@@ -153,22 +153,26 @@ export default {
         page.elements = page.elements.map(element => {
           if (element.name === 'lbp-subject') {
             console.log(idx)
-            if (idx > list.length) {
-              idx = idx - 5
+            let currentIndex = idx
+            if (idx > list.length - 1) {
+              currentIndex = idx - list.length
             }
-            if (list[idx].type === 'checkbox' || list[idx].type === 'multi') {
-              answer = list[idx].answer.split(',')
+            if (
+              list[currentIndex].type === 'checkbox' ||
+              list[currentIndex].type === 'multi'
+            ) {
+              answer = list[currentIndex].answer.split(',')
             } else {
-              answer.push(Number(list[idx].answer))
+              answer.push(Number(list[currentIndex].answer))
             }
-            element.pluginProps.aliasName = list[idx].topic
-            element.pluginProps.items = list[idx].option.map(el => {
+            element.pluginProps.aliasName = list[currentIndex].topic
+            element.pluginProps.items = list[currentIndex].option.map(el => {
               return { value: el }
             })
-            element.pluginProps.type = list[idx].type
-            element.pluginProps.answer = list[idx].answer
-            this.answer = list[idx].answer
-            this.score = list[idx].score
+            element.pluginProps.type = list[currentIndex].type
+            element.pluginProps.answer = list[currentIndex].answer
+            this.answer = list[currentIndex].answer
+            this.score = list[currentIndex].score
           }
           return new Element(element)
         })

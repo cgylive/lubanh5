@@ -39,8 +39,8 @@ const state = {
   scaleRate: 1,
   scripts: [],
   questionbanks: [],
-  activeIndex: 0,
-  imagetext:[]
+  score: 0,
+  imagetext: []
 }
 
 // getters

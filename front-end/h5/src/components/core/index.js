@@ -131,9 +131,10 @@ const CoreEditor = {
   created () {
     console.log(this.workId,'workId');
     if (this.workId) {
-      this.fetchQuestionbanks()
-      this.fetchImageText()
-      this.fetchWork(this.workId)
+      this.fetchWork(this.workId).then(()=>{
+        this.fetchQuestionbanks()
+        this.fetchImageText()
+      })
     } else {
       this.$message.error('no work id!')
     }

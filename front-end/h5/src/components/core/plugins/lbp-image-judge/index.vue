@@ -103,7 +103,7 @@ import LbpButton from 'core/plugins/lbp-button'
 import commonProps from './commonProps'
 import Element from 'core/models/element'
 import Page from 'core/models/page'
-import { mapState } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 export default {
   name: 'lbp-image-judge',
   components: { LbpPicture, LbpButton, lbpTextTinymce },
@@ -113,14 +113,15 @@ export default {
       showJudgePage: true,
       showRightCheck: '',
       resultText1: '很遗憾，答错了，再接再厉',
-      resultText: '恭喜你，答对了'
+      resultText: '恭喜你，答对了',
+      score:0
     }
   },
   computed: {
     ...mapState('editor', {
       imagetext: state => state.imagetext,
       work: state => state.work,
-      activeIndex: state => state.activeIndex
+      totalscore: state => state.score
     })
   },
   props: commonProps,
@@ -132,6 +133,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations('editor',['setSocre']),
     leftClick() {
       this.showLeftCheck = 'check'
       setTimeout(() => {
@@ -146,6 +148,11 @@ export default {
       }, 1000 * 1)
     },
     nextPage(message) {
+      if(this.showRightCheck && this.type === this.showRightCheck 
+      || this.showLeftCheck && this.type === this.showLeftCheck){
+         const totalscore = Number(parseInt(this.totalscore)) + Number(parseInt(this.score)) 
+         this.setSocre(totalscore)
+      } 
       const work = window.__work
       console.log(work, 'work')
       let iframe = document.getElementById('iframe-for-preview')
@@ -164,6 +171,7 @@ export default {
             element.pluginProps.text4 = list[idx].tips
             element.pluginProps.type = list[idx].answer
             element.pluginProps.imgSrc = list[idx].image.url
+            this.score = list[idx].score
           }
           return new Element(element)
         })

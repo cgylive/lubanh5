@@ -6,7 +6,7 @@
 // 生成一个指定范围内的随机整数
 function getRandomInt(min, max, num) {
    const res =  Math.floor(Math.random() * (max - min + 1)) + min;
-   if(num?.length && num.includes(res)){
+   if(num && num.length && num.includes(res)){
     getRandomInt(min, max, num)
    }
    if(num === res){
@@ -25,7 +25,7 @@ module.exports = {
         const res = resp.filter((el)=>el.type==='imagetext')
         let num = []
         let list = []
-        for(let i =0;i<6;i++){
+        for(let i =0;i<5;i++){
           const index = getRandomInt(0, res.length-1,num);
           num.push(index)
           if(res[index]){

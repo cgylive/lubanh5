@@ -170,7 +170,8 @@ export default {
           break
       }
     },
-    onButtonClick(val, isAnswer) {
+    onButtonClick(val, idx) {
+      console.log(idx)
       const index = this.buttonClickArr.findIndex(item => item === val)
       console.log(index)
       console.log(this.type)
@@ -218,6 +219,7 @@ export default {
           <LbpFormRadio
             vertical
             value={item.value}
+            index={index}
             isAnswer={this.answer.includes(index)}
             isClick={this.buttonClickArr.includes(item.value)}
             checked={this.value === item.value}

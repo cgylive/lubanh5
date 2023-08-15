@@ -21,10 +21,10 @@
        <div class="top-v">
         <div> <span class="pass-text">{{password}}</span> 密码强壮度 </div>
         <div class="strength-bar">
-          <div class="bar" :style="'width:'+ strength + '%;'"></div>
+          <div class="bar" :style="'width:'+ score + '%;'"></div>
         </div>
         <div style="color:rgba(212,92,57,1)">
-          {{intensity}},{{checkResult.filter((e)=>e).length}}分
+          {{intensity}},{{totalScore}}分
         </div>
        </div>
        <div class="content-v">
@@ -33,7 +33,7 @@
         </div>
         <div class="con-item-v">
            <template v-for="(item,index) in checkResult">
-              <div class="item-v" :key="index" v-if="index<4">
+              <div class="item-v" :key="index">
                  <div class="drop">
                    <span class="drop-c" v-show="item" ></span>
                  </div>
@@ -48,7 +48,7 @@
           <div class="pass-text">
             {{prompt}}
           </div>
-          <div class="pass-text" v-if="strength<80">
+          <div class="pass-text" v-if="score<80">
             <span v-if="password.length<8" >密码中长度不够8位、</span>
             <span>{{suggest}}</span>
             <span>你可以在改进改进，让密码更强。</span>
@@ -64,11 +64,12 @@
 </template>
 <script>
 import PropTypes from '@luban-h5/plugin-common-props'
+import { mapState, mapActions, mapMutations } from 'vuex'
 export default {
   extra: {
     defaultStyle: {
-      width: 375,
-      height: 456
+      width: 320,
+      height: 568
     }
   },
   name: 'weak-password',
@@ -84,59 +85,61 @@ export default {
         '缺少小写字母、',
         '缺少数字、',
         '缺少特殊字符，',
-        ''
       ],
-      showTip:false
+      showTip:false,
+      score:0
     }
   },
   computed:{
-    strength(){
-      const list = this.checkResult.filter((e)=>e)
-      return list.length * 20
+    ...mapState('editor', {
+      scoreX: state => state.score
+    }),
+    totalScore(){
+      const len = this.score
+      let str = '弱'
+      if(len >= 80){
+        return 30
+      }
+      if(len >=60){
+        return 20
+      }
+      if(len>= 50){
+        return 15
+      }
+      if(len>= 0){
+        return 5
+      }
     },
     intensity(){
-      const len = this.checkResult.filter((e)=>e).length
-      let str = ''
-      switch(len){
-          case 1:
-            str = '非常弱'
-            break;
-          case 2:
-            str = '弱'
-            break;
-          case 3:
-            str = '中等'
-            break;
-          case 4:
-            str = '强'
-            break;
-          default:
-            str = '非常强'
-            break;
+      const len = this.score
+      let str = '弱'
+      if(len >= 80){
+        return '安全(Secure)'
       }
-      return str
+      if(len >=60){
+        return '强'
+      }
+      if(len>= 50){
+        return '一般'
+      }
+      if(len>= 0){
+        return '弱'
+      }
     },
     prompt(){
-      const len = this.checkResult.filter((e)=>e).length
-      let str = ''
-      switch(len){
-          case 1:
-            str = '非常弱：噢买尬，用这个密码就相当于你离开家，门却开着，太危险了！'
-            break;
-          case 2:
-            str = '弱：用这个密码就相当于你家门虽然已经上锁，但钥匙仍然在门锁上没拿走，太危险了。'
-            break;
-          case 3:
-            str = '中等：用这个密码就相当于门已经锁上，但钥匙却放在门口的地垫上，还是会被别人猜到的风险。'
-            break;
-          case 4:
-            str = '强：用这个密码，就相当于门锁好了，钥匙也放在保险箱里，已经相对安全多了。'
-            break;
-          default:
-            str = '非常强：完美，这个密码太棒了，好习惯要继续保持哦。'
-            break;
+      const len = this.score
+      if(len >= 80){
+        return '非常强：完美，这个密码太棒了，好习惯要继续保持哦。'
       }
-      return str
+      if(len >=60){
+        return '强：用这个密码，就相当于门锁好了，钥匙也放在保险箱里，已经相对安全多了。'
+      }
+      if(len>= 50){
+        return '中等：用这个密码就相当于门已经锁上，但钥匙却放在门口的地垫上，还是会被别人猜到的风险。'
+      }
+      if(len>= 0){
+        return '弱：用这个密码就相当于你家门虽然已经上锁，但钥匙仍然在门锁上没拿走，太危险了。'
+      }
     },
     suggest(){
       let str = '';
@@ -146,11 +149,12 @@ export default {
          }
       })
       return str
-    }
+    },
   },
   mounted () {
   },
   methods:{
+    ...mapMutations('editor',['setSocre']),
     check(){
       if(!this.password.length){
         this.showTip = true
@@ -167,19 +171,53 @@ export default {
           big = false;
        }
       const special = /[^a-zA-Z0-9]/.test(string)
-      this.checkResult = [big, letter, num, special]
-      if(num && letter && big && special && this.password.length >= 12){
-        this.checkResult.push(true)
-      }
+      this.checkResult = [big,letter,num,special]
+      this.score = this.rules()
       this.setup++
     },
-    reCheck() {
+    reCheck(){
       this.password=''
       this.checkResult = []
       this.setup = 1
     },
-    submit() {
+    submit(){
+        this.setSocre(this.totalScore)
+        console.log(this.scoreX)
+    },
+    rules(){
+      const str = this.password.split('');
+      let num = 0;  //数字
+      let letter = 0; //小写字母
+      let big = 0;  //大写字母
+      let special = 0;  //特殊符合
+      str.forEach((el)=>{
+        if(/[0-9]/.test(el))num++
+        if(/[a-z]/i.test(el))letter++
+        if(el.match(/^.*[A-Z]+.*$/)!=null)big++
+        if(/[^a-zA-Z0-9]/.test(el))special++
+      })
+      console.log('num',num,'letter',letter,'big',big,'special',special)
+      let score = 0;
+      
+      if(str.length>=8) score+=25;
+      else if(str.length>=5 && str.length<=7) score+=10
+      else if(str.length<=4) score +=5
 
+      if(letter && !big) score+=10;
+      else if (!letter && big) score+=10;
+      else if (letter && big) score+=20;
+
+      if(num>1) score+=20
+      else if (num) score+=10
+
+      if(special>1) score+=25
+      else if (special) score+=10
+      
+      if(num && letter && big && special) score+=5
+      else if(num && letter && special || num && big && special) score+=3
+      else if(num && letter || num && big) score+=2 
+      
+      return score
     }
   }
 }
@@ -298,7 +336,7 @@ export default {
   padding: 0 20px;
   button{
     width: 80px;
-    height: 35px;
+    height: 35px; 
     background-color: rgb(216,191,37);
     border-radius:12px;
     font-size:14px;

@@ -20,8 +20,7 @@
 <script>
 import PropTypes from '@luban-h5/plugin-common-props'
 import LbpFormRadioGroup from 'core/plugins/lbp-subject-radio-group'
-import { mapState, mapActions, mapMutations } from 'vuex'
-import { handleError } from '@/utils/http.js'
+import { mapState } from 'vuex'
 import Element from 'core/models/element'
 import Page from 'core/models/page'
 // import LbpFormCheckboxGroup from 'core/plugins/lbp-form-checkbox-group'
@@ -142,8 +141,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions('editor', ['updateWork', 'setIndex']),
-    // ...mapMutations('editor', ),
     setSubject() {
       console.log('questionbanks')
       const list = this.questionbanks

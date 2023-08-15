@@ -101,6 +101,9 @@ import lbpTextTinymce from 'core/plugins/lbp-text-tinymce'
 import LbpPicture from 'core/plugins/lbp-picture'
 import LbpButton from 'core/plugins/lbp-button'
 import commonProps from './commonProps'
+import Element from 'core/models/element'
+import Page from 'core/models/page'
+import { mapState } from 'vuex'
 export default {
   name: 'lbp-image-judge',
   components: { LbpPicture, LbpButton, lbpTextTinymce },
@@ -113,8 +116,21 @@ export default {
       resultText: '恭喜你，答对了'
     }
   },
-  computed: {},
+  computed: {
+    ...mapState('editor', {
+      imagetext: state => state.imagetext,
+      work: state => state.work,
+      activeIndex: state => state.activeIndex
+    })
+  },
   props: commonProps,
+  watch:{
+    imagetext(newVal){
+       if(newVal && newVal.length){
+        this.setImageJudge()
+       }
+    }
+  },
   methods: {
     leftClick() {
       this.showLeftCheck = 'check'
@@ -137,7 +153,23 @@ export default {
       if (!iframe) return
       const iframeWin = iframe.contentWindow
       iframeWin.postMessage(message, window.location.origin)
-    }
+    },
+    setImageJudge() {
+      console.log('imagetext')
+      const list = this.imagetext
+      const work = this.work
+      work.pages = work.pages.map((page, idx) => {
+        page.elements = page.elements.map(element => {
+          if (element.name === 'lbp-image-judge') {
+            element.pluginProps.text4 = list[idx].tips
+            element.pluginProps.type = list[idx].answer
+            element.pluginProps.imgSrc = list[idx].image.url
+          }
+          return new Element(element)
+        })
+        return new Page(page)
+      })
+    },
   },
   mounted() {}
 }

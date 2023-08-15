@@ -13,6 +13,7 @@ export const actions = {
         }).get('questionbanks')
       },
       fetchImageText ({ commit, dispatch, state }) {
+        debugger
         return new AxiosWrapper({
           dispatch,
           commit,
@@ -28,6 +29,7 @@ export const mutations = {
       state.questionbanks = questionbanks.value.data
     },
     setImageText(state, imagetext){
+      debugger
       state.imagetext = imagetext.value.data
     }
 }

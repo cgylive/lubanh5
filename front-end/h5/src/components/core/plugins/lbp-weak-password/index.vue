@@ -57,7 +57,7 @@
        </div>
        <div class="bottom-v">
           <button @click="reCheck">重新检测</button>
-          <button @click="submit">提交</button>
+          <button  class="result-next-button" @click="submit">提交</button>
        </div>
     </div>
   </div>

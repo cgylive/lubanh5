@@ -63,10 +63,10 @@ export default {
             <a-icon type="eye" title={this.$t('workCard.preview')} onClick={() => this.$emit('preview')} />
           </a-tooltip>
           {
-            // !this.isTemplate &&
-            // <a-tooltip effect="dark" placement="bottom" title={this.$t('workCard.delete')}>
-            //   <a-icon type="delete" title={this.$t('workCard.delete')} onClick={() => this.$emit('delete') } />
-            // </a-tooltip>
+            !this.isTemplate &&
+            <a-tooltip effect="dark" placement="bottom" title={this.$t('workCard.delete')}>
+              <a-icon type="delete" title={this.$t('workCard.delete')} onClick={() => this.$emit('delete') } />
+            </a-tooltip>
           }
           {
             this.qrcodeUrl

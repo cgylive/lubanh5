@@ -6,7 +6,7 @@
 // 生成一个指定范围内的随机整数
 function getRandomInt(min, max, num) {
    const res =  Math.floor(Math.random() * (max - min + 1)) + min;
-   if(num?.length && num.includes(res)){
+   if(num && num.length && num.includes(res)){
     getRandomInt(min, max, num)
    }
    if(num === res){

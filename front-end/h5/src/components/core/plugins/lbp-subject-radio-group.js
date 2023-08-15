@@ -179,11 +179,12 @@ export default {
         this.buttonClickArr.splice(index, 1)
       } else {
         if (this.type !== 'checkbox') {
+          this.buttonClickArr = []
           if (this.buttonClickArr.length < 1) {
-            this.buttonClickArr.push(val)
+            this.buttonClickArr.push(idx)
           }
         } else {
-          this.buttonClickArr.push(val)
+          this.buttonClickArr.push(idx)
         }
       }
       // this.buttonClickArr.push(val)

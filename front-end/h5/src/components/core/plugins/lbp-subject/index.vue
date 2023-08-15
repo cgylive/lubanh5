@@ -20,7 +20,7 @@
 <script>
 import PropTypes from '@luban-h5/plugin-common-props'
 import LbpFormRadioGroup from 'core/plugins/lbp-subject-radio-group'
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import Element from 'core/models/element'
 import Page from 'core/models/page'
 // import LbpFormCheckboxGroup from 'core/plugins/lbp-form-checkbox-group'
@@ -64,14 +64,14 @@ export default {
   components: { LbpFormRadioGroup },
   data() {
     return {
-      // answer: []
+      score:0
     }
   },
   computed: {
     ...mapState('editor', {
       questionbanks: state => state.questionbanks,
       work: state => state.work,
-      activeIndex: state => state.activeIndex
+      totalscore: state => state.score
     })
   },
   extra: {
@@ -141,6 +141,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations('editor',['setSocre']),
     setSubject() {
       console.log('questionbanks')
       const list = this.questionbanks
@@ -162,7 +163,9 @@ export default {
               return { value: el }
             })
             element.pluginProps.type = list[idx].type
-            element.pluginProps.answer = answer
+            element.pluginProps.answer = list[idx].answer
+            this.answer = list[idx].answer
+            this.score = list[idx].score
           }
           return new Element(element)
         })
@@ -170,27 +173,17 @@ export default {
       })
       // this.updateWork(work)
     },
-    submit() {
-      console.log(999)
-      // let index = 0
-      // this.setIndex(index++)
+    submit(e) {
+      if(this.answer.toString() === e.toString()){
+        const totalscore = Number(parseInt(this.totalscore)) + Number(parseInt(this.score)) 
+        this.setSocre(totalscore)
+      }
     }
   },
-  mounted() {
+  mounted () {
     this.setSubject()
-    // if (this.type === 'judge') {
-    //   console.log(this.items)
-    //   this.items = [
-    //     {
-    //       value: '正确'
-    //     },
-    //     {
-    //       value: '错误'
-    //     }
-    //   ]
-    // }
   },
-  updated() {
+  updated () {
     const query = new URLSearchParams(window.location.search)
     const canRender = query.get('view_mode') === 'preview'
     console.log(canRender, 'canRender')

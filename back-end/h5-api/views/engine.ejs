@@ -323,7 +323,7 @@
           console.log(mySwiper[action]());
 
           // mySwiper[action]();
-          mySwiper.slideTo(mySwiper.activeIndex, 10, false)
+          mySwiper.slideTo(mySwiper.activeIndex, 10, false);
         }
       }
       window.addEventListener("click", (e) => {
@@ -334,7 +334,10 @@
           console.log(action);
           console.log(mySwiper[action]());
           // mySwiper[action]();
-          mySwiper.slideTo(mySwiper.activeIndex, 10, false)
+          mySwiper.slideTo(mySwiper.activeIndex, 10, false);
+        }
+        if (e.target._prevClass === "back-first-button") {
+          mySwiper.slideTo(0, 10, false);
         }
       });
       if (window.addEventListener) {

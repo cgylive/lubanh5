@@ -23,6 +23,7 @@ import LbpNewsList from 'core/plugins/lbp-news-list'
 import LbpWeakPassword from 'core/plugins/lbp-weak-password'
 import lbpImageJudge from 'core/plugins/lbp-image-judge'
 import lbpSubject from 'core/plugins/lbp-subject'
+import lbpResult from 'core/plugins/lbp-result'
 // import LbpTabs from 'core/components/plugins/lbp-tabs'
 
 export const pluginsList = [
@@ -375,6 +376,17 @@ export const pluginsList = [
     component: LbpWeakPassword,
     visible: true,
     name: LbpWeakPassword.name
+  },
+  {
+    i18nTitle: {
+      'en-US': 'WeakPassword',
+      'zh-CN': '结果页'
+    },
+    title: '结果页',
+    icon: 'list',
+    component: lbpResult,
+    visible: true,
+    name: lbpResult.name
   }
 ]
 

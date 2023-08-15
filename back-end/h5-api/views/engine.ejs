@@ -319,10 +319,11 @@
           // document.querySelector(`.swiper-button-${data}`).click()
 
           var action = `slide${title(data)}`;
-          console.log(action);
+          console.log(mySwiper);
           console.log(mySwiper[action]());
 
-          mySwiper[action]();
+          // mySwiper[action]();
+          mySwiper.slideTo(mySwiper.activeIndex, 10, false)
         }
       }
       window.addEventListener("click", (e) => {
@@ -332,7 +333,8 @@
           var action = `slide${title("next")}`;
           console.log(action);
           console.log(mySwiper[action]());
-          mySwiper[action]();
+          // mySwiper[action]();
+          mySwiper.slideTo(mySwiper.activeIndex, 10, false)
         }
       });
       if (window.addEventListener) {

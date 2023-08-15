@@ -25,7 +25,7 @@ module.exports = {
         const res = resp.filter((el)=>el.type==='imagetext')
         let num = []
         let list = []
-        for(let i =0;i<6;i++){
+        for(let i =0;i<5;i++){
           const index = getRandomInt(0, res.length-1,num);
           num.push(index)
           if(res[index]){

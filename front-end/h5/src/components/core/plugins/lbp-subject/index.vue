@@ -64,7 +64,7 @@ export default {
   components: { LbpFormRadioGroup },
   data() {
     return {
-      score:0
+      score: 0
     }
   },
   computed: {
@@ -141,7 +141,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('editor',['setSocre']),
+    ...mapMutations('editor', ['setSocre']),
     setSubject() {
       console.log('questionbanks')
       const list = this.questionbanks
@@ -174,16 +174,17 @@ export default {
       // this.updateWork(work)
     },
     submit(e) {
-      if(this.answer.toString() === e.toString()){
-        const totalscore = Number(parseInt(this.totalscore)) + Number(parseInt(this.score)) 
+      if (this.answer.toString() === e.toString()) {
+        const totalscore =
+          Number(parseInt(this.totalscore)) + Number(parseInt(this.score))
         this.setSocre(totalscore)
       }
     }
   },
-  mounted () {
+  mounted() {
     this.setSubject()
   },
-  updated () {
+  updated() {
     const query = new URLSearchParams(window.location.search)
     const canRender = query.get('view_mode') === 'preview'
     console.log(canRender, 'canRender')

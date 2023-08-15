@@ -92,7 +92,11 @@
         alt=""
       />
       <lbpTextTinymce class="result-info" :text="text4"></lbpTextTinymce>
-      <LbpButton class="result-next-button" @click="nextPage('next')" :text="text3"></LbpButton>
+      <LbpButton
+        class="result-next-button"
+        @click="nextPage('next')"
+        :text="text3"
+      ></LbpButton>
     </div>
   </div>
 </template>
@@ -114,7 +118,7 @@ export default {
       showRightCheck: '',
       resultText1: '很遗憾，答错了，再接再厉',
       resultText: '恭喜你，答对了',
-      score:0
+      score: 0
     }
   },
   computed: {
@@ -125,15 +129,15 @@ export default {
     })
   },
   props: commonProps,
-  watch:{
-    imagetext(newVal){
-       if(newVal && newVal.length){
+  watch: {
+    imagetext(newVal) {
+      if (newVal && newVal.length) {
         this.setImageJudge()
-       }
+      }
     }
   },
   methods: {
-    ...mapMutations('editor',['setSocre']),
+    ...mapMutations('editor', ['setSocre']),
     leftClick() {
       this.showLeftCheck = 'check'
       setTimeout(() => {
@@ -148,11 +152,14 @@ export default {
       }, 1000 * 1)
     },
     nextPage(message) {
-      if(this.showRightCheck && this.type === this.showRightCheck 
-      || this.showLeftCheck && this.type === this.showLeftCheck){
-         const totalscore = Number(parseInt(this.totalscore)) + Number(parseInt(this.score)) 
-         this.setSocre(totalscore)
-      } 
+      if (
+        (this.showRightCheck && this.type === this.showRightCheck) ||
+        (this.showLeftCheck && this.type === this.showLeftCheck)
+      ) {
+        const totalscore =
+          Number(parseInt(this.totalscore)) + Number(parseInt(this.score))
+        this.setSocre(totalscore)
+      }
       const work = window.__work
       console.log(work, 'work')
       let iframe = document.getElementById('iframe-for-preview')
@@ -177,7 +184,7 @@ export default {
         })
         return new Page(page)
       })
-    },
+    }
   },
   mounted() {}
 }

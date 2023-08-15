@@ -152,6 +152,9 @@ export default {
       }, 1000 * 1)
     },
     nextPage(message) {
+      setTimeout(() => {
+        this.showJudgePage = true
+      }, 1000 * 1)
       if (
         (this.showRightCheck && this.type === this.showRightCheck) ||
         (this.showLeftCheck && this.type === this.showLeftCheck)

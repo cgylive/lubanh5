@@ -181,7 +181,9 @@ export default {
       this.setup = 1
     },
     submit(){
-        this.setSocre(this.totalScore)
+      const totalscore =
+          Number(parseInt(this.totalscore)) + Number(parseInt(this.scoreX))
+        this.setSocre(totalscore)
         console.log(this.scoreX)
     },
     rules(){

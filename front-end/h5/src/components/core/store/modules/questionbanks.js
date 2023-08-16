@@ -8,7 +8,7 @@ export const actions = {
           commit,
           name: 'editor/setQuestionbanks',
           loading_name: 'fetchQuestionbanks_loading',
-          successMsg: '获取数据源成功',
+          // successMsg: '获取数据源成功',
           customRequest: strapi.getEntries.bind(strapi)
         }).get('questionbanks')
       },
@@ -18,7 +18,7 @@ export const actions = {
           commit,
           name: 'editor/setImageText',
           loading_name: 'fetchQuestionbanks_loading',
-          successMsg: '获取数据源成功',
+          // successMsg: '获取数据源成功',
           customRequest: strapi.getEntries.bind(strapi)
         }).get('questionbanks',{type:'imagetext'})
       },

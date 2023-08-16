@@ -1,5 +1,5 @@
 <template>
-  <div class="lbp-image-judge">
+  <div class="lbp-image-judge" v-show="imagetext && imagetext.length">
     <div class="judge-page" v-if="showJudgePage">
       <div class="body">
         <LbpPicture :imgSrc="imgSrc" :fillType="fillType"></LbpPicture>

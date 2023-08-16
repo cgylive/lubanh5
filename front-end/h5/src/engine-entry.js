@@ -33,7 +33,8 @@ const Engine = {
   },
   data () {
     return {
-      isLongPage: window.__work.page_mode === PAGE_MODE.LONG_PAGE
+      isLongPage: window.__work.page_mode === PAGE_MODE.LONG_PAGE,
+      works:window.__work
     }
   },
   methods: {
@@ -97,6 +98,15 @@ const Engine = {
         this.isLongPage ? this.renderLongPage() : this.renderSwiperPage()
       }
     </div>
+  },
+  watch:{
+    'works':{
+      handler(newVal, oldVal) {
+        console.log('新work',newVal)
+        this.renderSwiperPage()
+      },
+      deep: true,
+    }
   },
   created () {
     DataSource.dispatchRequest(window.__work)

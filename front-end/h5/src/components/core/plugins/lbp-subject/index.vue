@@ -1,7 +1,7 @@
 <template>
   <div class="lbp-subject">
     <LbpFormRadioGroup
-      :aliasName="canRender ? aliasNameP : aliasName"
+      :aliasName="aliasName"
       :backgroundColor="backgroundColor"
       :color="color"
       :borderColor="borderColor"
@@ -10,9 +10,9 @@
       :lineHeight="lineHeight"
       :borderWidth="borderWidth"
       :borderRadius="borderRadius"
-      :items="canRender ? itemsP : items"
-      :answer="canRender ? answerP : answer"
-      :type="canRender ? typeP : type"
+      :items="items"
+      :answer="answer"
+      :type="type"
       @submit="submit"
     ></LbpFormRadioGroup>
   </div>
@@ -66,11 +66,7 @@ export default {
     return {
       score: 0,
       canRender: false,
-      // aliasNameP: '',
-      // itemsP: [],
       answers: []
-      // typeP: '',
-      // answerP: ''
     }
   },
   computed: {
@@ -78,19 +74,7 @@ export default {
       questionbanks: state => state.questionbanks,
       work: state => state.work,
       totalscore: state => state.score
-    }),
-    aliasNameP() {
-      return this.aliasName
-    },
-    itemsP() {
-      return this.items
-    },
-    typeP() {
-      return this.type
-    },
-    answerP() {
-      return this.answer
-    }
+    })
   },
   extra: {
     defaultStyle: {
@@ -167,9 +151,6 @@ export default {
   methods: {
     ...mapMutations('editor', ['setSocre', 'updateWork']),
     setSubject() {
-      const query = new URLSearchParams(window.location.search)
-      const canRender = query.get('view_mode') === 'preview'
-      this.canRender = canRender
       console.log('questionbanks', this.questionbanks)
       const list = this.questionbanks
       const work = window.__work
@@ -197,16 +178,6 @@ export default {
             element.pluginProps.answer = answer
             this.answers = answer
             this.score = list[currentIndex].score
-            if (canRender) {
-              this.aliasNameP = list[currentIndex].topic
-              this.itemsP = list[currentIndex].option.map(el => {
-                return { value: el }
-              })
-              this.typeP = list[currentIndex].type
-              this.answerP = answer
-              this.answers = answer
-              this.score = list[currentIndex].score
-            }
           }
           return new Element(element)
         })
@@ -224,12 +195,6 @@ export default {
         this.setSocre(totalscore)
       }
     }
-  },
-  updated() {
-    const query = new URLSearchParams(window.location.search)
-    const canRender = query.get('view_mode') === 'preview'
-    console.log(canRender, 'canRender')
-    console.log(this.work.pages, 'work.pages updated')
   }
 }
 </script>

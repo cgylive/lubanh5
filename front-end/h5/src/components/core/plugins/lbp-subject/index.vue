@@ -1,7 +1,7 @@
 <template>
   <div class="lbp-subject">
     <LbpFormRadioGroup
-      :aliasName="canRender ? aliasNamePr : aliasName"
+      :aliasName="canRender ? aliasNameP : aliasName"
       :backgroundColor="backgroundColor"
       :color="color"
       :borderColor="borderColor"

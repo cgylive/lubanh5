@@ -7,10 +7,10 @@
 function getRandomInt(min, max, num) {
    const res =  Math.floor(Math.random() * (max - min + 1)) + min;
    if(num && num.length && num.includes(res)){
-    getRandomInt(min, max, num)
+    return -1
    }
    if(num === res){
-     getRandomInt(min, max, num)
+     return -1
    }else{
     return res
    }
@@ -27,8 +27,10 @@ module.exports = {
         let list = []
         for(let i =0;i<5;i++){
           const index = getRandomInt(0, res.length-1,num);
-          num.push(index)
-          if(res[index]){
+          if(index === -1){
+            i--
+          }else{
+            num.push(index)
             list.push(res[index])
           }
         }

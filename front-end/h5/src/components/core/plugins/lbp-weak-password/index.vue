@@ -65,6 +65,7 @@
 <script>
 import PropTypes from '@luban-h5/plugin-common-props'
 import { mapState, mapActions, mapMutations } from 'vuex'
+import strapi from '@/utils/strapi'
 export default {
   extra: {
     defaultStyle: {
@@ -152,6 +153,9 @@ export default {
     },
   },
   mounted () {
+    // strapi.updateEntry('scripts', 1).then((res)=>{
+    //   console.log(res)
+    // })
   },
   methods:{
     ...mapMutations('editor',['setSocre']),

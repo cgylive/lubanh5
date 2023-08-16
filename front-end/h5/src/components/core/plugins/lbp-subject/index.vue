@@ -1,7 +1,7 @@
 <template>
   <div class="lbp-subject">
     <LbpFormRadioGroup
-      :aliasName="aliasName"
+      :aliasName="canRender ? aliasNamePr : aliasName"
       :backgroundColor="backgroundColor"
       :color="color"
       :borderColor="borderColor"
@@ -10,9 +10,9 @@
       :lineHeight="lineHeight"
       :borderWidth="borderWidth"
       :borderRadius="borderRadius"
-      :items="items"
-      :answer="answer"
-      :type="type"
+      :items="canRender ? itemsP : items"
+      :answer="canRender ? answerP : answer"
+      :type="canRender ? typeP : type"
       @submit="submit"
     ></LbpFormRadioGroup>
   </div>
@@ -64,7 +64,13 @@ export default {
   components: { LbpFormRadioGroup },
   data() {
     return {
-      score: 0
+      score: 0,
+      canRender: false,
+      // aliasNameP: '',
+      // itemsP: [],
+      answers: []
+      // typeP: '',
+      // answerP: ''
     }
   },
   computed: {
@@ -72,7 +78,19 @@ export default {
       questionbanks: state => state.questionbanks,
       work: state => state.work,
       totalscore: state => state.score
-    })
+    }),
+    aliasNameP() {
+      return this.aliasName
+    },
+    itemsP() {
+      return this.items
+    },
+    typeP() {
+      return this.type
+    },
+    answerP() {
+      return this.answer
+    }
   },
   extra: {
     defaultStyle: {
@@ -139,17 +157,20 @@ export default {
         ]
       }
     },
-    questionbanks(newVal){
+    questionbanks(newVal) {
       if (newVal && newVal.length) {
-        console.log('组件获取题目',newVal)
+        console.log('组件获取题目', newVal)
         this.setSubject()
       }
     }
   },
   methods: {
-    ...mapMutations('editor', ['setSocre','updateWork']),
+    ...mapMutations('editor', ['setSocre', 'updateWork']),
     setSubject() {
-      console.log('questionbanks',this.questionbanks)
+      const query = new URLSearchParams(window.location.search)
+      const canRender = query.get('view_mode') === 'preview'
+      this.canRender = canRender
+      console.log('questionbanks', this.questionbanks)
       const list = this.questionbanks
       const work = window.__work
       let answer = []
@@ -163,10 +184,7 @@ export default {
             if (idx > list.length - 1) {
               currentIndex = idx - list.length
             }
-            if (
-              list[currentIndex].type === 'checkbox' ||
-              list[currentIndex].type === 'multi'
-            ) {
+            if (list[currentIndex].type === 'checkbox') {
               answer = list[currentIndex].answer.split(',')
             } else {
               answer.push(Number(list[currentIndex].answer))
@@ -176,21 +194,31 @@ export default {
               return { value: el }
             })
             element.pluginProps.type = list[currentIndex].type
-            element.pluginProps.answer = list[currentIndex].answer
-            this.answer = list[currentIndex].answer
+            element.pluginProps.answer = answer
+            this.answers = answer
             this.score = list[currentIndex].score
+            if (canRender) {
+              this.aliasNamePr = list[currentIndex].topic
+              this.itemsP = list[currentIndex].option.map(el => {
+                return { value: el }
+              })
+              this.typeP = list[currentIndex].type
+              this.answerP = answer
+              this.answers = answer
+              this.score = list[currentIndex].score
+            }
           }
           return new Element(element)
         })
         return new Page(page)
       })
-      this.$nextTick(()=>{
+      this.$nextTick(() => {
         this.$forceUpdate()
       })
     },
     submit(e) {
-      console.log('当页分数',this.totalscore,'当前题分数',this.score)
-      if (this.answer.toString() === e.toString()) {
+      console.log('当页分数', this.totalscore, '当前题分数', this.score)
+      if (this.answers.toString() === e.toString()) {
         const totalscore =
           Number(parseInt(this.totalscore)) + Number(parseInt(this.score))
         this.setSocre(totalscore)

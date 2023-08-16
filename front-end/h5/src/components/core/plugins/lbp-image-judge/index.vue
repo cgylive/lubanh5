@@ -129,13 +129,13 @@ export default {
     })
   },
   props: commonProps,
-  watch: {
-    imagetext(newVal) {
-      if (newVal && newVal.length) {
-        this.setImageJudge()
-      }
-    }
-  },
+  // watch: {
+  //   imagetext(newVal) {
+  //     if (newVal && newVal.length) {
+        
+  //     }
+  //   }
+  // },
   methods: {
     ...mapMutations('editor', ['setSocre']),
     leftClick() {
@@ -152,6 +152,9 @@ export default {
       }, 1000 * 1)
     },
     nextPage(message) {
+      setTimeout(() => {
+        this.showJudgePage = true
+      }, 1000 * 1)
       if (
         (this.showRightCheck && this.type === this.showRightCheck) ||
         (this.showLeftCheck && this.type === this.showLeftCheck)
@@ -186,7 +189,9 @@ export default {
       })
     }
   },
-  mounted() {}
+  mounted() {
+    this.setImageJudge()
+  }
 }
 </script>
 <style lang="scss" scoped>

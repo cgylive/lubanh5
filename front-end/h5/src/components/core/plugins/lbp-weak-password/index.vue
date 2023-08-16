@@ -186,9 +186,8 @@ export default {
     },
     submit(){
       const totalscore =
-          Number(parseInt(this.totalscore)) + Number(parseInt(this.scoreX))
+          Number(this.totalScore) + Number(this.scoreX)
         this.setSocre(totalscore)
-        console.log(this.scoreX)
     },
     rules(){
       const str = this.password.split('');

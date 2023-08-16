@@ -129,15 +129,16 @@ export default {
     })
   },
   props: commonProps,
-  // watch: {
-  //   imagetext(newVal) {
-  //     if (newVal && newVal.length) {
-        
-  //     }
-  //   }
-  // },
+  watch: {
+    imagetext(newVal) {
+      if (newVal && newVal.length) {
+        console.log('组件获取题目',newVal)
+        this.setImageJudge()
+      }
+    }
+  },
   methods: {
-    ...mapMutations('editor', ['setSocre']),
+    ...mapMutations('editor', ['setSocre','updateWork']),
     leftClick() {
       this.showLeftCheck = 'check'
       setTimeout(() => {
@@ -152,6 +153,7 @@ export default {
       }, 1000 * 1)
     },
     nextPage(message) {
+      console.log('当页分数',this.totalscore,'当前题分数',this.score)
       setTimeout(() => {
         this.showJudgePage = true
       }, 1000 * 1)
@@ -172,9 +174,9 @@ export default {
       iframeWin.postMessage(message, window.location.origin)
     },
     setImageJudge() {
-      console.log('imagetext')
       const list = this.imagetext
-      const work = this.work
+      const work = window.__work
+      console.log('imagetext',this.imagetext,work)
       work.pages = work.pages.map((page, idx) => {
         page.elements = page.elements.map(element => {
           if (element.name === 'lbp-image-judge') {
@@ -187,11 +189,11 @@ export default {
         })
         return new Page(page)
       })
+      this.$nextTick(()=>{
+        this.$forceUpdate()
+      })
     }
   },
-  mounted() {
-    this.setImageJudge()
-  }
 }
 </script>
 <style lang="scss" scoped>

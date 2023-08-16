@@ -138,14 +138,20 @@ export default {
           }
         ]
       }
+    },
+    questionbanks(newVal){
+      if (newVal && newVal.length) {
+        console.log('组件获取题目',newVal)
+        this.setSubject()
+      }
     }
   },
   methods: {
-    ...mapMutations('editor', ['setSocre']),
+    ...mapMutations('editor', ['setSocre','updateWork']),
     setSubject() {
-      console.log('questionbanks')
+      console.log('questionbanks',this.questionbanks)
       const list = this.questionbanks
-      const work = this.work
+      const work = window.__work
       let answer = []
       console.log(work.pages, 'work.pages')
       work.pages = work.pages.map((page, idx) => {
@@ -178,9 +184,12 @@ export default {
         })
         return new Page(page)
       })
-      // this.updateWork(work)
+      this.$nextTick(()=>{
+        this.$forceUpdate()
+      })
     },
     submit(e) {
+      console.log('当页分数',this.totalscore,'当前题分数',this.score)
       if (this.answer.toString() === e.toString()) {
         const totalscore =
           Number(parseInt(this.totalscore)) + Number(parseInt(this.score))
@@ -188,14 +197,10 @@ export default {
       }
     }
   },
-  mounted() {
-    this.setSubject()
-  },
   updated() {
     const query = new URLSearchParams(window.location.search)
     const canRender = query.get('view_mode') === 'preview'
     console.log(canRender, 'canRender')
-    // this.setSubject()
     console.log(this.work.pages, 'work.pages updated')
   }
 }

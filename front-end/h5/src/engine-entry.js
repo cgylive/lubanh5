@@ -22,7 +22,7 @@ import DataSource from 'core/models/data-source'
 import RenderPreview from 'core/editor/canvas/preview'
 import NodeWrapper from 'core/preview/node-wrapper.js'
 import store from 'core/store/index'
-
+import { mapState, mapActions, mapMutations } from 'vuex'
 Vue.config.productionTip = true
 
 const Engine = {
@@ -37,6 +37,7 @@ const Engine = {
     }
   },
   methods: {
+    ...mapActions('editor', ['fetchQuestionbanks','fetchImageText']),
     renderLongPage () {
       if (!window.__work.pages.length) return
       const work = window.__work
@@ -99,7 +100,9 @@ const Engine = {
   },
   created () {
     DataSource.dispatchRequest(window.__work)
-  }
+    this.fetchQuestionbanks()
+    this.fetchImageText()
+  },
 }
 
 const install = function (Vue) {

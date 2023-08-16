@@ -198,7 +198,7 @@ export default {
             this.answers = answer
             this.score = list[currentIndex].score
             if (canRender) {
-              this.aliasNamePr = list[currentIndex].topic
+              this.aliasNameP = list[currentIndex].topic
               this.itemsP = list[currentIndex].option.map(el => {
                 return { value: el }
               })

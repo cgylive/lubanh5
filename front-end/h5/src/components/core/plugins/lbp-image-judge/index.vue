@@ -66,18 +66,27 @@
 
       <img v-if="!correct" src="./img/2.png" alt="" />
       <lbpTextTinymce class="result-info" :text="text4"></lbpTextTinymce>
+      <span>{{pageIndex}}</span>
       <LbpButton
-        v-if="correct"
+       v-if="pageIndex<4"
         class="result-next-button"
         @click="nextPage('next')"
         :text="text3"
       ></LbpButton>
-      <LbpButton
-        v-if="!correct"
-        class="reset-index-button"
-        @click="resetPage"
-        text="重新答题"
-      ></LbpButton>
+      <template v-else>
+        <LbpButton
+          v-if="totalscore === 30"
+          class="result-next-button"
+          @click="nextPage"
+          :text="`下一关${totalscore}`"
+        ></LbpButton>
+        <LbpButton
+          v-else
+          class="reset-index-button"
+          @click="resetPage"
+          :text="`重新答题${totalscore}`"
+        ></LbpButton>
+      </template>
     </div>
   </div>
 </template>
@@ -88,7 +97,7 @@ import LbpButton from 'core/plugins/lbp-button'
 import commonProps from './commonProps'
 import Element from 'core/models/element'
 import Page from 'core/models/page'
-import { mapMutations, mapState } from 'vuex'
+import { mapMutations, mapState, mapActions } from 'vuex'
 export default {
   name: 'lbp-image-judge',
   components: { LbpPicture, LbpButton, lbpTextTinymce },
@@ -106,13 +115,14 @@ export default {
     ...mapState('editor', {
       imagetext: state => state.imagetext,
       work: state => state.work,
-      totalscore: state => state.score
+      totalscore: state => state.score,
     }),
-    correct () {
-      return (
-        (this.showRightCheck && this.type === this.showRightCheck) ||
-        (this.showLeftCheck && this.type === this.showLeftCheck)
-      )
+    pageIndex(){
+      return window.__activeIndex
+    },
+    correct(){
+      return (this.showRightCheck && this.type === this.showRightCheck) ||
+            (this.showLeftCheck && this.type === this.showLeftCheck)
     }
   },
   props: commonProps,
@@ -122,14 +132,16 @@ export default {
         console.log('组件获取题目', newVal)
         this.setImageJudge()
       }
-    }
+    },
   },
   methods: {
-    ...mapMutations('editor', ['setSocre', 'updateWork']),
+    ...mapMutations('editor', ['setSocre','fetchImageText']),
+    ...mapActions('editor', ['fetchImageText']),
     leftClick() {
       this.showLeftCheck = 'check'
       setTimeout(() => {
         this.showJudgePage = false
+        if(this.pageIndex>3){this.setTotalscore()}
       }, 1000 * 1)
     },
     rightClick() {
@@ -137,29 +149,39 @@ export default {
       this.showRightCheck = 'close'
       setTimeout(() => {
         this.showJudgePage = false
+        if(this.pageIndex>3){this.setTotalscore()}
       }, 1000 * 1)
     },
-    nextPage(message) {
+    nextPage(type) {
       setTimeout(() => {
         this.showJudgePage = true
         this.showLeftCheck = ''
         this.showRightCheck = ''
+        console.log('window.__activeIndex',window.__activeIndex)
       }, 1000 * 1)
-      if (
-        (this.showRightCheck && this.type === this.showRightCheck) ||
-        (this.showLeftCheck && this.type === this.showLeftCheck)
-      ) {
+      if (this.correct && type) {
         const totalscore =
           Number(parseInt(this.totalscore)) + Number(parseInt(this.score))
         this.setSocre(totalscore)
       }
       console.log('当页分数', this.totalscore, '当前题分数', this.score)
     },
-    resetPage() {
-      window.__activeIndex = 0
-      this.showLeftCheck = ''
-      this.showRightCheck = ''
-      this.showJudgePage = true
+    setTotalscore(){
+      if (this.correct){
+        const totalscore =
+            Number(parseInt(this.totalscore)) + Number(parseInt(this.score))
+          this.setSocre(totalscore)
+          console.log('当页分数',this.totalscore,'当前题分数',this.score)
+      }
+    },
+    resetPage(){
+        window.__activeIndex = 0
+        this.showLeftCheck = ''
+        this.showRightCheck = ''
+        this.showJudgePage = true
+        this.fetchImageText().then(()=>{
+          this.setImageJudge()
+        })
     },
     setImageJudge() {
       const list = this.imagetext

@@ -99,18 +99,18 @@ const Engine = {
       }
     </div>
   },
-  watch:{
-    'works':{
-      handler(newVal, oldVal) {
-        console.log('新work',newVal)
-        this.renderSwiperPage()
-      },
-      deep: true,
-    }
-  },
+  // watch:{
+  //   'works':{
+  //     handler(newVal, oldVal) {
+  //       console.log('新work',newVal)
+  //       this.renderSwiperPage()
+  //     },
+  //     deep: true,
+  //   }
+  // },
   created () {
     window.__activeIndex = 0
-    DataSource.dispatchRequest(window.__work)
+    // DataSource.dispatchRequest(window.__work)
     this.fetchQuestionbanks()
     this.fetchImageText()
   },

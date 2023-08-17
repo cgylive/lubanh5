@@ -49,6 +49,14 @@ export default {
       type: Boolean,
       default: false
     },
+    isCheckBorder: {
+      type: Boolean,
+      default: false
+    },
+    isSubmit: {
+      type: Boolean,
+      default: false
+    },
     isAnswer: {
       type: Boolean,
       default: false
@@ -114,7 +122,7 @@ export default {
     buttonClick(value, index) {
       // console.log(value, 'buttonClick')
       // console.log(isAnswer, 'buttonClick isAnswer')
-      this.isButtonClick = !this.isButtonClick
+      // this.isButtonClick = !this.isButtonClick
       // const index = this.buttonClickArr.findIndex(item => item === value)
       // if (index > -1) {
       //   this.buttonClickArr.splice(index, 1)
@@ -140,17 +148,21 @@ export default {
       checked,
       value,
       isAnswer,
-      isButtonClick
+      isSubmit,
+      isCheckBorder,
+      isClick
     } = this
-
+    console.log(isSubmit)
+    console.log(isClick)
     const uuid = +new Date() + genUUID()
     return (
       <div class={['lbp-' + this.type + '-wrapper', 'lbp-sub-wrapper']}>
         {/* <span class="tag">{value}11</span> */}
-        {isAnswer && isButtonClick && <img class="left-img" src={checkImg} />}
-        {!isAnswer && isButtonClick && <img class="left-img" src={closeImg} />}
+        {isAnswer && isSubmit && <img class="left-img" src={checkImg} />}
+        {!isAnswer && isSubmit && <img class="left-img" src={closeImg} />}
         {!!checked}
         <LbpButton
+          class={isCheckBorder && 'checkBorder'}
           style={{
             minHeight: `40px`,
             minWidth: `100px`,

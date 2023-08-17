@@ -56,29 +56,15 @@
       </div>
     </div>
     <div class="result-page" v-else>
-      <h2
-        class="page-title"
-        v-if="correct"
-      >
+      <h2 class="page-title" v-if="correct">
         {{ resultText }}
       </h2>
-      <h2
-        v-if="!correct"
-        class="page-title"
-      >
+      <h2 v-if="!correct" class="page-title">
         {{ resultText1 }}
       </h2>
-      <img
-        v-if="correct"
-        src="./img/1.png"
-        alt=""
-      />
+      <img v-if="correct" src="./img/1.png" alt="" />
 
-      <img
-        v-if="!correct"
-        src="./img/2.png"
-        alt=""
-      />
+      <img v-if="!correct" src="./img/2.png" alt="" />
       <lbpTextTinymce class="result-info" :text="text4"></lbpTextTinymce>
       <span>{{pageIndex}}</span>
       <LbpButton
@@ -143,7 +129,7 @@ export default {
   watch: {
     imagetext(newVal) {
       if (newVal && newVal.length) {
-        console.log('组件获取题目',newVal)
+        console.log('组件获取题目', newVal)
         this.setImageJudge()
       }
     },
@@ -178,7 +164,7 @@ export default {
           Number(parseInt(this.totalscore)) + Number(parseInt(this.score))
         this.setSocre(totalscore)
       }
-      console.log('当页分数',this.totalscore,'当前题分数',this.score)
+      console.log('当页分数', this.totalscore, '当前题分数', this.score)
     },
     setTotalscore(){
       if (this.correct){
@@ -200,7 +186,7 @@ export default {
     setImageJudge() {
       const list = this.imagetext
       const work = window.__work
-      console.log('imagetext',this.imagetext,work)
+      console.log('imagetext', this.imagetext, work)
       work.pages = work.pages.map((page, idx) => {
         page.elements = page.elements.map(element => {
           if (element.name === 'lbp-image-judge') {
@@ -213,11 +199,11 @@ export default {
         })
         return new Page(page)
       })
-      this.$nextTick(()=>{
+      this.$nextTick(() => {
         this.$forceUpdate()
       })
     }
-  },
+  }
 }
 </script>
 <style lang="scss" scoped>

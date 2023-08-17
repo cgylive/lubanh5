@@ -288,6 +288,8 @@
         // Optional parameters
         direction: "vertical",
         loop: false,
+        allowSlidePrev: false,
+        allowTouchMove: false,
         // If we need pagination
         pagination: {
           // el: ".swiper-pagination",
@@ -342,7 +344,7 @@
           // mySwiper[action]();
           window.__activeIndex = mySwiper.activeIndex
           console.log('window.__activeIndex',window.__activeIndex);
-          mySwiper.slideTo(mySwiper.activeIndex, 10, false);
+          mySwiper.slideTo(mySwiper.activeIndex, 3000, false);
         }
         if (e.target._prevClass === "reset-index-button") {
           mySwiper.slideTo(window.__activeIndex, 10, false);

@@ -46,6 +46,9 @@ $checkbox-check-height: math.div($checkbox-size, 4) * 5;
   min-height: 50px;
   margin-bottom: 20px;
   clear: both;
+  .checkBorder{
+    border-color:  red !important;
+  }
   img {
     width: 30px;
     height: 30px;

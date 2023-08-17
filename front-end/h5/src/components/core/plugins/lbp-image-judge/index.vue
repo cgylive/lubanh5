@@ -56,38 +56,24 @@
       </div>
     </div>
     <div class="result-page" v-else>
-      <h2
-        class="page-title"
-        v-if="correct"
-      >
+      <h2 class="page-title" v-if="correct">
         {{ resultText }}
       </h2>
-      <h2
-        v-if="!correct"
-        class="page-title"
-      >
+      <h2 v-if="!correct" class="page-title">
         {{ resultText1 }}
       </h2>
-      <img
-        v-if="correct"
-        src="./img/1.png"
-        alt=""
-      />
+      <img v-if="correct" src="./img/1.png" alt="" />
 
-      <img
-        v-if="!correct"
-        src="./img/2.png"
-        alt=""
-      />
+      <img v-if="!correct" src="./img/2.png" alt="" />
       <lbpTextTinymce class="result-info" :text="text4"></lbpTextTinymce>
       <LbpButton
-       v-if="correct"
+        v-if="correct"
         class="result-next-button"
         @click="nextPage('next')"
         :text="text3"
       ></LbpButton>
       <LbpButton
-       v-if="!correct"
+        v-if="!correct"
         class="reset-index-button"
         @click="resetPage"
         text="重新答题"
@@ -122,22 +108,24 @@ export default {
       work: state => state.work,
       totalscore: state => state.score
     }),
-    correct(){
-      return (this.showRightCheck && this.type === this.showRightCheck) ||
-            (this.showLeftCheck && this.type === this.showLeftCheck)
+    correct () {
+      return (
+        (this.showRightCheck && this.type === this.showRightCheck) ||
+        (this.showLeftCheck && this.type === this.showLeftCheck)
+      )
     }
   },
   props: commonProps,
   watch: {
     imagetext(newVal) {
       if (newVal && newVal.length) {
-        console.log('组件获取题目',newVal)
+        console.log('组件获取题目', newVal)
         this.setImageJudge()
       }
     }
   },
   methods: {
-    ...mapMutations('editor', ['setSocre','updateWork']),
+    ...mapMutations('editor', ['setSocre', 'updateWork']),
     leftClick() {
       this.showLeftCheck = 'check'
       setTimeout(() => {
@@ -165,18 +153,18 @@ export default {
           Number(parseInt(this.totalscore)) + Number(parseInt(this.score))
         this.setSocre(totalscore)
       }
-      console.log('当页分数',this.totalscore,'当前题分数',this.score)
+      console.log('当页分数', this.totalscore, '当前题分数', this.score)
     },
-    resetPage(){
-        window.__activeIndex = 0
-        this.showLeftCheck = ''
-        this.showRightCheck = ''
-        this.showJudgePage = true
+    resetPage() {
+      window.__activeIndex = 0
+      this.showLeftCheck = ''
+      this.showRightCheck = ''
+      this.showJudgePage = true
     },
     setImageJudge() {
       const list = this.imagetext
       const work = window.__work
-      console.log('imagetext',this.imagetext,work)
+      console.log('imagetext', this.imagetext, work)
       work.pages = work.pages.map((page, idx) => {
         page.elements = page.elements.map(element => {
           if (element.name === 'lbp-image-judge') {
@@ -189,11 +177,11 @@ export default {
         })
         return new Page(page)
       })
-      this.$nextTick(()=>{
+      this.$nextTick(() => {
         this.$forceUpdate()
       })
     }
-  },
+  }
 }
 </script>
 <style lang="scss" scoped>

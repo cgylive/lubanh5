@@ -95,7 +95,10 @@ export default {
     return {
       value: this.type === 'radio' ? '' : [],
       uuid: undefined,
-      buttonClickArr: []
+      buttonClickArr: [],
+      currentIndex: null,
+      isSubmit:false,
+      currentCheckboxIndex: []
     }
   },
   computed: {
@@ -171,7 +174,21 @@ export default {
       }
     },
     onButtonClick(val, idx) {
-      console.log(idx,this.answer)
+      if (this.type === 'checkbox') {
+        const index1 = this.currentCheckboxIndex.indexOf(idx)
+        if (index1 !== -1) {
+          this.currentCheckboxIndex.splice(index1, 1)
+        } else {
+          this.currentCheckboxIndex.push(idx)
+        }
+        this.currentCheckboxIndex = Array.from(
+          new Set(this.currentCheckboxIndex)
+        )
+      } else {
+        this.currentIndex = idx
+      }
+      console.log(this.currentCheckboxIndex)
+      console.log(idx, this.answer)
       const index = this.buttonClickArr.findIndex(item => item === idx)
       console.log(index)
       console.log(this.type)
@@ -199,6 +216,7 @@ export default {
       }
     },
     submit() {
+      this.isSubmit=true
       this.$emit('submit', this.buttonClickArr)
     },
     toggleRadio(val) {
@@ -221,11 +239,16 @@ export default {
             vertical
             value={item.value}
             index={index}
+            isCheckBorder={
+              this.currentIndex === index ||
+              this.currentCheckboxIndex.includes(index)
+            }
             isAnswer={this.answer.includes(index.toString())}
             isClick={this.buttonClickArr.includes(item.value)}
             checked={this.value === item.value}
             aliasName={this.uuid}
             type={this.type}
+            isSubmit={this.isSubmit}
             backgroundColor={this.backgroundColor}
             borderColor={this.borderColor}
             textAlign={this.textAlign}

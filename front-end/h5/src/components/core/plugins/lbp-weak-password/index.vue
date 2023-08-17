@@ -185,10 +185,10 @@ export default {
       this.setup = 1
     },
     submit(){
-      console.log('当页分数',this.totalScore,'当前题分数',this.scoreX)
       const totalscore =
           Number(this.totalScore) + Number(this.scoreX)
         this.setSocre(totalscore)
+        console.log('当页分数',this.totalScore,'当前题分数',this.scoreX)
     },
     rules(){
       const str = this.password.split('');

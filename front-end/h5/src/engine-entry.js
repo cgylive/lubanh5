@@ -63,7 +63,7 @@ const Engine = {
       )
     },
     renderPreview (pageElements = []) {
-      console.log(pageElements,'pageElements');
+      // console.log(pageElements,'pageElements');
       const height = this.isLongPage ? window.__work.height + 'px' : '100%'
       const elements = pageElements.map(element => new Element(element))
       // src//core/editor/canvas/preview
@@ -109,6 +109,7 @@ const Engine = {
     }
   },
   created () {
+    window.__activeIndex = 0
     DataSource.dispatchRequest(window.__work)
     this.fetchQuestionbanks()
     this.fetchImageText()

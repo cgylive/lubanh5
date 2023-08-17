@@ -17,7 +17,7 @@ export default {
   },
   methods: {
     genEventHandlers (element) {
-      console.log(element,'genEventHandlers');
+      // console.log(element,'genEventHandlers');
       const Ctor = this.$options.components[element.uuid]
       return element.getEventHandlers(Ctor)
     },

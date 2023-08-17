@@ -340,9 +340,15 @@
           console.log(action);
           console.log(mySwiper[action]());
           // mySwiper[action]();
+          window.__activeIndex = mySwiper.activeIndex
+          console.log('window.__activeIndex',window.__activeIndex);
           mySwiper.slideTo(mySwiper.activeIndex, 10, false);
         }
+        if (e.target._prevClass === "reset-index-button") {
+          mySwiper.slideTo(window.__activeIndex, 10, false);
+        }
         if (e.target._prevClass === "back-first-button") {
+          window.__activeIndex = 0
           mySwiper.slideTo(0, 10, false);
         }
       });

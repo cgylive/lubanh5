@@ -58,44 +58,39 @@
     <div class="result-page" v-else>
       <h2
         class="page-title"
-        v-if="
-          (showRightCheck && type === showRightCheck) ||
-            (showLeftCheck && type === showLeftCheck)
-        "
+        v-if="correct"
       >
         {{ resultText }}
       </h2>
       <h2
-        v-if="
-          (showLeftCheck && type !== showLeftCheck) ||
-            (showRightCheck && type !== showRightCheck)
-        "
+        v-if="!correct"
         class="page-title"
       >
         {{ resultText1 }}
       </h2>
       <img
-        v-if="
-          (showRightCheck && type === showRightCheck) ||
-            (showLeftCheck && type === showLeftCheck)
-        "
+        v-if="correct"
         src="./img/1.png"
         alt=""
       />
 
       <img
-        v-if="
-          (showLeftCheck && type !== showLeftCheck) ||
-            (showRightCheck && type !== showRightCheck)
-        "
+        v-if="!correct"
         src="./img/2.png"
         alt=""
       />
       <lbpTextTinymce class="result-info" :text="text4"></lbpTextTinymce>
       <LbpButton
+       v-if="correct"
         class="result-next-button"
         @click="nextPage('next')"
         :text="text3"
+      ></LbpButton>
+      <LbpButton
+       v-if="!correct"
+        class="reset-index-button"
+        @click="resetPage"
+        text="重新答题"
       ></LbpButton>
     </div>
   </div>
@@ -126,7 +121,11 @@ export default {
       imagetext: state => state.imagetext,
       work: state => state.work,
       totalscore: state => state.score
-    })
+    }),
+    correct(){
+      return (this.showRightCheck && this.type === this.showRightCheck) ||
+            (this.showLeftCheck && this.type === this.showLeftCheck)
+    }
   },
   props: commonProps,
   watch: {
@@ -153,9 +152,10 @@ export default {
       }, 1000 * 1)
     },
     nextPage(message) {
-      console.log('当页分数',this.totalscore,'当前题分数',this.score)
       setTimeout(() => {
         this.showJudgePage = true
+        this.showLeftCheck = ''
+        this.showRightCheck = ''
       }, 1000 * 1)
       if (
         (this.showRightCheck && this.type === this.showRightCheck) ||
@@ -165,13 +165,13 @@ export default {
           Number(parseInt(this.totalscore)) + Number(parseInt(this.score))
         this.setSocre(totalscore)
       }
-      const work = window.__work
-      console.log(work, 'work')
-      let iframe = document.getElementById('iframe-for-preview')
-      console.log(iframe)
-      if (!iframe) return
-      const iframeWin = iframe.contentWindow
-      iframeWin.postMessage(message, window.location.origin)
+      console.log('当页分数',this.totalscore,'当前题分数',this.score)
+    },
+    resetPage(){
+        window.__activeIndex = 0
+        this.showLeftCheck = ''
+        this.showRightCheck = ''
+        this.showJudgePage = true
     },
     setImageJudge() {
       const list = this.imagetext

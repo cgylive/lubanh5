@@ -66,11 +66,11 @@ export default {
     return {
       score: 0,
       canRender: false,
-      answers: []
     }
   },
   computed: {
     ...mapState('editor', {
+      imagetext: state => state.imagetext,
       questionbanks: state => state.questionbanks,
       work: state => state.work,
       totalscore: state => state.score
@@ -151,15 +151,16 @@ export default {
   methods: {
     ...mapMutations('editor', ['setSocre', 'updateWork']),
     setSubject() {
-      console.log('questionbanks', this.questionbanks)
-      const list = this.questionbanks
+      //  this.imagetext.concat()
+      const list = this.imagetext.concat(this.questionbanks )
+      console.log('questionbanks', list)
       const work = window.__work
-      let answer = []
       console.log(work.pages, 'work.pages')
       work.pages = work.pages.map((page, idx) => {
         console.log(idx)
         page.elements = page.elements.map(element => {
           if (element.name === 'lbp-subject') {
+            let answer = []
             console.log(idx)
             let currentIndex = idx
             if (idx > list.length - 1) {
@@ -168,7 +169,7 @@ export default {
             if (list[currentIndex].type === 'checkbox') {
               answer = list[currentIndex].answer.split(',')
             } else {
-              answer.push(Number(list[currentIndex].answer))
+              answer.push(list[currentIndex].answer)
             }
             element.pluginProps.aliasName = list[currentIndex].topic
             element.pluginProps.items = list[currentIndex].option.map(el => {
@@ -176,7 +177,6 @@ export default {
             })
             element.pluginProps.type = list[currentIndex].type
             element.pluginProps.answer = answer
-            this.answers = answer
             this.score = list[currentIndex].score
           }
           return new Element(element)
@@ -188,12 +188,12 @@ export default {
       })
     },
     submit(e) {
-      console.log('当页分数', this.totalscore, '当前题分数', this.score)
-      if (this.answers.toString() === e.toString()) {
+      if (this.answer.toString() === e.toString()) {
         const totalscore =
           Number(parseInt(this.totalscore)) + Number(parseInt(this.score))
         this.setSocre(totalscore)
       }
+      console.log('当页分数', this.totalscore, '当前题分数', this.score)
     }
   }
 }

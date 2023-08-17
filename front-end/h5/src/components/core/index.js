@@ -130,6 +130,7 @@ const CoreEditor = {
   },
   created () {
     console.log(this.workId,'workId');
+    window.__activeIndex = 0
     if (this.workId) {
       this.fetchWork(this.workId).then(()=>{
         this.fetchQuestionbanks()

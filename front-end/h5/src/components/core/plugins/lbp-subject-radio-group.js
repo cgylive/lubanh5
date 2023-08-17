@@ -171,8 +171,8 @@ export default {
       }
     },
     onButtonClick(val, idx) {
-      console.log(idx)
-      const index = this.buttonClickArr.findIndex(item => item === val)
+      console.log(idx,this.answer)
+      const index = this.buttonClickArr.findIndex(item => item === idx)
       console.log(index)
       console.log(this.type)
       if (index !== -1) {
@@ -221,7 +221,7 @@ export default {
             vertical
             value={item.value}
             index={index}
-            isAnswer={this.answer.includes(index)}
+            isAnswer={this.answer.includes(index.toString())}
             isClick={this.buttonClickArr.includes(item.value)}
             checked={this.value === item.value}
             aliasName={this.uuid}

@@ -65,7 +65,8 @@ export default {
   data() {
     return {
       score: 0,
-      canRender: false,
+      index: 0,
+      canRender: false
     }
   },
   computed: {
@@ -152,7 +153,7 @@ export default {
     ...mapMutations('editor', ['setSocre', 'updateWork']),
     setSubject() {
       //  this.imagetext.concat()
-      const list = this.imagetext.concat(this.questionbanks )
+      const list = this.imagetext.concat(this.questionbanks)
       console.log('questionbanks', list)
       const work = window.__work
       console.log(work.pages, 'work.pages')
@@ -187,13 +188,58 @@ export default {
         this.$forceUpdate()
       })
     },
+    setSubjectTest(index) {
+      //  this.imagetext.concat()
+      const list = this.questionbanks
+      console.log('questionbanks', list)
+      const work = window.__work
+      console.log(work.pages, 'work.pages')
+      work.pages = work.pages.map((page, idx) => {
+        console.log(idx)
+        page.elements = page.elements.map(element => {
+          if (element.name === 'lbp-subject') {
+            let answer = []
+            console.log(index, 'currentIndex index')
+            let currentIndex = 0
+            currentIndex = index
+            // if (idx > list.length - 1) {
+            //   currentIndex = idx - list.length
+            // }
+            console.log(currentIndex, 'currentIndex')
+            if (list[currentIndex].type === 'checkbox') {
+              answer = list[currentIndex].answer.split(',')
+            } else {
+              answer.push(list[currentIndex].answer)
+            }
+            element.pluginProps.aliasName = list[currentIndex].topic
+            element.pluginProps.items = list[currentIndex].option.map(el => {
+              return { value: el }
+            })
+            element.pluginProps.type = list[currentIndex].type
+            element.pluginProps.answer = answer
+            this.score = list[currentIndex].score
+          }
+          return new Element(element)
+        })
+        return new Page(page)
+      })
+      this.$nextTick(() => {
+        this.$forceUpdate()
+      })
+    },
     submit(e) {
-      if (this.answer.toString() === e.toString()) {
-        const totalscore =
-          Number(parseInt(this.totalscore)) + Number(parseInt(this.score))
-        this.setSocre(totalscore)
+      // let index = 0
+      if (this.index >= 4) {
+        this.index = -1
       }
-      console.log('当页分数', this.totalscore, '当前题分数', this.score)
+      this.index++
+      this.setSubjectTest(this.index)
+      // if (this.answer.toString() === e.toString()) {
+      //   const totalscore =
+      //     Number(parseInt(this.totalscore)) + Number(parseInt(this.score))
+      //   this.setSocre(totalscore)
+      // }
+      // console.log('当页分数', this.totalscore, '当前题分数', this.score)
     }
   }
 }

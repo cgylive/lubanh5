@@ -12,9 +12,9 @@ export default {
       borderColor,
       borderRadius,
       borderWidth,
-      text
+      text,
+      disabled
     } = this
-
     const style = {
       color,
       textAlign,
@@ -27,7 +27,7 @@ export default {
       textDecoration: 'none'
     }
     return (
-      <button onClick={() => this.$emit('click')} style={style}>
+      <button onClick={() => this.$emit('click')} style={style} disabled={disabled}>
         {text}
       </button>
     )
@@ -49,6 +49,10 @@ export default {
       label: '边框颜色',
       defaultValue: '#ced4da'
     }),
-    textAlign: PropTypes.textAlign()
+    textAlign: PropTypes.textAlign(),
+    disabled:{
+      type:Boolean,
+      default:false
+    }
   }
 }

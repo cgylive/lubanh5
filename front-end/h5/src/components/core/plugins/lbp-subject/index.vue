@@ -13,6 +13,8 @@
       :items="items"
       :answer="answer"
       :type="type"
+      :pageIndex="pageIndex"
+      :score="totalscore"
       @submit="submit"
     ></LbpFormRadioGroup>
   </div>
@@ -20,7 +22,7 @@
 <script>
 import PropTypes from '@luban-h5/plugin-common-props'
 import LbpFormRadioGroup from 'core/plugins/lbp-subject-radio-group'
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapActions} from 'vuex'
 import Element from 'core/models/element'
 import Page from 'core/models/page'
 // import LbpFormCheckboxGroup from 'core/plugins/lbp-form-checkbox-group'
@@ -65,8 +67,9 @@ export default {
   data() {
     return {
       score: 0,
-      index: 0,
-      canRender: false
+      pageIndex: 0,
+      canRender: false,
+      totalscore:0
     }
   },
   computed: {
@@ -74,7 +77,7 @@ export default {
       imagetext: state => state.imagetext,
       questionbanks: state => state.questionbanks,
       work: state => state.work,
-      totalscore: state => state.score
+      // totalscore: state => state.score
     })
   },
   extra: {
@@ -145,79 +148,37 @@ export default {
     questionbanks(newVal) {
       if (newVal && newVal.length) {
         console.log('组件获取题目', newVal)
-        this.setSubject()
+        this.setSubject(this.pageIndex)
       }
     }
   },
+  created(){
+    // this.setSocre(0)
+  },
   methods: {
     ...mapMutations('editor', ['setSocre', 'updateWork']),
-    setSubject() {
-      //  this.imagetext.concat()
-      const list = this.imagetext.concat(this.questionbanks)
-      console.log('questionbanks', list)
+    ...mapActions('editor', ['fetchQuestionbanks']),
+    setSubject(index) {
+      console.log('questionbanks', this.questionbanks)
       const work = window.__work
       console.log(work.pages, 'work.pages')
-      work.pages = work.pages.map((page, idx) => {
-        console.log(idx)
+      work.pages = work.pages.map((page) => {
         page.elements = page.elements.map(element => {
+          const item = this.questionbanks[index]
           if (element.name === 'lbp-subject') {
             let answer = []
-            console.log(idx)
-            let currentIndex = idx
-            if (idx > list.length - 1) {
-              currentIndex = idx - list.length
-            }
-            if (list[currentIndex].type === 'checkbox') {
-              answer = list[currentIndex].answer.split(',')
+            if (item.type === 'checkbox') {
+              answer = item.answer.split(',')
             } else {
-              answer.push(list[currentIndex].answer)
+              answer.push(item.answer)
             }
-            element.pluginProps.aliasName = list[currentIndex].topic
-            element.pluginProps.items = list[currentIndex].option.map(el => {
+            element.pluginProps.aliasName = item.topic
+            element.pluginProps.items = item.option.map(el => {
               return { value: el }
             })
-            element.pluginProps.type = list[currentIndex].type
+            element.pluginProps.type = item.type
             element.pluginProps.answer = answer
-            this.score = list[currentIndex].score
-          }
-          return new Element(element)
-        })
-        return new Page(page)
-      })
-      this.$nextTick(() => {
-        this.$forceUpdate()
-      })
-    },
-    setSubjectTest(index) {
-      //  this.imagetext.concat()
-      const list = this.questionbanks
-      console.log('questionbanks', list)
-      const work = window.__work
-      console.log(work.pages, 'work.pages')
-      work.pages = work.pages.map((page, idx) => {
-        console.log(idx)
-        page.elements = page.elements.map(element => {
-          if (element.name === 'lbp-subject') {
-            let answer = []
-            console.log(index, 'currentIndex index')
-            let currentIndex = 0
-            currentIndex = index
-            // if (idx > list.length - 1) {
-            //   currentIndex = idx - list.length
-            // }
-            console.log(currentIndex, 'currentIndex')
-            if (list[currentIndex].type === 'checkbox') {
-              answer = list[currentIndex].answer.split(',')
-            } else {
-              answer.push(list[currentIndex].answer)
-            }
-            element.pluginProps.aliasName = list[currentIndex].topic
-            element.pluginProps.items = list[currentIndex].option.map(el => {
-              return { value: el }
-            })
-            element.pluginProps.type = list[currentIndex].type
-            element.pluginProps.answer = answer
-            this.score = list[currentIndex].score
+            this.score = item.score
           }
           return new Element(element)
         })
@@ -228,18 +189,30 @@ export default {
       })
     },
     submit(e) {
+      const {text,value} = e
       // let index = 0
-      if (this.index >= 4) {
-        this.index = -1
+      switch(text){
+        case '提交':
+          if (this.answer.toString() === value.toString()) {
+            this.totalscore =  Number(parseInt(this.totalscore)) + Number(parseInt(this.score))
+          }
+          console.log('当页分数', this.totalscore, '当前题分数', this.score)
+          break;
+        case '下一题':
+          this.pageIndex++
+          this.setSubject(this.pageIndex)
+          break;
+        case '下一关':
+          break;
+        case '重新答题':
+          this.pageIndex = 0
+          // this.setSocre(30)
+          this.totalscore = 0
+          this.fetchQuestionbanks().then(()=>{
+            this.setSubject(this.pageIndex)
+          })
+          break;
       }
-      this.index++
-      this.setSubjectTest(this.index)
-      // if (this.answer.toString() === e.toString()) {
-      //   const totalscore =
-      //     Number(parseInt(this.totalscore)) + Number(parseInt(this.score))
-      //   this.setSocre(totalscore)
-      // }
-      // console.log('当页分数', this.totalscore, '当前题分数', this.score)
     }
   }
 }

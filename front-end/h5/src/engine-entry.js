@@ -110,7 +110,7 @@ const Engine = {
   // },
   created () {
     window.__activeIndex = 0
-    // DataSource.dispatchRequest(window.__work)
+    DataSource.dispatchRequest(window.__work)
     this.fetchQuestionbanks()
     this.fetchImageText()
   },

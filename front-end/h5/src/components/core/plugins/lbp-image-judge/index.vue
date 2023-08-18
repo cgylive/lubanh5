@@ -66,25 +66,21 @@
 
       <img v-if="!correct" src="./img/2.png" alt="" />
       <lbpTextTinymce class="result-info" :text="text4"></lbpTextTinymce>
-      <span>{{pageIndex}}</span>
       <LbpButton
        v-if="pageIndex<4"
-        class="result-next-button"
         @click="nextPage('next')"
         :text="text3"
       ></LbpButton>
       <template v-else>
         <LbpButton
-          v-if="totalscore === 30"
+          v-if="totalscore >= 30"
           class="result-next-button"
-          @click="nextPage"
-          :text="`下一关${totalscore}`"
+          text="下一关"
         ></LbpButton>
         <LbpButton
           v-else
-          class="reset-index-button"
           @click="resetPage"
-          :text="`重新答题${totalscore}`"
+          text="重新答题"
         ></LbpButton>
       </template>
     </div>
@@ -108,18 +104,17 @@ export default {
       showRightCheck: '',
       resultText1: '很遗憾，答错了，再接再厉',
       resultText: '恭喜你，答对了',
-      score: 0
+      score: 0,
+      pageIndex: 0,
+      totalscore:0
     }
   },
   computed: {
     ...mapState('editor', {
       imagetext: state => state.imagetext,
       work: state => state.work,
-      totalscore: state => state.score,
+      // totalscore: state => state.score,
     }),
-    pageIndex(){
-      return window.__activeIndex
-    },
     correct(){
       return (this.showRightCheck && this.type === this.showRightCheck) ||
             (this.showLeftCheck && this.type === this.showLeftCheck)
@@ -130,9 +125,12 @@ export default {
     imagetext(newVal) {
       if (newVal && newVal.length) {
         console.log('组件获取题目', newVal)
-        this.setImageJudge()
+        this.setImageJudge(this.pageIndex)
       }
     },
+  },
+  created(){
+    // this.setSocre(0)
   },
   methods: {
     ...mapMutations('editor', ['setSocre','fetchImageText']),
@@ -141,7 +139,7 @@ export default {
       this.showLeftCheck = 'check'
       setTimeout(() => {
         this.showJudgePage = false
-        if(this.pageIndex>3){this.setTotalscore()}
+        this.setTotalscore()
       }, 1000 * 1)
     },
     rightClick() {
@@ -149,51 +147,51 @@ export default {
       this.showRightCheck = 'close'
       setTimeout(() => {
         this.showJudgePage = false
-        if(this.pageIndex>3){this.setTotalscore()}
+        this.setTotalscore()
       }, 1000 * 1)
     },
     nextPage(type) {
-      setTimeout(() => {
+
+      if(type){
+        this.pageIndex++
+        this.setImageJudge(this.pageIndex)
         this.showJudgePage = true
         this.showLeftCheck = ''
         this.showRightCheck = ''
-        console.log('window.__activeIndex',window.__activeIndex)
-      }, 1000 * 1)
-      if (this.correct && type) {
-        const totalscore =
-          Number(parseInt(this.totalscore)) + Number(parseInt(this.score))
-        this.setSocre(totalscore)
       }
       console.log('当页分数', this.totalscore, '当前题分数', this.score)
     },
     setTotalscore(){
       if (this.correct){
-        const totalscore =
-            Number(parseInt(this.totalscore)) + Number(parseInt(this.score))
-          this.setSocre(totalscore)
+        // const totalscore =
+        this.totalscore =  Number(parseInt(this.totalscore)) + Number(parseInt(this.score))
+          // this.setSocre(totalscore)
           console.log('当页分数',this.totalscore,'当前题分数',this.score)
       }
     },
     resetPage(){
-        window.__activeIndex = 0
+        this.score = 0
+        this.pageIndex = 0
         this.showLeftCheck = ''
         this.showRightCheck = ''
         this.showJudgePage = true
+        // this.setSocre(0)
+        this.totalscore = 0
         this.fetchImageText().then(()=>{
-          this.setImageJudge()
+          this.setImageJudge(this.pageIndex)
         })
     },
-    setImageJudge() {
-      const list = this.imagetext
+    setImageJudge(idx) {
+      const item = this.imagetext[idx]
       const work = window.__work
       console.log('imagetext', this.imagetext, work)
-      work.pages = work.pages.map((page, idx) => {
+      work.pages = work.pages.map((page) => {
         page.elements = page.elements.map(element => {
           if (element.name === 'lbp-image-judge') {
-            element.pluginProps.text4 = list[idx].tips
-            element.pluginProps.type = list[idx].answer
-            element.pluginProps.imgSrc = list[idx].image.url
-            this.score = list[idx].score
+            element.pluginProps.text4 = item?.tips
+            element.pluginProps.type = item?.answer
+            element.pluginProps.imgSrc = item?.image.url
+            this.score = item?.score
           }
           return new Element(element)
         })

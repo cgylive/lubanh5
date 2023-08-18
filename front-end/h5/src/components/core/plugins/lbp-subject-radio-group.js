@@ -89,6 +89,14 @@ export default {
     borderRadius: {
       type: Number,
       default: 4
+    },
+    pageIndex:{
+      type: Number,
+      default: 0
+    },
+    score:{
+      type: Number,
+      default: 0
     }
   },
   data() {
@@ -96,7 +104,7 @@ export default {
       value: this.type === 'radio' ? '' : [],
       uuid: undefined,
       buttonClickArr: [],
-      currentIndex: null,
+      currentIndex: -1,
       isSubmit:false,
       currentCheckboxIndex: []
     }
@@ -109,6 +117,24 @@ export default {
         const value = (Array.isArray(this.value) && this.value) || []
         return value.join(',')
       }
+    },
+    btnText(){
+      if(!this.isSubmit){
+        return '提交'
+      }else{
+        if(this.pageIndex<4){
+          return '下一题'
+        }else{
+          if(this.score >= 40){
+            return "下一关"
+          }else{
+            return "重新答题"
+          }
+        }
+      }
+    },
+    btnDisabled(){
+       return this.currentIndex === -1 && !this.currentCheckboxIndex.length
     }
   },
   watch: {
@@ -185,13 +211,10 @@ export default {
           new Set(this.currentCheckboxIndex)
         )
       } else {
+        this.buttonClickArr = []
         this.currentIndex = idx
       }
-      console.log(this.currentCheckboxIndex)
-      console.log(idx, this.answer)
       const index = this.buttonClickArr.findIndex(item => item === idx)
-      console.log(index)
-      console.log(this.type)
       if (index !== -1) {
         this.buttonClickArr.splice(index, 1)
       } else {
@@ -204,8 +227,6 @@ export default {
           this.buttonClickArr.push(idx)
         }
       }
-      // this.buttonClickArr.push(val)
-      console.log(this.buttonClickArr, 'buttonClickArr')
     },
     toggleCheckbox(val) {
       const index = this.value.indexOf(val)
@@ -216,12 +237,19 @@ export default {
       }
     },
     submit() {
-      this.isSubmit=true
-      this.$emit('submit', this.buttonClickArr)
+      this.$emit('submit', {value:this.buttonClickArr,text:this.btnText})
+      if(!this.isSubmit && this.btnText == '提交'){
+        this.isSubmit = true
+      }else{
+        this.isSubmit = false
+        this.currentIndex = -1
+        this.currentCheckboxIndex = []
+        this.buttonClickArr = []
+      }
     },
     toggleRadio(val) {
       this.value = val
-    }
+    },
   },
   render() {
     return (
@@ -263,22 +291,24 @@ export default {
             {item.value}
           </LbpFormRadio>
         ))}
-        <LbpButton
-          class="result-next-button"
+       <LbpButton
+          class={this.btnText === '下一关' ? "result-next-button":''}
           style={{
             minHeight: `40px`,
             minWidth: `200px`,
             padding: '10px',
             borderRadius: '15px',
             color: '#fff',
-            backgroundColor: '#1890ff',
+            backgroundColor: this.btnDisabled ? '#d3d7d4': '#1890ff',
             paddingLeft: '20px',
             paddingRight: '20px'
           }}
-          text={'提交'}
+          disabled={this.btnDisabled}
+          text={this.btnText}
           onClick={() => this.submit()}
         ></LbpButton>
       </div>
     )
   }
 }
+

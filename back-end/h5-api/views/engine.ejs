@@ -9,7 +9,7 @@
  * @Copyright 2018 - 2019 luban-h5. All Rights Reserved
  -->
 
-<html>
+ <html>
   <head>
     <meta charset="UTF-8" />
     <title><%= work.title %></title>
@@ -288,8 +288,7 @@
         // Optional parameters
         direction: "vertical",
         loop: false,
-        allowSlidePrev: false,
-        allowTouchMove: false,
+        allowTouchMove: false, //禁止滑动翻页
         // If we need pagination
         pagination: {
           // el: ".swiper-pagination",
@@ -339,18 +338,12 @@
         console.log(e.target._prevClass);
         if (e.target._prevClass === "result-next-button") {
           var action = `slide${title("next")}`;
-          console.log(action);
-          console.log(mySwiper[action]());
-          // mySwiper[action]();
-          window.__activeIndex = mySwiper.activeIndex
-          console.log('window.__activeIndex',window.__activeIndex);
-          mySwiper.slideTo(mySwiper.activeIndex, 3000, false);
-        }
-        if (e.target._prevClass === "reset-index-button") {
-          mySwiper.slideTo(window.__activeIndex, 10, false);
+          // console.log(action);
+          // console.log(mySwiper[action]());
+          mySwiper[action]();
+          // mySwiper.slideTo(mySwiper.activeIndex++, 10, false);
         }
         if (e.target._prevClass === "back-first-button") {
-          window.__activeIndex = 0
           mySwiper.slideTo(0, 10, false);
         }
       });

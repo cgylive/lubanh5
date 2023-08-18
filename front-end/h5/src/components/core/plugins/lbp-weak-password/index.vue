@@ -13,7 +13,7 @@
           4、密码中不要出现连续数字
         </p>
         <span>请输入你的密码</span>
-        <input type="password" v-model="password" />
+        <input type="text" v-model="password" :keyup="password=password.replace(/[\u4e00-\u9fa5]/ig,'')"  />
         <div  class="errer"><span v-show="showTip">密码不能为空</span></div>
         <button @click="check">开始检测</button>
     </div>
@@ -56,8 +56,8 @@
         </div>
        </div>
        <div class="bottom-v">
-          <button @click="reCheck">重新检测</button>
-          <button  class="result-next-button" @click="submit">提交</button>
+          <button @click="reCheck" v-if="totalScore<30">重新检测</button>
+          <button v-else  class="result-next-button" @click="submit">提交</button>
        </div>
     </div>
   </div>
@@ -88,12 +88,12 @@ export default {
         '缺少特殊字符，',
       ],
       showTip:false,
-      score:0
+      score:0,
     }
   },
   computed:{
     ...mapState('editor', {
-      scoreX: state => state.score
+      // scoreX: state => state.score
     }),
     totalScore(){
       const len = this.score
@@ -153,9 +153,7 @@ export default {
     },
   },
   mounted () {
-    // strapi.updateEntry('scripts', 1).then((res)=>{
-    //   console.log(res)
-    // })
+    // this.setSocre(0)
   },
   methods:{
     ...mapMutations('editor',['setSocre']),
@@ -185,10 +183,10 @@ export default {
       this.setup = 1
     },
     submit(){
-      const totalscore =
-          Number(this.totalScore) + Number(this.scoreX)
-        this.setSocre(totalscore)
-        console.log('当页分数',this.totalScore,'当前题分数',this.scoreX)
+      // const totalscore =
+      //     Number(this.totalScore) + Number(this.scoreX)
+      //   this.setSocre(totalscore)
+        // console.log('当页分数',this.totalScore,'当前题分数',this.scoreX)
     },
     rules(){
       const str = this.password.split('');
@@ -229,6 +227,9 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.weak-password-view{
+  padding: 20px;
+}
 .flex-v{
   display: flex;
   flex-direction:column;
@@ -338,10 +339,10 @@ export default {
   margin-top:60px;
   width: 80%;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   padding: 0 20px;
   button{
-    width: 80px;
+    width: 100px;
     height: 35px; 
     background-color: rgb(216,191,37);
     border-radius:12px;

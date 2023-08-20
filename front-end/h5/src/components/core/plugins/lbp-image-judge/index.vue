@@ -1,6 +1,7 @@
 <template>
   <div class="lbp-image-judge" v-show="imagetext && imagetext.length">
     <div class="judge-page" v-if="showJudgePage">
+      <div style="color:#fff;text-align:left;margin-bottom:10px;">你认为下图中的做法是否安全？</div>
       <div class="body">
         <LbpPicture :imgSrc="imgSrc" :fillType="fillType"></LbpPicture>
       </div>
@@ -56,12 +57,12 @@
       </div>
     </div>
     <div class="result-page" v-else>
-      <h2 class="page-title" v-if="correct">
+      <h4 class="page-title" v-if="correct">
         {{ resultText }}
-      </h2>
-      <h2 v-if="!correct" class="page-title">
+      </h4>
+      <h4 v-if="!correct" class="page-title">
         {{ resultText1 }}
-      </h2>
+      </h4>
       <img v-if="correct" src="./img/1.png" alt="" />
 
       <img v-if="!correct" src="./img/2.png" alt="" />
@@ -207,6 +208,14 @@ export default {
 <style lang="scss" scoped>
 .lbp-image-judge {
   position: relative;
+  background-size: 100% 100%;
+  
+  .judge-page{
+    padding: 90px 40px;
+    .body{
+      background-color: #fff;
+    }
+  }
   .foot {
     margin-top: 50px;
     display: flex;
@@ -228,8 +237,13 @@ export default {
       position: relative;
       width: 50%;
       button {
+        background-image: url('./img/btn_bk.png');
+        background-size: 100% 100%;
         width: 100px;
-        height: 40px;
+        height: 35px;
+        background-color: unset !important;
+        border: unset;
+        font-weight: bold;
       }
     }
     .left {
@@ -237,8 +251,13 @@ export default {
       position: relative;
       width: 40%;
       button {
+        background-image: url('./img/btn_bk.png');
+        background-size: 100% 100%;
         width: 100px;
-        height: 40px;
+        height: 35px;
+        background-color: unset !important;
+        border: unset;
+        font-weight: bold;
       }
     }
   }
@@ -247,23 +266,38 @@ export default {
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    padding-top: 50px;
     img {
-      width: 300px;
-      height: 300px;
+      width: 70px;
+      height: 90px;
     }
     .page-title {
+      color: #fff;
       margin-top: 20px;
     }
     button {
-      position: absolute;
-      bottom: 30px;
-      width: 200px;
-      height: 40px;
-      border-radius: 20px !important;
+      // position: absolute;
+      // bottom: 30px;
+      // width: 200px;
+      // height: 40px;
+      // border-radius: 20px !important;
+      background-image: url('./img/btn_bk.png');
+      background-size: 100% 100%;
+      width: 100px;
+      height: 35px;
+      background-color: unset !important;
+      border: unset;
+      font-weight: bold;
     }
     .result-info {
       //   margin-top: 260px;
-      padding: 25px;
+      margin: 40px auto;
+      padding: 8px;
+      width: 213px;
+      height: 132px;
+      border-radius:10px;
+      overflow-y: auto;
+      background-color: #fff !important;
     }
   }
 }

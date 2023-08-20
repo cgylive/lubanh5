@@ -1,7 +1,7 @@
 <template>
-  <div class="weak-password-view">
+  <div class="weak-password-view " :class="setup===1 ? 'bk1' : 'bk2'">
     <div class="flex-v setup1" v-if="setup===1">
-        <p>
+        <!-- <p>
           您在输入密码时，请注意关注如下基本要素：</br>
                              </br>
           1、密码长度应大于8位</br>
@@ -12,10 +12,10 @@
 
           4、密码中不要出现连续数字
         </p>
-        <span>请输入你的密码</span>
+        <span>请输入你的密码</span> -->
         <input type="text" v-model="password" :keyup="password=password.replace(/[\u4e00-\u9fa5]/ig,'')"  />
         <div  class="errer"><span v-show="showTip">密码不能为空</span></div>
-        <button @click="check">开始检测</button>
+        <button @click="check">检测密码长度</button>
     </div>
     <div class="flex-v setup2" v-else-if="setup===2">
        <div class="top-v">
@@ -45,13 +45,13 @@
            </template>
         </div>
         <div class="con-desc">
-          <div class="pass-text">
+          <!-- <div class="pass-text">
             {{prompt}}
-          </div>
+          </div> -->
           <div class="pass-text" v-if="score<80">
             <span v-if="password.length<8" >密码中长度不够8位、</span>
             <span>{{suggest}}</span>
-            <span>你可以在改进改进，让密码更强。</span>
+            <span>你可以再改进，让密码更强。</span>
           </div>
         </div>
        </div>
@@ -227,8 +227,20 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.bk1{
+  background-image: url('./img/bk1.png');
+}
+.bk2{
+  background-image: url('./img/bk2.png');
+}
 .weak-password-view{
-  padding: 20px;
+  padding:0 20px;
+  // display: flex;
+  // align-items: center;
+  box-sizing: border-box;
+  position: fixed;
+  background-size: 100% 100%;
+  font-size: 12px;
 }
 .flex-v{
   display: flex;
@@ -238,43 +250,51 @@ export default {
 }
 .setup1{
   width: 100%;
+  padding-top: 300px;
   p{
     text-align: left;
   }
   input{
-    margin: 20px 0 0 0;
-    width: 160px;
-    height: 35px;
+    margin: 10px 0 0 0;
+    width: 122px;
+    height: 23px;
     border-radius:20px;
     font-size:14px;
     border: 1px solid #fff;
     color: #000000;
-    background-color: #eeeeee;
+    // background-color: #eeeeee;
+    background-image: url('./img/input_bk.png');
+    background-size: 100% 100%;
   }
   button{
-    width: 160px;
-    height: 35px; 
+    width: 122px;
+    height: 27px; 
     background-color: rgba(24,111,252,1);
     border-radius:12px;
-    font-size:14px;
+    font-size:12px;
     color:#fff;
     border: 1px solid rgba(24,111,252,1);
+    background-image: url('./img/pbtn_bk.png');
   }
   .errer{
     color: red;
-    height: 20px;
+    height: 10px;
     display: inline-block;
     margin-bottom: 5px;
+    font-size: 12px;
   }
 }
 .setup2{
   width: 100%;
+  padding-top: 190px;
   .pass-text{
-    color:rgba(212,92,57,1)
+    color:rgba(212,92,57,1);
   }
 }
 .top-v{
   width: 80%;
+  height: 81px;
+  // padding-top:10px;
 }
 .strength-bar{
   background-color: rgb(23,54,134);
@@ -290,6 +310,8 @@ export default {
 }
 .content-v{
   width: 80%;
+  padding-top: 5px;
+  min-height: 140px;
   .con-len-v{
     display: flex;
     flex-direction: row;
@@ -298,7 +320,9 @@ export default {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    margin-left:30px;
+    padding-left:30px;
+    padding-bottom: 5px;
+    border-bottom: 1px #a0a0a0 dashed;
     .item-v{
       width: 50%;
       display: flex;
@@ -308,26 +332,25 @@ export default {
       .drop{
         background-color: rgb(167,164,147);
         border-radius: 50%;
-        width: 16px;
-        height: 16px;
+        width: 8px;
+        height: 8px;
         margin-right:5px;
         display: flex;
         justify-content: center;
         align-items: center;
         .drop-c{
           display: block;
-          background-color: rgb(14,105,28);
+          background-color:#ff6c02;
           border-radius: 50%;
-          width: 8px;
-          height: 8px;
+          width: 5px;
+          height: 5px;
         }
       }
     }
   }
   .con-desc{
     div:first-child{
-      padding: 10px 0 5px 0;
-      border-bottom: 1px #000 dashed;
+      padding: 5px 0 5px 0;
     }
     div{
        text-align: left;
@@ -336,19 +359,21 @@ export default {
   }
 }
 .bottom-v{
-  margin-top:60px;
+  // margin-top:60px;
   width: 80%;
+  height: 35px;
   display: flex;
   justify-content: center;
   padding: 0 20px;
   button{
-    width: 100px;
-    height: 35px; 
-    background-color: rgb(216,191,37);
-    border-radius:12px;
-    font-size:14px;
-    color:#000;
-    border: 1px solid rgb(216,191,37);
+      background-image: url('../lbp-image-judge/img/btn_bk.png');
+      background-size: 100% 100%;
+      width: 100px;
+      height: 35px;
+      background-color: unset !important;
+      border: unset;
+      font-weight: bold;
+      text-align: center !important;
   }
 }
 </style>

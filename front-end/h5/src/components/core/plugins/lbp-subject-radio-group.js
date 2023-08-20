@@ -253,8 +253,8 @@ export default {
   },
   render() {
     return (
-      <div>
-        <h3>{this.aliasName}</h3>
+      <div style="width:100%;">
+        <div class="title">{this.aliasName}</div>
         <input
           type="text"
           hidden
@@ -262,51 +262,56 @@ export default {
           data-type="lbp-form-input"
           data-uuid={this.uuid}
         />
+        <div class="options">
         {this.items.map((item, index) => (
-          <LbpFormRadio
-            vertical
-            value={item.value}
-            index={index}
-            isCheckBorder={
-              this.currentIndex === index ||
-              this.currentCheckboxIndex.includes(index)
-            }
-            isAnswer={this.answer.includes(index.toString())}
-            isClick={this.buttonClickArr.includes(item.value)}
-            checked={this.value === item.value}
-            aliasName={this.uuid}
-            type={this.type}
-            isSubmit={this.isSubmit}
-            backgroundColor={this.backgroundColor}
-            borderColor={this.borderColor}
-            textAlign={this.textAlign}
-            fontSize={this.fontSize}
-            lineHeight={this.lineHeight}
-            borderWidth={this.borderWidth}
-            borderRadius={this.borderRadius}
-            color={this.color}
-            onButtonClick={this.onButtonClick}
-            onChange={this.onChange}
-          >
-            {item.value}
-          </LbpFormRadio>
-        ))}
-       <LbpButton
-          class={this.btnText === '下一关' ? "result-next-button":''}
-          style={{
-            minHeight: `40px`,
-            minWidth: `200px`,
-            padding: '10px',
-            borderRadius: '15px',
-            color: '#fff',
-            backgroundColor: this.btnDisabled ? '#d3d7d4': '#1890ff',
-            paddingLeft: '20px',
-            paddingRight: '20px'
-          }}
-          disabled={this.btnDisabled}
-          text={this.btnText}
-          onClick={() => this.submit()}
-        ></LbpButton>
+              <LbpFormRadio
+                vertical
+                value={item.value}
+                index={index}
+                isCheckBorder={
+                  this.currentIndex === index ||
+                  this.currentCheckboxIndex.includes(index)
+                }
+                isAnswer={this.answer.includes(index.toString())}
+                isClick={this.buttonClickArr.includes(item.value)}
+                checked={this.value === item.value}
+                aliasName={this.uuid}
+                type={this.type}
+                isSubmit={this.isSubmit}
+                backgroundColor={this.backgroundColor}
+                borderColor={this.borderColor}
+                textAlign={this.textAlign}
+                fontSize={this.fontSize}
+                lineHeight={this.lineHeight}
+                borderWidth={this.borderWidth}
+                borderRadius={this.borderRadius}
+                color={this.color}
+                onButtonClick={this.onButtonClick}
+                onChange={this.onChange}
+              >
+                {item.value}
+              </LbpFormRadio>
+            )
+        )}
+        </div>
+      <div class="submit_btn">
+        <LbpButton
+            class={this.btnText === '下一关' ? "result-next-button":''}
+            // style={{
+            //   minHeight: `40px`,
+            //   minWidth: `200px`,
+            //   padding: '10px',
+            //   borderRadius: '15px',
+            //   color: '#fff',
+            //   backgroundColor: this.btnDisabled ? '#d3d7d4': '#1890ff',
+            //   paddingLeft: '20px',
+            //   paddingRight: '20px'
+            // }}
+            disabled={this.btnDisabled}
+            text={this.btnText}
+            onClick={() => this.submit()}
+          ></LbpButton>
+      </div>
       </div>
     )
   }

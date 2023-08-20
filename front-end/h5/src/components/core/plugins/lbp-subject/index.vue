@@ -217,7 +217,43 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
+div{
+  box-sizing: border-box;
+}
 .lbp-subject {
+  padding:98px 20px 20px 20px;
+  box-sizing: border-box;
+  .title{
+    background-color: #fff;
+    border-radius: 4px;
+    text-align: left;
+    padding: 5px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  .options{
+    max-height: 300px;
+    overflow-y: auto;
+    button{
+      width: 100%;
+      text-align: left !important;
+      border-width: 2px !important;
+      box-sizing:border-box;
+      font-weight: bold;
+    }
+  }
+  .submit_btn{
+    button{
+      background-image: url('../lbp-image-judge/img/btn_bk.png');
+      background-size: 100% 100%;
+      width: 100px;
+      height: 35px;
+      background-color: unset !important;
+      border: unset;
+      font-weight: bold;
+      text-align: center !important;
+    }
+  }
 }
 </style>

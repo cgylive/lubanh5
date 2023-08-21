@@ -212,7 +212,7 @@ export default {
             this.setSubject(this.pageIndex)
           }
           break
-        case '下一关':
+        case '全部通关':
           break
         case '重新答题':
           this.pageIndex = 0

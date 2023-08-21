@@ -127,7 +127,7 @@ export default {
           return '提交'
         } else {
           if (this.score >= 40) {
-            return '下一关'
+            return '全部通关'
           } else {
             return '重新答题'
           }
@@ -137,7 +137,7 @@ export default {
           return '下一题'
         } else {
           if (this.score >= 40) {
-            return '下一关'
+            return '全部通关'
           } else {
             return '重新答题'
           }
@@ -329,7 +329,7 @@ export default {
             </div>
           )}
           <LbpButton
-            class={this.btnText === '下一关' ? 'result-next-button' : ''}
+            class={this.btnText === '全部通关' ? 'result-next-button' : ''}
             // style={{
             //   minHeight: `40px`,
             //   minWidth: `200px`,

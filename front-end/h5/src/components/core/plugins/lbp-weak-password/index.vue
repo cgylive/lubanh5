@@ -84,7 +84,7 @@
         密码还不够强,请再试一次吧！
       </div>
       <button @click="reCheck" v-if="totalScore < 30">重新检测</button>
-      <button v-else class="result-next-button">全部通关</button>
+      <button v-else class="result-next-button">下一关</button>
     </div>
   </div>
 </template>

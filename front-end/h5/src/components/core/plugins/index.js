@@ -24,6 +24,7 @@ import LbpWeakPassword from 'core/plugins/lbp-weak-password'
 import lbpImageJudge from 'core/plugins/lbp-image-judge'
 import lbpSubject from 'core/plugins/lbp-subject'
 import lbpResult from 'core/plugins/lbp-result'
+import lbpImgButton from 'core/plugins/lbp-img-button'
 // import LbpTabs from 'core/components/plugins/lbp-tabs'
 
 export const pluginsList = [
@@ -195,6 +196,17 @@ export const pluginsList = [
     component: LbpButton,
     visible: true,
     name: LbpButton.name
+  },
+  {
+    i18nTitle: {
+      'en-US': 'Button',
+      'zh-CN': '背景按钮'
+    },
+    title: '背景按钮',
+    icon: 'hand-pointer-o',
+    component: lbpImgButton,
+    visible: true,
+    name: lbpImgButton.name
   },
   {
     i18nTitle: {

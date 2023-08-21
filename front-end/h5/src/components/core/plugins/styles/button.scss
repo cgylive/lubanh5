@@ -1,0 +1,25 @@
+@use 'sass:math';
+.img-small-button {
+  button {
+    background-image: url('../lbp-image-judge/img/btn_bk.png');
+    background-size: 100% 100%;
+    min-width: 100px;
+    height: 35px;
+    background-color: unset !important;
+    border: unset;
+    font-weight: bold;
+    text-align: center !important;
+  }
+}
+.img-large-button{
+    button {
+        background-image: url('../lbp-image-judge/img/btn-bg-large.png');
+        background-size: 100% 100%;
+        min-width: 100px;
+        height: 35px;
+        background-color: unset !important;
+        border: unset;
+        font-weight: bold;
+        text-align: center !important;
+      }
+}

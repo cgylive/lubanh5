@@ -9,7 +9,7 @@
  * @Copyright 2018 - 2019 luban-h5. All Rights Reserved
  -->
 
- <html>
+<html>
   <head>
     <meta charset="UTF-8" />
     <title><%= work.title %></title>
@@ -342,6 +342,16 @@
           // console.log(mySwiper[action]());
           mySwiper[action]();
           // mySwiper.slideTo(mySwiper.activeIndex++, 10, false);
+        }
+        if (e.target._prevClass === "lbp-next-click-button") {
+          var action = `slide${title("next")}`;
+          // console.log(action);
+          // console.log(mySwiper[action]());
+          mySwiper[action]();
+          // mySwiper.slideTo(mySwiper.activeIndex++, 10, false);
+        }
+        if (e.target._prevClass === "lbp-back-click-button") {
+          mySwiper.slideTo(1, 10, false);
         }
         if (e.target._prevClass === "back-first-button") {
           mySwiper.slideTo(0, 10, false);

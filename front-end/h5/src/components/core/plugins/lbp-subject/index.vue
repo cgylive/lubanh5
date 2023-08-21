@@ -1,5 +1,11 @@
 <template>
-  <div class="lbp-subject">
+  <div
+    class="lbp-subject"
+    :class="{
+      checkImg: pageIndex === 5 && totalscore >= 40,
+      closeImg: pageIndex === 5 && totalscore < 40 && totalscore > 0
+    }"
+  >
     <LbpFormRadioGroup
       :aliasName="aliasName"
       :backgroundColor="backgroundColor"
@@ -22,7 +28,7 @@
 <script>
 import PropTypes from '@luban-h5/plugin-common-props'
 import LbpFormRadioGroup from 'core/plugins/lbp-subject-radio-group'
-import { mapState, mapMutations, mapActions} from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 import Element from 'core/models/element'
 import Page from 'core/models/page'
 // import LbpFormCheckboxGroup from 'core/plugins/lbp-form-checkbox-group'
@@ -69,14 +75,14 @@ export default {
       score: 0,
       pageIndex: 0,
       canRender: false,
-      totalscore:0
+      totalscore: 0
     }
   },
   computed: {
     ...mapState('editor', {
       imagetext: state => state.imagetext,
       questionbanks: state => state.questionbanks,
-      work: state => state.work,
+      work: state => state.work
       // totalscore: state => state.score
     })
   },
@@ -152,7 +158,7 @@ export default {
       }
     }
   },
-  created(){
+  created() {
     // this.setSocre(0)
   },
   methods: {
@@ -162,7 +168,7 @@ export default {
       console.log('questionbanks', this.questionbanks)
       const work = window.__work
       console.log(work.pages, 'work.pages')
-      work.pages = work.pages.map((page) => {
+      work.pages = work.pages.map(page => {
         page.elements = page.elements.map(element => {
           const item = this.questionbanks[index]
           if (element.name === 'lbp-subject') {
@@ -189,42 +195,54 @@ export default {
       })
     },
     submit(e) {
-      const {text,value} = e
+      const { text, value } = e
       // let index = 0
-      switch(text){
+      console.log(text, value, 'submit')
+      switch (text) {
         case '提交':
           if (this.answer.toString() === value.toString()) {
-            this.totalscore =  Number(parseInt(this.totalscore)) + Number(parseInt(this.score))
+            this.totalscore =
+              Number(parseInt(this.totalscore)) + Number(parseInt(this.score))
           }
           console.log('当页分数', this.totalscore, '当前题分数', this.score)
-          break;
+          break
         case '下一题':
           this.pageIndex++
-          this.setSubject(this.pageIndex)
-          break;
+          if (this.pageIndex < 5) {
+            this.setSubject(this.pageIndex)
+          }
+          break
         case '下一关':
-          break;
+          break
         case '重新答题':
           this.pageIndex = 0
           // this.setSocre(30)
           this.totalscore = 0
-          this.fetchQuestionbanks().then(()=>{
+          this.fetchQuestionbanks().then(() => {
             this.setSubject(this.pageIndex)
           })
-          break;
+          break
       }
     }
   }
 }
 </script>
 <style lang="scss">
-div{
+.checkImg {
+  background-image: url('./img/7.png');
+  background-size: 100% 100%;
+}
+.closeImg {
+  background-image: url('./img/8.png');
+  background-size: 100% 100%;
+}
+div {
   box-sizing: border-box;
 }
 .lbp-subject {
-  padding:98px 20px 20px 20px;
+  padding: 98px 20px 20px 20px;
   box-sizing: border-box;
-  .title{
+  .title {
     background-color: #fff;
     border-radius: 4px;
     text-align: left;
@@ -232,19 +250,19 @@ div{
     font-weight: bold;
     margin-bottom: 10px;
   }
-  .options{
+  .options {
     max-height: 300px;
     overflow-y: auto;
-    button{
+    button {
       width: 100%;
       text-align: left !important;
       border-width: 2px !important;
-      box-sizing:border-box;
+      box-sizing: border-box;
       font-weight: bold;
     }
   }
-  .submit_btn{
-    button{
+  .submit_btn {
+    button {
       background-image: url('../lbp-image-judge/img/btn_bk.png');
       background-size: 100% 100%;
       width: 100px;
@@ -253,6 +271,14 @@ div{
       border: unset;
       font-weight: bold;
       text-align: center !important;
+    }
+  }
+  .result_btn {
+    display: flex;
+    justify-content: center;
+    button {
+      position: absolute;
+      bottom: 106px;
     }
   }
 }

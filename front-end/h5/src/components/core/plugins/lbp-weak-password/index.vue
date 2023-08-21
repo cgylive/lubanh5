@@ -1,7 +1,18 @@
 <template>
-  <div class="weak-password-view " :class="setup===1 ? 'bk1' : 'bk2'">
-    <div class="flex-v setup1" v-if="setup===1">
-        <!-- <p>
+  <div
+    class="weak-password-view "
+    :class="
+      !isSubmit
+        ? setup === 1
+          ? 'bk1'
+          : 'bk2'
+        : totalScore < 30
+        ? 'closeImg'
+        : 'checkImg'
+    "
+  >
+    <div class="flex-v setup1" v-if="!isSubmit && setup === 1">
+      <!-- <p>
           您在输入密码时，请注意关注如下基本要素：</br>
                              </br>
           1、密码长度应大于8位</br>
@@ -13,52 +24,67 @@
           4、密码中不要出现连续数字
         </p>
         <span>请输入你的密码</span> -->
-        <input type="text" v-model="password" :keyup="password=password.replace(/[\u4e00-\u9fa5]/ig,'')"  />
-        <div  class="errer"><span v-show="showTip">密码不能为空</span></div>
-        <button @click="check">检测密码长度</button>
+      <input
+        type="text"
+        v-model="password"
+        :keyup="(password = password.replace(/[\u4e00-\u9fa5]/gi, ''))"
+      />
+      <div class="errer"><span v-show="showTip">密码不能为空</span></div>
+      <button @click="check">检测密码长度</button>
     </div>
-    <div class="flex-v setup2" v-else-if="setup===2">
-       <div class="top-v">
-        <div> <span class="pass-text">{{password}}</span> 密码强壮度 </div>
+    <div class="flex-v setup2" v-else-if="!isSubmit && setup === 2">
+      <div class="top-v">
+        <div>
+          <span class="pass-text">{{ password }}</span> 密码强壮度
+        </div>
         <div class="strength-bar">
-          <div class="bar" :style="'width:'+ score + '%;'"></div>
+          <div class="bar" :style="'width:' + score + '%;'"></div>
         </div>
         <div style="color:rgba(212,92,57,1)">
-          {{intensity}},{{totalScore}}分
+          {{ intensity }},{{ totalScore }}分
         </div>
-       </div>
-       <div class="content-v">
+      </div>
+      <div class="content-v">
         <div class="con-len-v">
-          <span>密码长度</span><div>{{password.length}}</div><span>位</span>
+          <span>密码长度</span>
+          <div>{{ password.length }}</div>
+          <span>位</span>
         </div>
         <div class="con-item-v">
-           <template v-for="(item,index) in checkResult">
-              <div class="item-v" :key="index">
-                 <div class="drop">
-                   <span class="drop-c" v-show="item" ></span>
-                 </div>
-                 <span v-if="index===0">大写字母</span>
-                 <span v-if="index===1">小写字母</span>
-                 <span v-if="index===2">数字</span>
-                 <span v-if="index===3">特殊字符</span>
+          <template v-for="(item, index) in checkResult">
+            <div class="item-v" :key="index">
+              <div class="drop">
+                <span class="drop-c" v-show="item"></span>
               </div>
-           </template>
+              <span v-if="index === 0">大写字母</span>
+              <span v-if="index === 1">小写字母</span>
+              <span v-if="index === 2">数字</span>
+              <span v-if="index === 3">特殊字符</span>
+            </div>
+          </template>
         </div>
         <div class="con-desc">
           <!-- <div class="pass-text">
             {{prompt}}
           </div> -->
-          <div class="pass-text" v-if="score<80">
-            <span v-if="password.length<8" >密码中长度不够8位、</span>
-            <span>{{suggest}}</span>
+          <div class="pass-text" v-if="score < 80">
+            <span v-if="password.length < 8">密码中长度不够8位、</span>
+            <span>{{ suggest }}</span>
             <span>你可以再改进，让密码更强。</span>
           </div>
         </div>
-       </div>
-       <div class="bottom-v">
-          <button @click="reCheck" v-if="totalScore<30">重新检测</button>
-          <button v-else  class="result-next-button" @click="submit">提交</button>
-       </div>
+      </div>
+      <div class="bottom-v">
+        <!-- <button @click="reCheck" v-if="totalScore < 30">重新检测</button> -->
+        <button @click="submit">提交</button>
+      </div>
+    </div>
+    <div v-if="isSubmit" class="bottom-v result-v">
+      <div v-if="totalScore < 30" class="error-msg">
+        密码还不够强,请再试一次吧！
+      </div>
+      <button @click="reCheck" v-if="totalScore < 30">重新检测</button>
+      <button v-else class="result-next-button">全部通关</button>
     </div>
   </div>
 </template>
@@ -74,209 +100,217 @@ export default {
     }
   },
   name: 'weak-password',
-  props: {
-  },
-  data () {
+  props: {},
+  data() {
     return {
-      password:'',
-      checkResult:[],
-      setup:1,
-      strList:[
+      password: '',
+      checkResult: [],
+      setup: 1,
+      strList: [
         '缺少大写字母、',
         '缺少小写字母、',
         '缺少数字、',
-        '缺少特殊字符，',
+        '缺少特殊字符，'
       ],
-      showTip:false,
-      score:0,
+      isSubmit: false,
+      showTip: false,
+      score: 0
     }
   },
-  computed:{
+  computed: {
     ...mapState('editor', {
       // scoreX: state => state.score
     }),
-    totalScore(){
+    totalScore() {
       const len = this.score
       let str = '弱'
-      if(len >= 80){
+      if (len >= 80) {
         return 30
       }
-      if(len >=60){
+      if (len >= 60) {
         return 20
       }
-      if(len>= 50){
+      if (len >= 50) {
         return 15
       }
-      if(len>= 0){
+      if (len >= 0) {
         return 5
       }
     },
-    intensity(){
+    intensity() {
       const len = this.score
       let str = '弱'
-      if(len >= 80){
+      if (len >= 80) {
         return '安全(Secure)'
       }
-      if(len >=60){
+      if (len >= 60) {
         return '强'
       }
-      if(len>= 50){
+      if (len >= 50) {
         return '一般'
       }
-      if(len>= 0){
+      if (len >= 0) {
         return '弱'
       }
     },
-    prompt(){
+    prompt() {
       const len = this.score
-      if(len >= 80){
+      if (len >= 80) {
         return '非常强：完美，这个密码太棒了，好习惯要继续保持哦。'
       }
-      if(len >=60){
+      if (len >= 60) {
         return '强：用这个密码，就相当于门锁好了，钥匙也放在保险箱里，已经相对安全多了。'
       }
-      if(len>= 50){
+      if (len >= 50) {
         return '中等：用这个密码就相当于门已经锁上，但钥匙却放在门口的地垫上，还是会被别人猜到的风险。'
       }
-      if(len>= 0){
+      if (len >= 0) {
         return '弱：用这个密码就相当于你家门虽然已经上锁，但钥匙仍然在门锁上没拿走，太危险了。'
       }
     },
-    suggest(){
-      let str = '';
-      this.checkResult.forEach((el,index)=>{
-         if(!el){
-           str += this.strList[index]
-         }
+    suggest() {
+      let str = ''
+      this.checkResult.forEach((el, index) => {
+        if (!el) {
+          str += this.strList[index]
+        }
       })
       return str
-    },
+    }
   },
-  mounted () {
+  mounted() {
     // this.setSocre(0)
   },
-  methods:{
-    ...mapMutations('editor',['setSocre']),
-    check(){
-      if(!this.password.length){
+  methods: {
+    ...mapMutations('editor', ['setSocre']),
+    check() {
+      if (!this.password.length) {
         this.showTip = true
-        return 
+        return
       }
       this.showTip = false
       console.log(this.password)
       const string = this.password
       const num = /[0-9]/.test(string)
       const letter = /[a-z]/i.test(string)
-      let big = true;
-      const result = string.match(/^.*[A-Z]+.*$/);
-       if(result==null) {
-          big = false;
-       }
+      let big = true
+      const result = string.match(/^.*[A-Z]+.*$/)
+      if (result == null) {
+        big = false
+      }
       const special = /[^a-zA-Z0-9]/.test(string)
-      this.checkResult = [big,letter,num,special]
+      this.checkResult = [big, letter, num, special]
       this.score = this.rules()
       this.setup++
     },
-    reCheck(){
-      this.password=''
+    reCheck() {
+      this.password = ''
       this.checkResult = []
       this.setup = 1
+      this.isSubmit = false
     },
-    submit(){
+    submit() {
+      this.isSubmit = true
       // const totalscore =
       //     Number(this.totalScore) + Number(this.scoreX)
       //   this.setSocre(totalscore)
-        // console.log('当页分数',this.totalScore,'当前题分数',this.scoreX)
+      // console.log('当页分数',this.totalScore,'当前题分数',this.scoreX)
     },
-    rules(){
-      const str = this.password.split('');
-      let num = 0;  //数字
-      let letter = 0; //小写字母
-      let big = 0;  //大写字母
-      let special = 0;  //特殊符合
-      str.forEach((el)=>{
-        if(/[0-9]/.test(el))num++
-        if(/[a-z]/i.test(el))letter++
-        if(el.match(/^.*[A-Z]+.*$/)!=null)big++
-        if(/[^a-zA-Z0-9]/.test(el))special++
+    rules() {
+      const str = this.password.split('')
+      let num = 0 //数字
+      let letter = 0 //小写字母
+      let big = 0 //大写字母
+      let special = 0 //特殊符合
+      str.forEach(el => {
+        if (/[0-9]/.test(el)) num++
+        if (/[a-z]/i.test(el)) letter++
+        if (el.match(/^.*[A-Z]+.*$/) != null) big++
+        if (/[^a-zA-Z0-9]/.test(el)) special++
       })
-      console.log('num',num,'letter',letter,'big',big,'special',special)
-      let score = 0;
-      
-      if(str.length>=8) score+=25;
-      else if(str.length>=5 && str.length<=7) score+=10
-      else if(str.length<=4) score +=5
+      console.log('num', num, 'letter', letter, 'big', big, 'special', special)
+      let score = 0
 
-      if(letter && !big) score+=10;
-      else if (!letter && big) score+=10;
-      else if (letter && big) score+=20;
+      if (str.length >= 8) score += 25
+      else if (str.length >= 5 && str.length <= 7) score += 10
+      else if (str.length <= 4) score += 5
 
-      if(num>1) score+=20
-      else if (num) score+=10
+      if (letter && !big) score += 10
+      else if (!letter && big) score += 10
+      else if (letter && big) score += 20
 
-      if(special>1) score+=25
-      else if (special) score+=10
-      
-      if(num && letter && big && special) score+=5
-      else if(num && letter && special || num && big && special) score+=3
-      else if(num && letter || num && big) score+=2 
-      
+      if (num > 1) score += 20
+      else if (num) score += 10
+
+      if (special > 1) score += 25
+      else if (special) score += 10
+
+      if (num && letter && big && special) score += 5
+      else if ((num && letter && special) || (num && big && special)) score += 3
+      else if ((num && letter) || (num && big)) score += 2
+
       return score
     }
   }
 }
 </script>
 <style lang="scss" scoped>
-.bk1{
+.bk1 {
   background-image: url('./img/bk1.png');
 }
-.bk2{
+.bk2 {
   background-image: url('./img/bk2.png');
 }
-.weak-password-view{
-  padding:0 20px;
+.checkImg {
+  background-image: url('./img/next.png');
+}
+.closeImg {
+  background-image: url('./img/8.png');
+}
+.weak-password-view {
+  padding: 0 20px;
   // display: flex;
   // align-items: center;
   box-sizing: border-box;
-  position: fixed;
+  // position: fixed;
   background-size: 100% 100%;
   font-size: 12px;
 }
-.flex-v{
+.flex-v {
   display: flex;
-  flex-direction:column;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
-.setup1{
+.setup1 {
   width: 100%;
   padding-top: 300px;
-  p{
+  p {
     text-align: left;
   }
-  input{
+  input {
     margin: 10px 0 0 0;
     width: 122px;
     height: 23px;
-    border-radius:20px;
-    font-size:14px;
+    border-radius: 20px;
+    font-size: 14px;
     border: 1px solid #fff;
     color: #000000;
     // background-color: #eeeeee;
     background-image: url('./img/input_bk.png');
     background-size: 100% 100%;
   }
-  button{
+  button {
     width: 122px;
-    height: 27px; 
-    background-color: rgba(24,111,252,1);
-    border-radius:12px;
-    font-size:12px;
-    color:#fff;
-    border: 1px solid rgba(24,111,252,1);
+    height: 27px;
+    background-color: rgba(24, 111, 252, 1);
+    border-radius: 12px;
+    font-size: 12px;
+    color: #fff;
+    border: 1px solid rgba(24, 111, 252, 1);
     background-image: url('./img/pbtn_bk.png');
   }
-  .errer{
+  .errer {
     color: red;
     height: 10px;
     display: inline-block;
@@ -284,63 +318,63 @@ export default {
     font-size: 12px;
   }
 }
-.setup2{
+.setup2 {
   width: 100%;
   padding-top: 190px;
-  .pass-text{
-    color:rgba(212,92,57,1);
+  .pass-text {
+    color: rgba(212, 92, 57, 1);
   }
 }
-.top-v{
+.top-v {
   width: 80%;
   height: 81px;
   // padding-top:10px;
 }
-.strength-bar{
-  background-color: rgb(23,54,134);
+.strength-bar {
+  background-color: rgb(23, 54, 134);
   height: 15px;
   overflow: hidden;
   border-radius: 20px;
   width: 60%;
   margin: 5px auto;
-  .bar{
-    background-color: rgb(11,141,133);
+  .bar {
+    background-color: rgb(11, 141, 133);
     height: 100%;
   }
 }
-.content-v{
+.content-v {
   width: 80%;
   padding-top: 5px;
   min-height: 140px;
-  .con-len-v{
+  .con-len-v {
     display: flex;
     flex-direction: row;
   }
-  .con-item-v{
+  .con-item-v {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    padding-left:30px;
+    padding-left: 30px;
     padding-bottom: 5px;
     border-bottom: 1px #a0a0a0 dashed;
-    .item-v{
+    .item-v {
       width: 50%;
       display: flex;
       justify-content: flex-start;
       flex-direction: row;
       align-items: center;
-      .drop{
-        background-color: rgb(167,164,147);
+      .drop {
+        background-color: rgb(167, 164, 147);
         border-radius: 50%;
         width: 8px;
         height: 8px;
-        margin-right:5px;
+        margin-right: 5px;
         display: flex;
         justify-content: center;
         align-items: center;
-        .drop-c{
+        .drop-c {
           display: block;
-          background-color:#ff6c02;
+          background-color: #ff6c02;
           border-radius: 50%;
           width: 5px;
           height: 5px;
@@ -348,32 +382,43 @@ export default {
       }
     }
   }
-  .con-desc{
-    div:first-child{
+  .con-desc {
+    div:first-child {
       padding: 5px 0 5px 0;
     }
-    div{
-       text-align: left;
-       padding: 5px 0 10px 0;
+    div {
+      text-align: left;
+      padding: 5px 0 10px 0;
     }
   }
 }
-.bottom-v{
+.bottom-v {
   // margin-top:60px;
   width: 80%;
   height: 35px;
   display: flex;
   justify-content: center;
   padding: 0 20px;
-  button{
-      background-image: url('../lbp-image-judge/img/btn_bk.png');
-      background-size: 100% 100%;
-      width: 100px;
-      height: 35px;
-      background-color: unset !important;
-      border: unset;
-      font-weight: bold;
-      text-align: center !important;
+  button {
+    background-image: url('../lbp-image-judge/img/btn_bk.png');
+    background-size: 100% 100%;
+    width: 100px;
+    height: 35px;
+    background-color: unset !important;
+    border: unset;
+    font-weight: bold;
+    text-align: center !important;
+  }
+}
+.result-v {
+  width: 100%;
+  button {
+    position: absolute;
+    bottom: 113px;
+  }
+  .error-msg {
+    color: #fff;
+    padding-top: 185px;
   }
 }
 </style>

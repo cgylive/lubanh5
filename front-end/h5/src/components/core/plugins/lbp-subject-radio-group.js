@@ -90,11 +90,11 @@ export default {
       type: Number,
       default: 4
     },
-    pageIndex:{
+    pageIndex: {
       type: Number,
       default: 0
     },
-    score:{
+    score: {
       type: Number,
       default: 0
     }
@@ -105,7 +105,7 @@ export default {
       uuid: undefined,
       buttonClickArr: [],
       currentIndex: -1,
-      isSubmit:false,
+      isSubmit: false,
       currentCheckboxIndex: []
     }
   },
@@ -118,23 +118,36 @@ export default {
         return value.join(',')
       }
     },
-    btnText(){
-      if(!this.isSubmit){
-        return '提交'
-      }else{
-        if(this.pageIndex<4){
+    btnText() {
+      console.log(this.isSubmit, 'isSubmit')
+      console.log(this.pageIndex, 'pageIndex')
+      if (!this.isSubmit) {
+        // return '提交'
+        if (this.pageIndex < 5) {
+          return '提交'
+        } else {
+          if (this.score >= 40) {
+            return '下一关'
+          } else {
+            return '重新答题'
+          }
+        }
+      } else {
+        if (this.pageIndex < 5) {
           return '下一题'
-        }else{
-          if(this.score >= 40){
-            return "下一关"
-          }else{
-            return "重新答题"
+        } else {
+          if (this.score >= 40) {
+            return '下一关'
+          } else {
+            return '重新答题'
           }
         }
       }
     },
-    btnDisabled(){
-       return this.currentIndex === -1 && !this.currentCheckboxIndex.length
+    btnDisabled() {
+      console.log(this.currentIndex)
+      console.log(this.currentCheckboxIndex)
+      return this.currentIndex === -1 && !this.currentCheckboxIndex.length
     }
   },
   watch: {
@@ -237,24 +250,30 @@ export default {
       }
     },
     submit() {
-      this.$emit('submit', {value:this.buttonClickArr,text:this.btnText})
-      if(!this.isSubmit && this.btnText == '提交'){
+      this.$emit('submit', { value: this.buttonClickArr, text: this.btnText })
+      console.log(this.btnText, 'this.btnText==00')
+      if (!this.isSubmit && this.btnText === '提交') {
         this.isSubmit = true
-      }else{
+      } else {
+        console.log(this.pageIndex, 'this.pageIndex==00')
         this.isSubmit = false
         this.currentIndex = -1
         this.currentCheckboxIndex = []
         this.buttonClickArr = []
+        if (this.pageIndex >= 4) {
+          this.currentIndex = 5
+          this.isSubmit = true
+        }
       }
     },
     toggleRadio(val) {
       this.value = val
-    },
+    }
   },
   render() {
     return (
       <div style="width:100%;">
-        <div class="title">{this.aliasName}</div>
+        {this.pageIndex < 5 && <div class="title">{this.aliasName}</div>}
         <input
           type="text"
           hidden
@@ -263,7 +282,8 @@ export default {
           data-uuid={this.uuid}
         />
         <div class="options">
-        {this.items.map((item, index) => (
+          {this.pageIndex < 5 &&
+            this.items.map((item, index) => (
               <LbpFormRadio
                 vertical
                 value={item.value}
@@ -291,12 +311,25 @@ export default {
               >
                 {item.value}
               </LbpFormRadio>
-            )
-        )}
+            ))}
         </div>
-      <div class="submit_btn">
-        <LbpButton
-            class={this.btnText === '下一关' ? "result-next-button":''}
+        <div
+          class={
+            this.currentIndex === 5 ? 'result_btn submit_btn' : 'submit_btn'
+          }
+        >
+          {this.pageIndex >= 5 && this.score < 40 && this.score > 0 && (
+            <div
+              style={{
+                paddingTop: '80px'
+              }}
+              class="error-msg"
+            >
+              离成功只差一步，继续加油
+            </div>
+          )}
+          <LbpButton
+            class={this.btnText === '下一关' ? 'result-next-button' : ''}
             // style={{
             //   minHeight: `40px`,
             //   minWidth: `200px`,
@@ -311,9 +344,8 @@ export default {
             text={this.btnText}
             onClick={() => this.submit()}
           ></LbpButton>
-      </div>
+        </div>
       </div>
     )
   }
 }
-

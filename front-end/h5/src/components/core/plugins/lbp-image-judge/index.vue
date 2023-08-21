@@ -1,60 +1,81 @@
 <template>
-  <div class="lbp-image-judge" v-show="imagetext && imagetext.length">
+  <div
+    class="lbp-image-judge"
+    :class="{
+      checkImg: showJudgePage && pageIndex === 5 && totalscore >= 30,
+      closeImg:
+        showJudgePage && pageIndex === 5 && totalscore < 30 && totalscore > 0
+    }"
+    v-show="imagetext && imagetext.length"
+  >
     <div class="judge-page" v-if="showJudgePage">
-      <div style="color:#fff;text-align:left;margin-bottom:10px;">你认为下图中的做法是否安全？</div>
-      <div class="body">
-        <LbpPicture :imgSrc="imgSrc" :fillType="fillType"></LbpPicture>
-      </div>
-      <div class="foot">
-        <div class="left">
-          <img
-            v-if="showLeftCheck && type === showLeftCheck"
-            class="left-img"
-            src="./img/check.png"
-            alt=""
-          />
-          <img
-            v-if="showLeftCheck && type !== showLeftCheck"
-            class="left-img"
-            src="./img/close.png"
-            alt=""
-          />
-          <LbpButton
-            :text="text1"
-            :textAlign="textAlign"
-            :backgroundColor="backgroundColor1"
-            :fontSize="fontSize1"
-            :lineHeight="lineHeight1"
-            :borderRadius="borderRadius1"
-            :borderColor="borderColor1"
-            :borderWidth="borderWidth1"
-            @click="leftClick"
-          ></LbpButton>
+      <template v-if="pageIndex < 5">
+        <div style="color:#fff;text-align:left;margin-bottom:10px;">
+          你认为下图中的做法是否安全？
         </div>
-        <div class="right">
-          <img
-            v-if="showRightCheck && type === showRightCheck"
-            src="./img/check.png"
-            alt=""
-          />
-          <img
-            v-if="showRightCheck && type !== showRightCheck"
-            src="./img/close.png"
-            alt=""
-          />
-          <LbpButton
-            :text="text2"
-            :textAlign="textAlign"
-            :backgroundColor="backgroundColor2"
-            :fontSize="fontSize2"
-            :lineHeight="lineHeight2"
-            :borderRadius="borderRadius2"
-            :borderColor="borderColor2"
-            :borderWidth="borderWidth2"
-            @click="rightClick"
-          ></LbpButton>
+        <div class="body">
+          <LbpPicture :imgSrc="imgSrc" :fillType="fillType"></LbpPicture>
         </div>
-      </div>
+        <div class="foot">
+          <div class="left">
+            <img
+              v-if="showLeftCheck && type === showLeftCheck"
+              class="left-img"
+              src="./img/check.png"
+              alt=""
+            />
+            <img
+              v-if="showLeftCheck && type !== showLeftCheck"
+              class="left-img"
+              src="./img/close.png"
+              alt=""
+            />
+            <LbpButton
+              :text="text1"
+              :textAlign="textAlign"
+              :backgroundColor="backgroundColor1"
+              :fontSize="fontSize1"
+              :lineHeight="lineHeight1"
+              :borderRadius="borderRadius1"
+              :borderColor="borderColor1"
+              :borderWidth="borderWidth1"
+              @click="leftClick"
+            ></LbpButton>
+          </div>
+          <div class="right">
+            <img
+              v-if="showRightCheck && type === showRightCheck"
+              src="./img/check.png"
+              alt=""
+            />
+            <img
+              v-if="showRightCheck && type !== showRightCheck"
+              src="./img/close.png"
+              alt=""
+            />
+            <LbpButton
+              :text="text2"
+              :textAlign="textAlign"
+              :backgroundColor="backgroundColor2"
+              :fontSize="fontSize2"
+              :lineHeight="lineHeight2"
+              :borderRadius="borderRadius2"
+              :borderColor="borderColor2"
+              :borderWidth="borderWidth2"
+              @click="rightClick"
+            ></LbpButton>
+          </div></div
+      ></template>
+      <template v-else>
+        <div class="result-button">
+          <LbpButton
+            v-if="totalscore >= 30"
+            class="result-next-button"
+            text="下一关"
+          ></LbpButton>
+          <LbpButton v-else @click="resetPage" text="重新答题"></LbpButton>
+        </div>
+      </template>
     </div>
     <div class="result-page" v-else>
       <h4 class="page-title" v-if="correct">
@@ -64,25 +85,21 @@
         {{ resultText1 }}
       </h4>
       <img v-if="correct" src="./img/1.png" alt="" />
-
       <img v-if="!correct" src="./img/2.png" alt="" />
       <lbpTextTinymce class="result-info" :text="text4"></lbpTextTinymce>
       <LbpButton
-       v-if="pageIndex<4"
+        v-if="pageIndex < 5"
         @click="nextPage('next')"
         :text="text3"
       ></LbpButton>
       <template v-else>
+        {{ pageIndex }}
         <LbpButton
           v-if="totalscore >= 30"
           class="result-next-button"
           text="下一关"
         ></LbpButton>
-        <LbpButton
-          v-else
-          @click="resetPage"
-          text="重新答题"
-        ></LbpButton>
+        <LbpButton v-else @click="resetPage" text="重新答题"></LbpButton>
       </template>
     </div>
   </div>
@@ -107,18 +124,20 @@ export default {
       resultText: '恭喜你，答对了',
       score: 0,
       pageIndex: 0,
-      totalscore:0
+      totalscore: 0
     }
   },
   computed: {
     ...mapState('editor', {
       imagetext: state => state.imagetext,
-      work: state => state.work,
+      work: state => state.work
       // totalscore: state => state.score,
     }),
-    correct(){
-      return (this.showRightCheck && this.type === this.showRightCheck) ||
-            (this.showLeftCheck && this.type === this.showLeftCheck)
+    correct() {
+      return (
+        (this.showRightCheck && this.type === this.showRightCheck) ||
+        (this.showLeftCheck && this.type === this.showLeftCheck)
+      )
     }
   },
   props: commonProps,
@@ -128,13 +147,13 @@ export default {
         console.log('组件获取题目', newVal)
         this.setImageJudge(this.pageIndex)
       }
-    },
+    }
   },
-  created(){
+  created() {
     // this.setSocre(0)
   },
   methods: {
-    ...mapMutations('editor', ['setSocre','fetchImageText']),
+    ...mapMutations('editor', ['setSocre', 'fetchImageText']),
     ...mapActions('editor', ['fetchImageText']),
     leftClick() {
       this.showLeftCheck = 'check'
@@ -152,41 +171,43 @@ export default {
       }, 1000 * 1)
     },
     nextPage(type) {
-
-      if(type){
+      if (type) {
         this.pageIndex++
-        this.setImageJudge(this.pageIndex)
+        if (this.pageIndex < 5) {
+          this.setImageJudge(this.pageIndex)
+        }
         this.showJudgePage = true
         this.showLeftCheck = ''
         this.showRightCheck = ''
       }
       console.log('当页分数', this.totalscore, '当前题分数', this.score)
     },
-    setTotalscore(){
-      if (this.correct){
+    setTotalscore() {
+      if (this.correct) {
         // const totalscore =
-        this.totalscore =  Number(parseInt(this.totalscore)) + Number(parseInt(this.score))
-          // this.setSocre(totalscore)
-          console.log('当页分数',this.totalscore,'当前题分数',this.score)
+        this.totalscore =
+          Number(parseInt(this.totalscore)) + Number(parseInt(this.score))
+        // this.setSocre(totalscore)
+        console.log('当页分数', this.totalscore, '当前题分数', this.score)
       }
     },
-    resetPage(){
-        this.score = 0
-        this.pageIndex = 0
-        this.showLeftCheck = ''
-        this.showRightCheck = ''
-        this.showJudgePage = true
-        // this.setSocre(0)
-        this.totalscore = 0
-        this.fetchImageText().then(()=>{
-          this.setImageJudge(this.pageIndex)
-        })
+    resetPage() {
+      this.score = 0
+      this.pageIndex = 0
+      this.showLeftCheck = ''
+      this.showRightCheck = ''
+      this.showJudgePage = true
+      // this.setSocre(0)
+      this.totalscore = 0
+      this.fetchImageText().then(() => {
+        this.setImageJudge(this.pageIndex)
+      })
     },
     setImageJudge(idx) {
       const item = this.imagetext[idx]
       const work = window.__work
       console.log('imagetext', this.imagetext, work)
-      work.pages = work.pages.map((page) => {
+      work.pages = work.pages.map(page => {
         page.elements = page.elements.map(element => {
           if (element.name === 'lbp-image-judge') {
             element.pluginProps.text4 = item?.tips
@@ -206,13 +227,20 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.checkImg {
+  background-image: url('./img/next.png');
+}
+.closeImg {
+  background-image: url('./img/error.png');
+}
 .lbp-image-judge {
   position: relative;
   background-size: 100% 100%;
-  
-  .judge-page{
+
+  .judge-page {
     padding: 90px 40px;
-    .body{
+    .body {
+      height: 300px;
       background-color: #fff;
     }
   }
@@ -261,6 +289,30 @@ export default {
       }
     }
   }
+  .result-button {
+    // min-height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    // position: relative;
+    button {
+      // position: absolute;
+      // bottom: 30px;
+      // width: 200px;
+      // height: 40px;
+      // border-radius: 20px !important;
+      background-image: url('./img/btn_bk.png');
+      background-size: 100% 100%;
+      width: 100px;
+      height: 35px;
+      background-color: unset !important;
+      border: unset;
+      font-weight: bold;
+      position: absolute;
+      bottom: 107px;
+    }
+  }
   .result-page {
     display: flex;
     align-items: center;
@@ -295,7 +347,7 @@ export default {
       padding: 8px;
       width: 213px;
       height: 132px;
-      border-radius:10px;
+      border-radius: 10px;
       overflow-y: auto;
       background-color: #fff !important;
     }

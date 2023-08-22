@@ -262,7 +262,12 @@ export default {
         this.buttonClickArr = []
         if (this.pageIndex >= 4) {
           this.currentIndex = 5
-          this.isSubmit = true
+          if (this.btnText === '重新答题') {
+            this.currentIndex = -1
+            this.isSubmit = false
+          } else {
+            this.isSubmit = true
+          }
         }
       }
     },

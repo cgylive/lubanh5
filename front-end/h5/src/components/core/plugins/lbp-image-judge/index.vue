@@ -240,7 +240,7 @@ export default {
   .judge-page {
     padding: 90px 40px;
     .body {
-      height: 300px;
+      // height: 300px;
       background-color: #fff;
     }
   }

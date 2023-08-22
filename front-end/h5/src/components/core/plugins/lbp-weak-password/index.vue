@@ -30,7 +30,7 @@
         :keyup="(password = password.replace(/[\u4e00-\u9fa5]/gi, ''))"
       />
       <div class="errer"><span v-show="showTip">密码不能为空</span></div>
-      <button @click="check">检测密码长度</button>
+      <button @click="check">检测密码强度</button>
     </div>
     <div class="flex-v setup2" v-else-if="!isSubmit && setup === 2">
       <div class="top-v">

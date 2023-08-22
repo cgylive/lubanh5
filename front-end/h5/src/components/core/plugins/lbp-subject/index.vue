@@ -231,10 +231,14 @@ export default {
 .checkImg {
   background-image: url('./img/7.png');
   background-size: 100% 100%;
+  background-position: 50% 50%;
+  background-origin: border-box;
 }
 .closeImg {
   background-image: url('./img/8.png');
   background-size: 100% 100%;
+  background-position: 50% 50%;
+  background-origin: border-box;
 }
 div {
   box-sizing: border-box;

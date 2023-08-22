@@ -64,9 +64,9 @@
           </template>
         </div>
         <div class="con-desc">
-          <!-- <div class="pass-text">
+          <div class="pass-text">
             {{prompt}}
-          </div> -->
+          </div>
           <div class="pass-text" v-if="score < 80">
             <span v-if="password.length < 8">密码中长度不够8位、</span>
             <span>{{ suggest }}</span>

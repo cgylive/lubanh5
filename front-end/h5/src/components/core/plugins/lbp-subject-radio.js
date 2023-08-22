@@ -21,7 +21,35 @@ export default {
   data() {
     return {
       isButtonClick: false,
-      buttonClickArr: []
+      buttonClickArr: [],
+      myArr: [
+        'A',
+        'B',
+        'C',
+        'D',
+        'E',
+        'F',
+        'G',
+        'H',
+        'I',
+        'J',
+        'K',
+        'L',
+        'M',
+        'N',
+        'O',
+        'P',
+        'Q',
+        'R',
+        'S',
+        'T',
+        'U',
+        'V',
+        'W',
+        'X',
+        'Y',
+        'Z'
+      ]
     }
   },
   props: {
@@ -150,16 +178,18 @@ export default {
       isAnswer,
       isSubmit,
       isCheckBorder,
+      myArr,
       isClick
     } = this
     console.log(isSubmit)
     console.log(isClick)
     const uuid = +new Date() + genUUID()
+
     return (
       <div class={['lbp-' + this.type + '-wrapper', 'lbp-sub-wrapper']}>
         {/* <span class="tag">{value}11</span> */}
         {isAnswer && isSubmit && <img class="left-img" src={checkImg} />}
-        {!isAnswer && isSubmit && <img class="left-img" src={closeImg} />}
+        {/* {!isAnswer && isSubmit && <img class="left-img" src={closeImg} />} */}
         {!!checked}
         <LbpButton
           class={isCheckBorder && 'checkBorder'}
@@ -170,7 +200,7 @@ export default {
             paddingLeft: '20px',
             paddingRight: '20px'
           }}
-          text={value}
+          text={myArr[index] + '   ' + value}
           backgroundColor={this.backgroundColor}
           borderColor={this.borderColor}
           textAlign={this.textAlign}

@@ -1,13 +1,23 @@
 <template>
-  <div
-    class="lbp-image-judge"
-    :class="{
-      checkImg: showJudgePage && pageIndex === 5 && totalscore >= 30,
-      closeImg:
-        showJudgePage && pageIndex === 5 && totalscore < 30 && totalscore > 0
-    }"
-    v-show="imagetext && imagetext.length"
-  >
+  <div class="lbp-image-judge" v-show="imagetext && imagetext.length">
+    <div v-if="pageIndex === 5" class="overlayJudge" id="overlayJudge">
+      <div class="popup">
+        <div v-if="totalscore < 30 && totalscore > 0" class="judge-error-msg">
+          没有识别到所有风险,
+          <span
+            style="display: block;
+                 margin-top: -5px;"
+            >再接再厉哦！</span
+          >
+        </div>
+        <img
+          style="width:100%;height:100%"
+          id="popup-image"
+          :src="src"
+          alt=""
+        />
+      </div>
+    </div>
     <div class="judge-page" v-if="showJudgePage">
       <template v-if="pageIndex < 5">
         <div style="color:#fff;text-align:left;margin-bottom:10px;">
@@ -123,6 +133,7 @@ export default {
       resultText1: '很遗憾，答错了，再接再厉',
       resultText: '恭喜你，答对了',
       score: 0,
+      src: require('./img/errorImg.png'),
       pageIndex: 0,
       totalscore: 0
     }
@@ -175,6 +186,12 @@ export default {
         this.pageIndex++
         if (this.pageIndex < 5) {
           this.setImageJudge(this.pageIndex)
+        } else {
+          if (this.totalscore >= 30) {
+            this.src = require('./img/checkImg.png')
+          } else if (this.totalscore < 30 && this.totalscore > 0) {
+            this.src = require('./img/errorImg.png')
+          }
         }
         this.showJudgePage = true
         this.showLeftCheck = ''
@@ -232,6 +249,31 @@ export default {
 }
 .closeImg {
   background-image: url('./img/error.png');
+}
+.overlayJudge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  backdrop-filter: blur(5px); /* Add backdrop blur */
+}
+.popup {
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  left: 50%;
+  z-index: 1001;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  .judge-error-msg {
+    top: 147px;
+    left: 94px;
+    position: absolute;
+    color: #fff;
+  }
 }
 .lbp-image-judge {
   position: relative;
@@ -310,7 +352,8 @@ export default {
       border: unset;
       font-weight: bold;
       position: absolute;
-      bottom: 107px;
+      bottom: 90px;
+      z-index: 2000;
     }
   }
   .result-page {

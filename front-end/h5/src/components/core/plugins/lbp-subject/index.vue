@@ -1,11 +1,18 @@
 <template>
-  <div
-    class="lbp-subject"
-    :class="{
-      checkImg: pageIndex === 5 && totalscore >= 40,
-      closeImg: pageIndex === 5 && totalscore < 40 && totalscore > 0
-    }"
-  >
+  <div class="lbp-subject">
+    <div v-if="pageIndex === 5" class="overlaySubject" id="overlaySubject">
+      <div class="popup">
+        <div v-if="totalscore < 40 && totalscore > 0" class="error-msg">
+          离成功只差一步，继续加油!
+        </div>
+        <img
+          style="width:100%;height:100%"
+          id="popup-image"
+          :src="src"
+          alt=""
+        />
+      </div>
+    </div>
     <LbpFormRadioGroup
       :aliasName="aliasName"
       :backgroundColor="backgroundColor"
@@ -74,6 +81,7 @@ export default {
     return {
       score: 0,
       pageIndex: 0,
+      src: require('./img/errorImg.png'),
       canRender: false,
       totalscore: 0
     }
@@ -204,13 +212,21 @@ export default {
             this.totalscore =
               Number(parseInt(this.totalscore)) + Number(parseInt(this.score))
           }
+
           console.log('当页分数', this.totalscore, '当前题分数', this.score)
           break
         case '下一题':
           this.pageIndex++
           if (this.pageIndex < 5) {
             this.setSubject(this.pageIndex)
+          } else {
+            if (this.totalscore >= 40) {
+              this.src = require('./img/checkImg.png')
+            } else if (this.totalscore < 40 && this.totalscore > 0) {
+              this.src = require('./img/errorImg.png')
+            }
           }
+          console.log(this.pageIndex, 'this.pageIndex')
           break
         case '全部通关':
           break
@@ -229,13 +245,13 @@ export default {
 </script>
 <style lang="scss">
 .checkImg {
-  background-image: url('./img/7.png');
+  background-image: url('./img/checkImg.png');
   background-size: 100% 100%;
   background-position: 50% 50%;
   background-origin: border-box;
 }
 .closeImg {
-  background-image: url('./img/8.png');
+  background-image: url('./img/errorImg.png');
   background-size: 100% 100%;
   background-position: 50% 50%;
   background-origin: border-box;
@@ -243,6 +259,32 @@ export default {
 div {
   box-sizing: border-box;
 }
+.overlaySubject {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  backdrop-filter: blur(5px); /* Add backdrop blur */
+}
+.popup {
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  left: 50%;
+  z-index: 1001;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  .error-msg {
+    top: 156px;
+    left: 78px;
+    position: absolute;
+    color: #fff;
+  }
+}
+
 .lbp-subject {
   padding: 98px 20px 20px 20px;
   box-sizing: border-box;
@@ -283,6 +325,7 @@ div {
     button {
       position: absolute;
       bottom: 106px;
+      z-index: 2000;
     }
   }
 }

@@ -323,16 +323,6 @@ export default {
             this.currentIndex === 5 ? 'result_btn submit_btn' : 'submit_btn'
           }
         >
-          {this.pageIndex >= 5 && this.score < 40 && this.score > 0 && (
-            <div
-              style={{
-                paddingTop: '80px'
-              }}
-              class="error-msg"
-            >
-              离成功只差一步，继续加油
-            </div>
-          )}
           <LbpButton
             class={this.btnText === '全部通关' ? 'result-next-button' : ''}
             // style={{

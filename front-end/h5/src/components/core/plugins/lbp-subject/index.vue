@@ -1,7 +1,7 @@
 <template>
   <div class="lbp-subject">
     <div v-if="pageIndex === 5" class="overlaySubject" id="overlaySubject">
-      <div class="popup">
+      <div class="popup" id="popup">
         <div v-if="totalscore < 40 && totalscore > 0" class="error-msg">
           离成功只差一步，继续加油!
         </div>
@@ -58,22 +58,7 @@ function getDefaultItems() {
 
   return defaultItems
 }
-function judgeDefaultItems() {
-  // defaultItems.slice(0)[0] === defaultItems.slice(0)[0] -> true
-  // Object.assign(defaultItems)[0] === Object.assign(defaultItems)[0] -> true
-  // clone = (val) => JSON.parse(JSON.stringify(val))
-  // clone(defaultItems)[0] === clone(defaultItems)[0] -> false
-  const defaultItems = [
-    {
-      value: '正确'
-    },
-    {
-      value: '错误'
-    }
-  ]
 
-  return defaultItems
-}
 export default {
   name: 'lbp-subject',
   components: { LbpFormRadioGroup },
@@ -220,6 +205,12 @@ export default {
           if (this.pageIndex < 5) {
             this.setSubject(this.pageIndex)
           } else {
+            this.$nextTick(() => {
+              const popupImage = document.getElementById('popup')
+              setTimeout(() => {
+                popupImage.style.opacity = 1
+              }, 1000)
+            })
             if (this.totalscore >= 40) {
               this.src = require('./img/checkImg.png')
             } else if (this.totalscore < 40 && this.totalscore > 0) {
@@ -231,6 +222,8 @@ export default {
         case '全部通关':
           break
         case '重新答题':
+          const popupImage = document.getElementById('popup-image')
+          popupImage.classList.remove('show')
           this.pageIndex = 0
           // this.setSocre(30)
           this.totalscore = 0
@@ -269,6 +262,9 @@ div {
   z-index: 1000;
   backdrop-filter: blur(5px); /* Add backdrop blur */
 }
+.show {
+  opacity: 1;
+}
 .popup {
   position: absolute;
   width: 100%;
@@ -276,6 +272,8 @@ div {
   left: 50%;
   z-index: 1001;
   transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 3s ease-in-out;
   text-align: center;
   .error-msg {
     top: 156px;

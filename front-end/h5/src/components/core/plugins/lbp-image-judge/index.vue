@@ -1,7 +1,7 @@
 <template>
   <div class="lbp-image-judge" v-show="imagetext && imagetext.length">
     <div v-if="pageIndex === 5" class="overlayJudge" id="overlayJudge">
-      <div class="popup">
+      <div class="popup" id="popup">
         <div v-if="totalscore < 30 && totalscore > 0" class="judge-error-msg">
           没有识别到所有风险,
           <span
@@ -187,6 +187,12 @@ export default {
         if (this.pageIndex < 5) {
           this.setImageJudge(this.pageIndex)
         } else {
+          this.$nextTick(() => {
+              const popupImage = document.getElementById('popup')
+              setTimeout(() => {
+                popupImage.style.opacity = 1
+              }, 1000)
+            })
           if (this.totalscore >= 30) {
             this.src = require('./img/checkImg.png')
           } else if (this.totalscore < 30 && this.totalscore > 0) {
@@ -260,6 +266,9 @@ export default {
   z-index: 1000;
   backdrop-filter: blur(5px); /* Add backdrop blur */
 }
+.show {
+  opacity: 1;
+}
 .popup {
   position: absolute;
   width: 100%;
@@ -267,7 +276,10 @@ export default {
   left: 50%;
   z-index: 1001;
   transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 3s ease-in-out;
   text-align: center;
+
   .judge-error-msg {
     top: 147px;
     left: 94px;

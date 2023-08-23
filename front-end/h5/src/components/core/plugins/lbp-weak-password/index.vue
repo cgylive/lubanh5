@@ -223,9 +223,9 @@ export default {
     },
     submit() {
       this.isSubmit = true
-      if (this.totalscore >= 30) {
+      if (this.score >= 80) {
         this.src = require('./img/checkImg.png')
-      } else if (this.totalscore < 30 && this.totalscore > 0) {
+      } else if (this.totalscore < 80 && this.totalscore > 0) {
         this.src = require('./img/errorImg.png')
       }
       this.$nextTick(() => {

@@ -48,8 +48,15 @@ export default {
       const iframeWin = iframe.contentWindow
       iframeWin.postMessage(message, window.location.origin)
     },
-    iframeLoaded() {
+    iframeContentLoaded() {
       this.isShowLoading = false
+    },
+    addLoadEvent(iframe, callback) {
+      if (iframe.attachEvent) {
+        iframe.attachEvent('onload', callback)
+      } else {
+        iframe.onload = callback
+      }
     }
   },
   render(h) {
@@ -105,7 +112,6 @@ export default {
                       id="iframe-for-preview"
                       src={this.previewUrl}
                       frameborder="0"
-                      onload={this.iframeLoaded()}
                       style="height: 100%;width: 100%;"
                     ></iframe>
                   )}
@@ -121,7 +127,10 @@ export default {
       </a-modal>
     )
   },
-  mounted() {}
+  mounted() {
+    const iframe = document.getElementById('iframe-for-preview')
+    this.addLoadEvent(iframe, this.iframeContentLoaded())
+  }
 }
 </script>
 

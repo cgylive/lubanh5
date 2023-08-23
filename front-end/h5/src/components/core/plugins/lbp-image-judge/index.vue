@@ -11,7 +11,7 @@
           >
         </div>
         <img
-          style="width:100%;height:100%"
+          style="width:100%;height:400px"
           id="popup-image"
           :src="src"
           alt=""
@@ -188,11 +188,11 @@ export default {
           this.setImageJudge(this.pageIndex)
         } else {
           this.$nextTick(() => {
-              const popupImage = document.getElementById('popup')
-              setTimeout(() => {
-                popupImage.style.opacity = 1
-              }, 1000)
-            })
+            const popupImage = document.getElementById('popup')
+            setTimeout(() => {
+              popupImage.style.opacity = 1
+            }, 1000)
+          })
           if (this.totalscore >= 30) {
             this.src = require('./img/checkImg.png')
           } else if (this.totalscore < 30 && this.totalscore > 0) {

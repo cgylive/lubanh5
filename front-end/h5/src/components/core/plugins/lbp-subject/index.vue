@@ -6,7 +6,7 @@
           离成功只差一步，继续加油!
         </div>
         <img
-          style="width:100%;height:100%"
+          style="width:100%;height:400px"
           id="popup-image"
           :src="src"
           alt=""

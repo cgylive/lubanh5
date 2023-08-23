@@ -3,8 +3,12 @@ import { parsePx, guid } from '@/utils/element.js'
 import { bindData } from '@/utils/data-binding.js'
 
 // #! 编辑状态，不可以点击的按钮，因为点击按钮会触发一些默认动作，比如表单提交等
-const disabledPluginsForEditMode = ['lbp-form-input', 'lbp-form-button', 'lbp-video']
-const cloneObj = (value) => JSON.parse(JSON.stringify(value))
+const disabledPluginsForEditMode = [
+  'lbp-form-input',
+  'lbp-form-button',
+  'lbp-video'
+]
+const cloneObj = value => JSON.parse(JSON.stringify(value))
 
 const defaultStyle = {
   top: 100,
@@ -82,7 +86,7 @@ const defaultStyle = {
 
 const numberReg = /^\d+$/
 export default class Element {
-  constructor (ele) {
+  constructor(ele) {
     this.name = ele.name
     this.pluginType = ele.name
     this.uuid = this.getUUID(ele)
@@ -121,11 +125,13 @@ export default class Element {
    *
    * @param {*} ele
    */
-  getUUID (ele) {
-    return (!ele.uuid || numberReg.test(ele.uuid) || !ele.uuid.includes('_')) ? `${ele.name}_${guid()}` : ele.uuid
+  getUUID(ele) {
+    return !ele.uuid || numberReg.test(ele.uuid) || !ele.uuid.includes('_')
+      ? `${ele.name}_${guid()}`
+      : ele.uuid
   }
 
-  getCommonStyle (ele) {
+  getCommonStyle(ele) {
     if (typeof ele.commonStyle === 'object') {
       return cloneObj({ ...defaultStyle, ...ele.commonStyle })
     }
@@ -137,7 +143,7 @@ export default class Element {
     }
   }
 
-  getPluginProps (ele) {
+  getPluginProps(ele) {
     if (typeof ele.pluginProps === 'object') {
       return cloneObj({ ...ele.pluginProps, uuid: this.uuid })
     }
@@ -145,7 +151,7 @@ export default class Element {
   }
 
   // init prop of plugin
-  getDefaultPluginProps (ele) {
+  getDefaultPluginProps(ele) {
     const { props = {}, shortcutProps = {} } = ele
 
     let pluginProps = {
@@ -153,7 +159,8 @@ export default class Element {
     }
     Object.keys(props).forEach(key => {
       const defaultValue = props[key].default
-      pluginProps[key] = typeof defaultValue === 'function' ? defaultValue() : defaultValue
+      pluginProps[key] =
+        typeof defaultValue === 'function' ? defaultValue() : defaultValue
     })
 
     pluginProps = {
@@ -163,14 +170,14 @@ export default class Element {
 
     return pluginProps
   }
-  packPosData (obj, prefix) {
+  packPosData(obj, prefix) {
     let init = {}
     Object.keys(obj).forEach(key => {
       init[prefix + '-' + key] = obj[key].value + (obj[key].unit || '')
     })
     return init
   }
-  packBorderData () {
+  packBorderData() {
     const { top, right, bottom, left, color, style } = this.commonStyle.border
     return {
       /**
@@ -182,13 +189,14 @@ export default class Element {
       'border-color': color.value
     }
   }
-  getStyle ({ position = 'static', isRem = false, isNodeWrapper = true } = {}) {
+  getStyle({ position = 'static', isRem = false, isNodeWrapper = true } = {}) {
     if (this.name === 'lbp-background' || !isNodeWrapper) {
       return {
         width: '100%',
         height: '100%'
       }
     }
+    console.log(this.pluginProps, 'this.pluginProps 000000')
     const pluginProps = this.pluginProps
     const commonStyle = this.commonStyle
     const { margin, padding } = commonStyle
@@ -202,7 +210,7 @@ export default class Element {
       top: parsePx(pluginProps.top || commonStyle.top, isRem),
       left: parsePx(pluginProps.left || commonStyle.left, isRem),
       width: parsePx(pluginProps.width || commonStyle.width, isRem),
-      height: parsePx(pluginProps.height || commonStyle.height, isRem),
+      height: '100%',
       fontSize: parsePx(pluginProps.fontSize || commonStyle.fontSize, isRem),
       ...boxModel,
       color: pluginProps.color || commonStyle.color,
@@ -214,23 +222,21 @@ export default class Element {
     return style
   }
 
-  getProps ({ mode = 'edit' } = {}) {
-    const pluginProps = mode === 'preview' ? bindData(this.pluginProps, window) : this.pluginProps
+  getProps({ mode = 'edit' } = {}) {
+    const pluginProps =
+      mode === 'preview' ? bindData(this.pluginProps, window) : this.pluginProps
     return {
       ...pluginProps,
-      disabled: disabledPluginsForEditMode.includes(this.name) && mode === 'edit'
+      disabled:
+        disabledPluginsForEditMode.includes(this.name) && mode === 'edit'
     }
   }
 
-  getClass () {
+  getClass() {}
 
-  }
+  getData() {}
 
-  getData () {
-
-  }
-
-  getAttrs () {
+  getAttrs() {
     const attrs = {
       'data-uuid': this.uuid
     }
@@ -244,7 +250,12 @@ export default class Element {
     return attrs
   }
 
-  getPreviewData ({ position = 'static', isRem = false, mode = 'preview', isNodeWrapper = true } = {}) {
+  getPreviewData({
+    position = 'static',
+    isRem = false,
+    mode = 'preview',
+    isNodeWrapper = true
+  } = {}) {
     const data = {
       // 与 edit 组件保持样式一致
       style: this.getStyle({ position, isNodeWrapper }),
@@ -255,7 +266,7 @@ export default class Element {
     return data
   }
 
-  clone ({ zindex = this.commonStyle.zindex + 1 } = {}) {
+  clone({ zindex = this.commonStyle.zindex + 1 } = {}) {
     return new Element({
       zindex,
       name: this.name,
@@ -268,20 +279,23 @@ export default class Element {
     })
   }
 
-  getEventHandlers () {
+  getEventHandlers() {
     const Ctor = Vue.component(this.uuid)
     const vm = new Ctor()
     const handlers = this.methodList.reduce((handlers, method) => {
       // bind is fine too：handlers[method.trigger] = vm[method.name].bind(vm, method.arguments)
-      handlers[method.trigger] = () => vm[method.name].apply(vm, method.arguments)
+      handlers[method.trigger] = () =>
+        vm[method.name].apply(vm, method.arguments)
       return handlers
     }, {})
     return handlers
   }
 
-  registerGlobalComponent () {
+  registerGlobalComponent() {
     const basePlugin = Vue.component(this.name)
-    const mixinList = this.scripts.map(script => new Function(script.content.replace('editorMethods', 'methodsConfig'))())
+    const mixinList = this.scripts.map(script =>
+      new Function(script.content.replace('editorMethods', 'methodsConfig'))()
+    )
     basePlugin && this._mixinScript(mixinList, basePlugin)
   }
 
@@ -294,7 +308,7 @@ export default class Element {
     }
    * @param {Object} script:Script
    */
-  mixinScript (script) {
+  mixinScript(script) {
     const basePlugin = Vue.component(this.uuid)
     let mixin = new Function(script.content)() || {}
     // normalize mixin(对 mixin 做规范化处理)
@@ -305,7 +319,7 @@ export default class Element {
     this._mixinScript(mixin, basePlugin)
   }
 
-  _mixinScript (mixinList, basePlugin = Vue.component(this.uuid)) {
+  _mixinScript(mixinList, basePlugin = Vue.component(this.uuid)) {
     // basePlugin 不传入 && 不存在
     if (!basePlugin) return
 

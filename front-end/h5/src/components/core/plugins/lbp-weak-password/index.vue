@@ -1,5 +1,5 @@
 <template>
-  <div class="weak-password-view ">
+  <div class="weak-password-view " :class="setup===1 ? 'bk1' : 'bk2'">
     <div class="flex-v setup1" v-if="!isSubmit && setup === 1">
       <!-- <p>
           您在输入密码时，请注意关注如下基本要素：</br>
@@ -75,7 +75,7 @@
             密码还不够强,请再试一次吧！
           </div>
           <img
-            style="width:100%;height:100%"
+            style="width:100%;height:400px"
             id="popup-image"
             :src="src"
             alt=""
@@ -194,9 +194,9 @@ export default {
         this.showTip = true
         return
       }
-      this.setBackground(
-        'http://hd.szyfd.xyz:1337/uploads/weak_Bg2_68b3f70003.png'
-      )
+      // this.setBackground(
+      //   'http://hd.szyfd.xyz:1337/uploads/weak_Bg2_68b3f70003.png'
+      // )
       this.showTip = false
       console.log(this.password)
       const string = this.password
@@ -213,9 +213,9 @@ export default {
       this.setup++
     },
     reCheck() {
-      this.setBackground(
-        'http://hd.szyfd.xyz:1337/uploads/weak_Bg1_3ac52d1f35.png'
-      )
+      // this.setBackground(
+      //   'http://hd.szyfd.xyz:1337/uploads/weak_Bg1_3ac52d1f35.png'
+      // )
       this.password = ''
       this.checkResult = []
       this.setup = 1
@@ -241,7 +241,11 @@ export default {
     },
     setBackground(imgSrc) {
       console.log(imgSrc, 'imgSrc')
+      let active = document.getElementsByClassName('swiper-slide')
+      console.log(active[0], 'active ')
+      console.log(active[0].style.height, 'active height')
       const work = window.__work
+      console.log(window.__work.height, 'window.__work.height')
       console.log(work.pages, 'work.pages')
       const modifiedArray = work.pages.map(page => {
         const updatedElements = page.elements.map(element => {
@@ -372,7 +376,7 @@ export default {
 }
 .setup1 {
   width: 100%;
-  padding-top: 300px;
+  padding-top: 334px;
   p {
     text-align: left;
   }
@@ -408,7 +412,7 @@ export default {
 }
 .setup2 {
   width: 100%;
-  padding-top: 205px;
+  padding-top: 240px;
   .pass-text {
     color: rgba(212, 92, 57, 1);
   }

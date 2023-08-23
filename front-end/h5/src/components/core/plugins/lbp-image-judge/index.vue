@@ -1,7 +1,7 @@
 <template>
   <div class="lbp-image-judge" v-show="imagetext && imagetext.length">
     <div v-if="pageIndex === 5" class="overlayJudge" id="overlayJudge">
-      <div class="popup" id="popup">
+      <div class="popup" id="judgePopup">
         <div v-if="totalscore < 30 && totalscore > 0" class="judge-error-msg">
           没有识别到所有风险,
           <span
@@ -188,7 +188,7 @@ export default {
           this.setImageJudge(this.pageIndex)
         } else {
           this.$nextTick(() => {
-            const popupImage = document.getElementById('popup')
+            const popupImage = document.getElementById('judgePopup')
             setTimeout(() => {
               popupImage.style.opacity = 1
             }, 1000)

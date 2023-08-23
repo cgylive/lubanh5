@@ -70,7 +70,7 @@
     </div>
     <div v-if="isSubmit" class="bottom-v result-v">
       <div class="overlaySubject" id="overlaySubject">
-        <div class="popup" id="popup">
+        <div class="popup" id="passwordPopup">
           <div v-if="totalScore < 30" class="error-msg">
             密码还不够强,请再试一次吧！
           </div>
@@ -229,7 +229,7 @@ export default {
         this.src = require('./img/errorImg.png')
       }
       this.$nextTick(() => {
-        const popupImage = document.getElementById('popup')
+        const popupImage = document.getElementById('passwordPopup')
         setTimeout(() => {
           popupImage.style.opacity = 1
         }, 1000)

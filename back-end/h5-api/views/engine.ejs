@@ -299,7 +299,7 @@
       width: <%=work.width %>px;
       height: 568px;
       display: inline-block;
-      background: #fff;
+      /* background: #fff; */
       box-sizing: content-box;
       border: 10px solid #f6f6f6;
     }
@@ -397,6 +397,7 @@
       }
 
       function doMobileActions() {
+        
         updateViewport();
         var app = document.getElementById('app');
         document.body.innerHTML = '';

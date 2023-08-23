@@ -1,16 +1,5 @@
 <template>
-  <div
-    class="weak-password-view "
-    :class="
-      !isSubmit
-        ? setup === 1
-          ? 'bk1'
-          : 'bk2'
-        : totalScore < 30
-        ? 'closeImg'
-        : 'checkImg'
-    "
-  >
+  <div class="weak-password-view ">
     <div class="flex-v setup1" v-if="!isSubmit && setup === 1">
       <!-- <p>
           您在输入密码时，请注意关注如下基本要素：</br>
@@ -30,7 +19,7 @@
         :keyup="(password = password.replace(/[\u4e00-\u9fa5]/gi, ''))"
       />
       <div class="errer"><span v-show="showTip">密码不能为空</span></div>
-      <button @click="check">检测密码强度</button>
+      <button class="change-bg" @click="check">检测密码强度</button>
     </div>
     <div class="flex-v setup2" v-else-if="!isSubmit && setup === 2">
       <div class="top-v">
@@ -64,8 +53,8 @@
           </template>
         </div>
         <div class="con-desc">
-          <div class="pass-text">
-            {{prompt}}
+          <div v-if="totalScore >= 30" class="pass-text">
+            {{ prompt }}
           </div>
           <div class="pass-text" v-if="score < 80">
             <span v-if="password.length < 8">密码中长度不够8位、</span>
@@ -80,8 +69,18 @@
       </div>
     </div>
     <div v-if="isSubmit" class="bottom-v result-v">
-      <div v-if="totalScore < 30" class="error-msg">
-        密码还不够强,请再试一次吧！
+      <div class="overlaySubject" id="overlaySubject">
+        <div class="popup" id="popup">
+          <div v-if="totalScore < 30" class="error-msg">
+            密码还不够强,请再试一次吧！
+          </div>
+          <img
+            style="width:100%;height:100%"
+            id="popup-image"
+            :src="src"
+            alt=""
+          />
+        </div>
       </div>
       <button @click="reCheck" v-if="totalScore < 30">重新检测</button>
       <button v-else class="result-next-button">下一关</button>
@@ -92,6 +91,8 @@
 import PropTypes from '@luban-h5/plugin-common-props'
 import { mapState, mapActions, mapMutations } from 'vuex'
 import strapi from '@/utils/strapi'
+import Element from 'core/models/element'
+import Page from 'core/models/page'
 export default {
   extra: {
     defaultStyle: {
@@ -112,6 +113,7 @@ export default {
         '缺少数字、',
         '缺少特殊字符，'
       ],
+      src: require('./img/errorImg.png'),
       isSubmit: false,
       showTip: false,
       score: 0
@@ -180,14 +182,21 @@ export default {
   },
   mounted() {
     // this.setSocre(0)
+    // this.setBackground(
+    //   'http://hd.szyfd.xyz:1337/engine-assets/img/bk1.10713a03.png'
+    // )
   },
   methods: {
     ...mapMutations('editor', ['setSocre']),
+    ...mapActions('editor', ['updateWork']),
     check() {
       if (!this.password.length) {
         this.showTip = true
         return
       }
+      this.setBackground(
+        'http://hd.szyfd.xyz:1337/uploads/weak_Bg2_68b3f70003.png'
+      )
       this.showTip = false
       console.log(this.password)
       const string = this.password
@@ -204,6 +213,9 @@ export default {
       this.setup++
     },
     reCheck() {
+      this.setBackground(
+        'http://hd.szyfd.xyz:1337/uploads/weak_Bg1_3ac52d1f35.png'
+      )
       this.password = ''
       this.checkResult = []
       this.setup = 1
@@ -211,10 +223,56 @@ export default {
     },
     submit() {
       this.isSubmit = true
+      if (this.totalscore >= 30) {
+        this.src = require('./img/checkImg.png')
+      } else if (this.totalscore < 30 && this.totalscore > 0) {
+        this.src = require('./img/errorImg.png')
+      }
+      this.$nextTick(() => {
+        const popupImage = document.getElementById('popup')
+        setTimeout(() => {
+          popupImage.style.opacity = 1
+        }, 1000)
+      })
       // const totalscore =
       //     Number(this.totalScore) + Number(this.scoreX)
       //   this.setSocre(totalscore)
       // console.log('当页分数',this.totalScore,'当前题分数',this.scoreX)
+    },
+    setBackground(imgSrc) {
+      console.log(imgSrc, 'imgSrc')
+      const work = window.__work
+      console.log(work.pages, 'work.pages')
+      const modifiedArray = work.pages.map(page => {
+        const updatedElements = page.elements.map(element => {
+          if (element.name === 'weak-password') {
+            const lbpBackground = page.elements.find(
+              e => e.name === 'lbp-background'
+            )
+            lbpBackground.pluginProps.imgSrc = imgSrc
+            if (lbpBackground) {
+              return new Element({
+                ...element,
+                pluginProps: {
+                  imgSrc: lbpBackground.pluginProps.imgSrc
+                }
+              })
+            }
+          }
+          return element
+        })
+
+        return new Page({
+          ...page,
+          elements: updatedElements
+        })
+      })
+      console.log(modifiedArray)
+      console.log(modifiedArray, 'work pages change===')
+      this.updateWork(work)
+      this.$nextTick(() => {
+        this.$forceUpdate()
+      })
     },
     rules() {
       const str = this.password.split('')
@@ -256,10 +314,10 @@ export default {
 </script>
 <style lang="scss" scoped>
 .bk1 {
-  background-image: url('./img/bk1.png');
+  background-image: url('./img/bg1.png');
 }
 .bk2 {
-  background-image: url('./img/bk2.png');
+  background-image: url('./img/bg2.png');
 }
 .checkImg {
   background-image: url('./img/next.png');
@@ -275,6 +333,36 @@ export default {
   // position: fixed;
   background-size: 100% 100%;
   font-size: 12px;
+}
+.overlaySubject {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  backdrop-filter: blur(5px); /* Add backdrop blur */
+}
+.show {
+  opacity: 1;
+}
+.popup {
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  left: 50%;
+  z-index: 1001;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 3s ease-in-out;
+  text-align: center;
+  .error-msg {
+    top: 156px;
+    left: 93px;
+    position: absolute;
+    color: #fff;
+  }
 }
 .flex-v {
   display: flex;
@@ -320,14 +408,14 @@ export default {
 }
 .setup2 {
   width: 100%;
-  padding-top: 190px;
+  padding-top: 205px;
   .pass-text {
     color: rgba(212, 92, 57, 1);
   }
 }
 .top-v {
   width: 80%;
-  height: 81px;
+  height: 100px;
   // padding-top:10px;
 }
 .strength-bar {
@@ -345,7 +433,7 @@ export default {
 .content-v {
   width: 80%;
   padding-top: 5px;
-  min-height: 140px;
+  min-height: 144px;
   .con-len-v {
     display: flex;
     flex-direction: row;
@@ -394,6 +482,7 @@ export default {
 }
 .bottom-v {
   // margin-top:60px;
+  margin-top: 28px;
   width: 80%;
   height: 35px;
   display: flex;
@@ -415,10 +504,11 @@ export default {
   button {
     position: absolute;
     bottom: 113px;
+    z-index: 2000;
   }
   .error-msg {
     color: #fff;
-    padding-top: 185px;
+    padding-top: 2px;
   }
 }
 </style>

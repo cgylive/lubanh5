@@ -39,7 +39,7 @@
         console.log('Hello world');
     </script> -->
   <script>
-    window.__work = <% - JSON.stringify(work) %>
+    window.__work = <%- JSON.stringify(work) %>
   </script>
   <script src="/engine-assets/engine.umd.js"></script>
   <style>
@@ -155,9 +155,9 @@
 
     .cont,
     p {
-      top: 50%;
+      top: 51%;
       width: 200px;
-      left: 30px;
+      left: 63px;
       height: 10px;
       border-radius: 10px;
       position: relative;
@@ -297,19 +297,7 @@
     </div>
   </div>
   </div>
-  <script>
-      var progressBar = document.getElementById("progress");
-    setInterval("button_onclick()", 1);
-    var i = 0;
-    function button_onclick() {
-      if (i < 100) {
-        i++;
-        progressBar.value = i;
-        console.log(progressBar.value, 'progressBar.value');
-        // document.getElementById("section-span").innerHTML = i + "%";
-      }
-    }
-  </script>
+ 
   <script>
     !function () {
       console.log(window.__work);
@@ -354,17 +342,6 @@
 
       function doPCActions() {
         loadJS('https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js', drawQRcode);
-      }
-      var progressBar = document.getElementById("progress");
-      setInterval("button_onclick()", 1);
-      var i = 0;
-      function button_onclick() {
-        if (i < 100) {
-          i++;
-          progressBar.value = i;
-          console.log(progressBar.value, 'progressBar.value');
-          // document.getElementById("section-span").innerHTML = i + "%";
-        }
       }
       isMobile() ? doMobileActions() : doPCActions();
     }();

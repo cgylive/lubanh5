@@ -196,7 +196,8 @@ export default class Element {
         height: '100%'
       }
     }
-    console.log(this.pluginProps, 'this.pluginProps 000000')
+    // console.log(this.pluginProps, 'this.pluginProps 000000')
+    let expectArr = ['weak-password', 'lbp-image-judge', 'lbp-subject']
     const pluginProps = this.pluginProps
     const commonStyle = this.commonStyle
     const { margin, padding } = commonStyle
@@ -206,11 +207,14 @@ export default class Element {
       ...this.packPosData(padding, 'padding'),
       ...this.packBorderData()
     }
+    console.log(this.name, 'this.name')
     let style = {
       top: parsePx(pluginProps.top || commonStyle.top, isRem),
       left: parsePx(pluginProps.left || commonStyle.left, isRem),
       width: parsePx(pluginProps.width || commonStyle.width, isRem),
-      height: '100%',
+      height: expectArr.includes(this.name)
+        ? '100%'
+        : parsePx(pluginProps.height || commonStyle.height, isRem),
       fontSize: parsePx(pluginProps.fontSize || commonStyle.fontSize, isRem),
       ...boxModel,
       color: pluginProps.color || commonStyle.color,

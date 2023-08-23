@@ -22,6 +22,80 @@
   <meta content="black" name="apple-mobile-web-app-status-bar-style" />
   <meta content="telephone=no" name="format-detection" />
   <meta content="email=no" name="format-detection" />
+  <style>
+    /* 样式用于显示 loading 界面 */
+    /* #loading {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 24px;
+    } */
+    .loading-img {
+      width: 100%;
+      position: relative;
+      height: 100%;
+      background-size: contain;
+      background-position: 50% 50%;
+      background-origin: content-box;
+      background-image: url("http://hd.szyfd.xyz:1337/uploads/1_1_9f0a54385e.png");
+    }
+
+    .cont {
+      /* position: absolute; */
+      /* top: 50%; */
+      /* margin: 50px auto; */
+    }
+
+    .cont,
+    p {
+      top: 51%;
+      width: 200px;
+      left: 63px;
+      height: 10px;
+      border-radius: 10px;
+      position: relative;
+      background-color: #1b4698;
+    }
+
+    p {
+      height: 10px;
+      top: 0;
+      left: 0px;
+    }
+
+    #bar {
+      background-color: #04898d;
+      width: 0;
+      animation: prog 1 5s ease forwards;
+    }
+
+    /*进度提示数字展示*/
+    #txt {
+      position: absolute;
+      left: 200px;
+      width: 50px;
+      font: bold 18px/20px "";
+      color: #f00;
+    }
+
+    /*蓝色逐渐向右填充动画*/
+    @keyframes prog {
+      0% {
+        width: 0px;
+      }
+
+      100% {
+        width: 200px;
+      }
+    }
+  </style>
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vuex/dist/vuex.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" />
@@ -38,6 +112,12 @@
         var vConsole = new VConsole();
         console.log('Hello world');
     </script> -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        // 当页面加载完成后，隐藏 loading 界面
+        document.getElementById("loading").style.display = "none";
+      });
+    </script>
   <script>
     window.__work = <%- JSON.stringify(work) %>
   </script>
@@ -267,6 +347,12 @@
 </head>
 
 <body>
+  <!-- <div >Loading...</div> -->
+  <div class="loading-img" id="loading">
+    <div class="cont">
+      <p id="bar"></p>
+    </div>
+  </div>
   <div class="bg-wrapper"></div>
   <div class="preview-wrapper">
     <div class="phone-wrapper">
@@ -276,13 +362,7 @@
       </div>
       <div id="app">
         <engine />
-        <div class="loading-img">
-          <div class="cont">
-            <p id="bar">
-
-            </p>
-          </div>
-        </div>
+        
       </div>
     </div>
   </div>

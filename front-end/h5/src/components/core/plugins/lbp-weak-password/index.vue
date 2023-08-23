@@ -412,7 +412,7 @@ export default {
 }
 .setup2 {
   width: 100%;
-  padding-top: 240px;
+  padding-top: 217px;
   .pass-text {
     color: rgba(212, 92, 57, 1);
   }

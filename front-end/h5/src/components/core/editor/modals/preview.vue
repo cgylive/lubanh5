@@ -47,16 +47,6 @@ export default {
       if (!iframe) return
       const iframeWin = iframe.contentWindow
       iframeWin.postMessage(message, window.location.origin)
-    },
-    iframeContentLoaded() {
-      this.isShowLoading = false
-    },
-    addLoadEvent(iframe, callback) {
-      if (iframe.attachEvent) {
-        iframe.attachEvent('onload', callback)
-      } else {
-        iframe.onload = callback
-      }
     }
   },
   render(h) {
@@ -128,8 +118,14 @@ export default {
     )
   },
   mounted() {
-    const iframe = document.getElementById('iframe-for-preview')
-    this.addLoadEvent(iframe, this.iframeContentLoaded())
+    window.addEventListener('message', function(e) {
+      console.log(e, 'addEventListener message')
+      // alert('Value from iframe: ' + e)
+      if (e.data === 'Hello') {
+        this.isShowLoading = false
+        document.getElementById('loading').style.display = 'none'
+      }
+    })
   }
 }
 </script>

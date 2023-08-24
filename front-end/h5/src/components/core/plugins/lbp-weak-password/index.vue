@@ -354,7 +354,7 @@ export default {
 .popup {
   position: absolute;
   width: 100%;
-  top: 50%;
+  top: 45%;
   left: 50%;
   z-index: 1001;
   transform: translate(-50%, -50%);
@@ -412,7 +412,7 @@ export default {
 }
 .setup2 {
   width: 100%;
-  padding-top: 217px;
+  padding-top: 240px;
   .pass-text {
     color: rgba(212, 92, 57, 1);
   }

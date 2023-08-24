@@ -272,7 +272,7 @@ export default {
 .popup {
   position: absolute;
   width: 100%;
-  top: 50%;
+  top: 45%;
   left: 50%;
   z-index: 1001;
   transform: translate(-50%, -50%);

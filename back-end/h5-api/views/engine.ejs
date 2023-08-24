@@ -105,12 +105,6 @@
         var vConsole = new VConsole();
         console.log('Hello world');
     </script> -->
-    <script>
-      document.addEventListener("DOMContentLoaded", function() {
-        // 当页面加载完成后，隐藏 loading 界面
-        document.getElementById("loading").style.display = "none";
-      });
-    </script>
   <script>
     window.__work = <%- JSON.stringify(work) %>
   </script>
@@ -394,7 +388,11 @@
         updateViewport();
         var app = document.getElementById('app');
         document.body.innerHTML = '';
+        
         document.body.appendChild(app);
+        var valueToSend = "Hello";
+        window.parent.postMessage(valueToSend);
+        console.log(window.parent);
       }
 
       var loadJS = function (url, callback, location) {

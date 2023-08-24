@@ -334,7 +334,7 @@ export default {
   // display: flex;
   // align-items: center;
   box-sizing: border-box;
-  // position: fixed;
+  position: fixed;
   background-size: 100% 100%;
   font-size: 12px;
 }

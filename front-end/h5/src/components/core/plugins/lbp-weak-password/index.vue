@@ -1,5 +1,5 @@
 <template>
-  <div class="weak-password-view " :class="setup===1 ? 'bk1' : 'bk2'">
+  <div class="weak-password-view" :class="setup === 1 ? 'bk1' : 'bk2'">
     <div class="flex-v setup1" v-if="!isSubmit && setup === 1">
       <!-- <p>
           您在输入密码时，请注意关注如下基本要素：</br>
@@ -11,8 +11,8 @@
           3、密码中不要出现英文单词</br>
 
           4、密码中不要出现连续数字
-        </p>
-        <span>请输入你的密码</span> -->
+        </p> -->
+      <span>请输入你的密码</span>
       <input
         type="text"
         v-model="password"
@@ -29,7 +29,7 @@
         <div class="strength-bar">
           <div class="bar" :style="'width:' + score + '%;'"></div>
         </div>
-        <div style="color:rgba(212,92,57,1)">
+        <div style="color: rgba(212, 92, 57, 1)">
           {{ intensity }},{{ totalScore }}分
         </div>
       </div>
@@ -75,7 +75,7 @@
             密码还不够强,请再试一次吧！
           </div>
           <img
-            style="width:100%;height:400px"
+            style="width: 100%; height: 400px"
             id="popup-image"
             :src="src"
             alt=""
@@ -97,8 +97,8 @@ export default {
   extra: {
     defaultStyle: {
       width: 320,
-      height: 568
-    }
+      height: 568,
+    },
   },
   name: 'weak-password',
   props: {},
@@ -111,12 +111,12 @@ export default {
         '缺少大写字母、',
         '缺少小写字母、',
         '缺少数字、',
-        '缺少特殊字符，'
+        '缺少特殊字符，',
       ],
       src: require('./img/errorImg.png'),
       isSubmit: false,
       showTip: false,
-      score: 0
+      score: 0,
     }
   },
   computed: {
@@ -178,7 +178,7 @@ export default {
         }
       })
       return str
-    }
+    },
   },
   mounted() {
     // this.setSocre(0)
@@ -247,19 +247,19 @@ export default {
       const work = window.__work
       console.log(window.__work.height, 'window.__work.height')
       console.log(work.pages, 'work.pages')
-      const modifiedArray = work.pages.map(page => {
-        const updatedElements = page.elements.map(element => {
+      const modifiedArray = work.pages.map((page) => {
+        const updatedElements = page.elements.map((element) => {
           if (element.name === 'weak-password') {
             const lbpBackground = page.elements.find(
-              e => e.name === 'lbp-background'
+              (e) => e.name === 'lbp-background'
             )
             lbpBackground.pluginProps.imgSrc = imgSrc
             if (lbpBackground) {
               return new Element({
                 ...element,
                 pluginProps: {
-                  imgSrc: lbpBackground.pluginProps.imgSrc
-                }
+                  imgSrc: lbpBackground.pluginProps.imgSrc,
+                },
               })
             }
           }
@@ -268,7 +268,7 @@ export default {
 
         return new Page({
           ...page,
-          elements: updatedElements
+          elements: updatedElements,
         })
       })
       console.log(modifiedArray)
@@ -284,7 +284,7 @@ export default {
       let letter = 0 //小写字母
       let big = 0 //大写字母
       let special = 0 //特殊符合
-      str.forEach(el => {
+      str.forEach((el) => {
         if (/[0-9]/.test(el)) num++
         if (/[a-z]/i.test(el)) letter++
         if (el.match(/^.*[A-Z]+.*$/) != null) big++
@@ -312,13 +312,13 @@ export default {
       else if ((num && letter) || (num && big)) score += 2
 
       return score
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang="scss" scoped>
 .bk1 {
-  background-image: url('./img/bg1.png');
+  background-image: url('./img/bg11.png');
 }
 .bk2 {
   background-image: url('./img/bg2.png');
@@ -376,12 +376,12 @@ export default {
 }
 .setup1 {
   width: 100%;
-  padding-top: 334px;
+  padding-top: 364px;
   p {
     text-align: left;
   }
   input {
-    margin: 10px 0 0 0;
+    // margin: 10px 0 0 0;
     width: 122px;
     height: 23px;
     border-radius: 20px;

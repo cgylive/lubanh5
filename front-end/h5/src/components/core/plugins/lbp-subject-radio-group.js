@@ -147,7 +147,11 @@ export default {
     btnDisabled() {
       console.log(this.currentIndex)
       console.log(this.currentCheckboxIndex)
-      return this.currentIndex === -1 && !this.currentCheckboxIndex.length
+      return (
+        this.btnText === '提交' &&
+        this.currentIndex === -1 &&
+        !this.currentCheckboxIndex.length
+      )
     }
   },
   watch: {

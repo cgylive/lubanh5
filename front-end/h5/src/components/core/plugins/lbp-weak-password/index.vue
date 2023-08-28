@@ -1,5 +1,9 @@
 <template>
-  <div class="weak-password-view" :class="setup === 1 ? 'bk1' : 'bk2'">
+  <div
+    id="weakPassword"
+    class="weak-password-view"
+    :class="setup === 1 ? 'bk1' : 'bk2'"
+  >
     <div class="flex-v setup1" v-if="!isSubmit && setup === 1">
       <!-- <p>
           您在输入密码时，请注意关注如下基本要素：</br>
@@ -97,8 +101,8 @@ export default {
   extra: {
     defaultStyle: {
       width: 320,
-      height: 568,
-    },
+      height: 568
+    }
   },
   name: 'weak-password',
   props: {},
@@ -111,12 +115,13 @@ export default {
         '缺少大写字母、',
         '缺少小写字母、',
         '缺少数字、',
-        '缺少特殊字符，',
+        '缺少特殊字符，'
       ],
       src: require('./img/errorImg.png'),
       isSubmit: false,
       showTip: false,
       score: 0,
+      clientHeight: 0
     }
   },
   computed: {
@@ -178,9 +183,13 @@ export default {
         }
       })
       return str
-    },
+    }
   },
   mounted() {
+    this.clientHeight = document.getElementById('weakPassword').clientHeight
+
+    // 监听Android键盘弹起
+    this.listenKeybordAndroid()
     // this.setSocre(0)
     // this.setBackground(
     //   'http://hd.szyfd.xyz:1337/engine-assets/img/bk1.10713a03.png'
@@ -247,19 +256,19 @@ export default {
       const work = window.__work
       console.log(window.__work.height, 'window.__work.height')
       console.log(work.pages, 'work.pages')
-      const modifiedArray = work.pages.map((page) => {
-        const updatedElements = page.elements.map((element) => {
+      const modifiedArray = work.pages.map(page => {
+        const updatedElements = page.elements.map(element => {
           if (element.name === 'weak-password') {
             const lbpBackground = page.elements.find(
-              (e) => e.name === 'lbp-background'
+              e => e.name === 'lbp-background'
             )
             lbpBackground.pluginProps.imgSrc = imgSrc
             if (lbpBackground) {
               return new Element({
                 ...element,
                 pluginProps: {
-                  imgSrc: lbpBackground.pluginProps.imgSrc,
-                },
+                  imgSrc: lbpBackground.pluginProps.imgSrc
+                }
               })
             }
           }
@@ -268,7 +277,7 @@ export default {
 
         return new Page({
           ...page,
-          elements: updatedElements,
+          elements: updatedElements
         })
       })
       console.log(modifiedArray)
@@ -284,7 +293,7 @@ export default {
       let letter = 0 //小写字母
       let big = 0 //大写字母
       let special = 0 //特殊符合
-      str.forEach((el) => {
+      str.forEach(el => {
         if (/[0-9]/.test(el)) num++
         if (/[a-z]/i.test(el)) letter++
         if (el.match(/^.*[A-Z]+.*$/) != null) big++
@@ -313,7 +322,36 @@ export default {
 
       return score
     },
-  },
+    listenKeybordAndroid() {
+      const originHeight =
+        document.documentElement.clientHeight || document.body.clientHeight
+      window.onresize = function() {
+        // 键盘弹起与隐藏都会引起窗口的高度发生变化
+        const resizeHeight =
+          document.documentElement.clientHeight || document.body.clientHeight
+        if (resizeHeight < originHeight) {
+          // 当软键盘弹起，在此处操作
+          if (this.clientHeight) {
+            document.getElementById('weakPassword').style.height =
+              this.clientHeight + 'px'
+          }
+          console.log(
+            '弹出...',
+            document.getElementById('weakPassword').style.height,
+            document.body.clientHeight
+          )
+        } else {
+          // 当软键盘收起，在此处操作
+          document.getElementById('weakPassword').style.height = '100%'
+          console.log(
+            '收起...',
+            document.getElementById('weakPassword').style.height,
+            document.body.clientHeight
+          )
+        }
+      }
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>

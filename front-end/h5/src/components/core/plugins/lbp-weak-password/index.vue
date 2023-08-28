@@ -4,7 +4,7 @@
     class="weak-password-view"
     :class="setup === 1 ? 'bk1' : 'bk2'"
   >
-    <div class="flex-v setup1" v-if="!isSubmit && setup === 1">
+    <div id="setup1" class="flex-v setup1" v-if="!isSubmit && setup === 1">
       <!-- <p>
           您在输入密码时，请注意关注如下基本要素：</br>
                              </br>
@@ -25,7 +25,7 @@
       <div class="errer"><span v-show="showTip">密码不能为空</span></div>
       <button class="change-bg" @click="check">检测密码强度</button>
     </div>
-    <div class="flex-v setup2" v-else-if="!isSubmit && setup === 2">
+    <div id="setup2" class="flex-v setup2" v-else-if="!isSubmit && setup === 2">
       <div class="top-v">
         <div>
           <span class="pass-text">{{ password }}</span> 密码强壮度
@@ -121,7 +121,9 @@ export default {
       isSubmit: false,
       showTip: false,
       score: 0,
-      clientHeight: 0
+      clientHeight: 568,
+      setupOnePaddingNum: 345,
+      setupTwoPaddingNum: 235
     }
   },
   computed: {
@@ -186,10 +188,34 @@ export default {
     }
   },
   mounted() {
-    this.clientHeight = document.getElementById('weakPassword').clientHeight
+    this.clientHeight = null
+    this.clientHeight =
+      document.documentElement.clientHeight || document.body.clientHeight
+    localStorage.setItem('currentClientHeight', this.clientHeight)
+    console.log(this.clientHeight, '  this.clientHeight ====')
+    let setupOnePaddingNum = 345
+    let setupTwoPaddingNum = 235
+    if (this.clientHeight === 568) {
+      setupOnePaddingNum = 345
+    } else if (this.clientHeight > 568) {
+      setupOnePaddingNum = this.clientHeight - 568 + 345
+      setupTwoPaddingNum = this.clientHeight - 568 + 235
+    } else if (this.clientHeight < 568) {
+      setupOnePaddingNum = 345 - (568 - this.clientHeight)
+      setupTwoPaddingNum = 235 - (568 - this.clientHeight)
+    }
+    this.setupOnePaddingNum = setupOnePaddingNum
+    this.setupTwoPaddingNum = setupTwoPaddingNum
+    console.log(setupOnePaddingNum, 'setupOnePaddingNum')
+    console.log(setupTwoPaddingNum, 'setupTwoPaddingNum')
+    document.getElementById('setup1').style.paddingTop =
+      setupOnePaddingNum + 'px'
 
+    // this.clientHeight = active[0].style.height
     // 监听Android键盘弹起
-    this.listenKeybordAndroid()
+    setTimeout(() => {
+      this.listenKeybordAndroid()
+    })
     // this.setSocre(0)
     // this.setBackground(
     //   'http://hd.szyfd.xyz:1337/engine-assets/img/bk1.10713a03.png'
@@ -220,6 +246,10 @@ export default {
       this.checkResult = [big, letter, num, special]
       this.score = this.rules()
       this.setup++
+      this.$nextTick(() => {
+        document.getElementById('setup2').style.paddingTop =
+          this.setupTwoPaddingNum + 'px'
+      })
     },
     reCheck() {
       // this.setBackground(
@@ -229,6 +259,10 @@ export default {
       this.checkResult = []
       this.setup = 1
       this.isSubmit = false
+      this.$nextTick(() => {
+        document.getElementById('setup1').style.paddingTop =
+          this.setupOnePaddingNum + 'px'
+      })
     },
     submit() {
       this.isSubmit = true
@@ -323,18 +357,24 @@ export default {
       return score
     },
     listenKeybordAndroid() {
+      let currentClientHeight = localStorage.getItem('currentClientHeight')
       const originHeight =
         document.documentElement.clientHeight || document.body.clientHeight
       window.onresize = function() {
         // 键盘弹起与隐藏都会引起窗口的高度发生变化
         const resizeHeight =
           document.documentElement.clientHeight || document.body.clientHeight
+        console.log(resizeHeight, 'resizeHeight')
+        console.log(originHeight, 'originHeight')
         if (resizeHeight < originHeight) {
           // 当软键盘弹起，在此处操作
-          if (this.clientHeight) {
-            document.getElementById('weakPassword').style.height =
-              this.clientHeight + 'px'
-          }
+          console.log(currentClientHeight, 'currentClientHeight')
+          let transformNum = currentClientHeight - resizeHeight
+          document.getElementById('weakPassword').style.height =
+            currentClientHeight + 'px'
+          document.getElementById('weakPassword').style.transform =
+            'translateY(-' + transformNum + 'px)'
+          console.log(document.getElementById('weakPassword').style, ' style')
           console.log(
             '弹出...',
             document.getElementById('weakPassword').style.height,
@@ -343,6 +383,8 @@ export default {
         } else {
           // 当软键盘收起，在此处操作
           document.getElementById('weakPassword').style.height = '100%'
+          document.getElementById('weakPassword').style.transform =
+            'translateY(-' + 0 + 'px)'
           console.log(
             '收起...',
             document.getElementById('weakPassword').style.height,
@@ -368,11 +410,13 @@ export default {
   background-image: url('./img/8.png');
 }
 .weak-password-view {
-  padding: 0 20px;
+  height: 574px;
+  // padding: 0 20px;
   // display: flex;
   // align-items: center;
   box-sizing: border-box;
-  position: fixed;
+  position: absolute;
+  top: 0px;
   background-size: 100% 100%;
   font-size: 12px;
 }
@@ -414,7 +458,8 @@ export default {
 }
 .setup1 {
   width: 100%;
-  padding-top: 364px;
+  padding-top: 345px;
+  position: absolute;
   p {
     text-align: left;
   }
@@ -450,7 +495,7 @@ export default {
 }
 .setup2 {
   width: 100%;
-  padding-top: 240px;
+  padding-top: 235px;
   .pass-text {
     color: rgba(212, 92, 57, 1);
   }

@@ -123,7 +123,7 @@ export default {
       score: 0,
       clientHeight: 568,
       setupOnePaddingNum: 345,
-      setupTwoPaddingNum: 235
+      setupTwoPaddingNum: 215
     }
   },
   computed: {
@@ -194,15 +194,15 @@ export default {
     localStorage.setItem('currentClientHeight', this.clientHeight)
     console.log(this.clientHeight, '  this.clientHeight ====')
     let setupOnePaddingNum = 345
-    let setupTwoPaddingNum = 235
+    let setupTwoPaddingNum = 215
     if (this.clientHeight === 568) {
       setupOnePaddingNum = 345
     } else if (this.clientHeight > 568) {
-      setupOnePaddingNum = this.clientHeight - 568 + 345
-      setupTwoPaddingNum = this.clientHeight - 568 + 235
+      setupOnePaddingNum = (this.clientHeight - 568) / 2 + 345
+      setupTwoPaddingNum = (this.clientHeight - 568) / 2 + 215
     } else if (this.clientHeight < 568) {
       setupOnePaddingNum = 345 - (568 - this.clientHeight)
-      setupTwoPaddingNum = 235 - (568 - this.clientHeight)
+      setupTwoPaddingNum = 215 - (568 - this.clientHeight)
     }
     this.setupOnePaddingNum = setupOnePaddingNum
     this.setupTwoPaddingNum = setupTwoPaddingNum
@@ -495,7 +495,7 @@ export default {
 }
 .setup2 {
   width: 100%;
-  padding-top: 235px;
+  padding-top: 215px;
   .pass-text {
     color: rgba(212, 92, 57, 1);
   }
@@ -521,6 +521,8 @@ export default {
   width: 80%;
   padding-top: 5px;
   min-height: 144px;
+  padding-left: 20px;
+  padding-right: 20px;
   .con-len-v {
     display: flex;
     flex-direction: row;

@@ -277,7 +277,7 @@ export default {
   z-index: 1001;
   transform: translate(-50%, -50%);
   opacity: 0;
-  transition: opacity 3s ease-in-out;
+  transition: opacity 1s ease-in-out;
   text-align: center;
 
   .judge-error-msg {

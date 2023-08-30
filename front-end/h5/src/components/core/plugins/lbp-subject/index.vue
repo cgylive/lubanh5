@@ -38,6 +38,7 @@ import LbpFormRadioGroup from 'core/plugins/lbp-subject-radio-group'
 import { mapState, mapMutations, mapActions } from 'vuex'
 import Element from 'core/models/element'
 import Page from 'core/models/page'
+import Watermark from './watermark'
 // import LbpFormCheckboxGroup from 'core/plugins/lbp-form-checkbox-group'
 function getDefaultItems() {
   // defaultItems.slice(0)[0] === defaultItems.slice(0)[0] -> true
@@ -187,6 +188,29 @@ export default {
         this.$forceUpdate()
       })
     },
+    timestampToTime(times) {
+      let time = times[1]
+      let mdy = times[0]
+      mdy = mdy.split('/')
+      let month = parseInt(mdy[0])
+      let day = parseInt(mdy[1])
+      let year = parseInt(mdy[2])
+      return (
+        year + '-' + month + '-' + day + ' ' + time
+        // +
+        // '' +
+        // new Date().getSeconds() +
+        // '' +
+        // new Date().getMilliseconds()
+      )
+    },
+    setWatermark(value) {
+      let time = new Date()
+      let nowTime = this.timestampToTime(
+        time.toLocaleString('en-US', { hour12: false }).split(' ')
+      )
+      Watermark.set(nowTime)
+    },
     submit(e) {
       const { text, value } = e
       // let index = 0
@@ -213,6 +237,7 @@ export default {
             })
             if (this.totalscore >= 40) {
               this.src = require('./img/checkImg.png')
+              this.setWatermark()
             } else if (this.totalscore < 40 && this.totalscore > 0) {
               this.src = require('./img/errorImg.png')
             }

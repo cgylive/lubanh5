@@ -39,6 +39,7 @@ import { mapState, mapMutations, mapActions } from 'vuex'
 import Element from 'core/models/element'
 import Page from 'core/models/page'
 import Watermark from './watermark'
+import currentWork from '../../../../assets/currentWork.js'
 // import LbpFormCheckboxGroup from 'core/plugins/lbp-form-checkbox-group'
 function getDefaultItems() {
   // defaultItems.slice(0)[0] === defaultItems.slice(0)[0] -> true
@@ -154,13 +155,16 @@ export default {
   },
   created() {
     // this.setSocre(0)
+    this.fetchQuestionbanks().then(() => {
+      this.setSubject(this.pageIndex)
+    })
   },
   methods: {
     ...mapMutations('editor', ['setSocre', 'updateWork']),
     ...mapActions('editor', ['fetchQuestionbanks']),
     setSubject(index) {
       console.log('questionbanks', this.questionbanks)
-      const work = window.__work
+      const work = currentWork
       console.log(work.pages, 'work.pages')
       work.pages = work.pages.map(page => {
         page.elements = page.elements.map(element => {

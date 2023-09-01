@@ -22,6 +22,7 @@ import DataSource from 'core/models/data-source'
 import RenderPreview from 'core/editor/canvas/preview'
 import NodeWrapper from 'core/preview/node-wrapper.js'
 import store from 'core/store/index'
+import currentWork from './assets/currentWork.js'
 import { mapState, mapActions, mapMutations } from 'vuex'
 Vue.config.productionTip = true
 
@@ -33,19 +34,19 @@ const Engine = {
   },
   data() {
     return {
-      isLongPage: window.__work.page_mode === PAGE_MODE.LONG_PAGE,
-      works: window.__work
+      isLongPage: currentWork.page_mode === PAGE_MODE.LONG_PAGE,
+      works: currentWork
     }
   },
   methods: {
     ...mapActions('editor', ['fetchQuestionbanks', 'fetchImageText']),
     renderLongPage() {
-      if (!window.__work.pages.length) return
-      const work = window.__work
+      if (!currentWork.pages.length) return
+      const work = currentWork
       return this.renderPreview(work.pages[0].elements)
     },
     renderSwiperPage() {
-      const work = window.__work
+      const work = currentWork
       return (
         <div class="swiper-container">
           <div class="swiper-wrapper">
@@ -64,7 +65,7 @@ const Engine = {
     },
     renderPreview(pageElements = []) {
       // console.log(pageElements,'pageElements');
-      const height = this.isLongPage ? window.__work.height + 'px' : '100%'
+      const height = this.isLongPage ? currentWork.height + 'px' : '100%'
       const elements = pageElements.map(element => new Element(element))
       // src//core/editor/canvas/preview
       return <RenderPreview elements={elements} height={height} />
@@ -89,7 +90,7 @@ const Engine = {
     }
   },
   render(h) {
-    const work = window.__work
+    const work = currentWork
 
     // 预览模式 或者 已经发布 的页面可以正常渲染，否则提示用户暂未发布
     const query = new URLSearchParams(window.location.search)
@@ -114,7 +115,7 @@ const Engine = {
   // },
   created() {
     window.__activeIndex = 0
-    DataSource.dispatchRequest(window.__work)
+    DataSource.dispatchRequest(currentWork)
     this.fetchQuestionbanks()
     this.fetchImageText()
   }

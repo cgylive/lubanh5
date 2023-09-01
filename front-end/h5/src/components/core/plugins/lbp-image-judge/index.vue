@@ -121,6 +121,7 @@ import LbpButton from 'core/plugins/lbp-button'
 import commonProps from './commonProps'
 import Element from 'core/models/element'
 import Page from 'core/models/page'
+import currentWork from '../../../../assets/currentWork.js'
 import { mapMutations, mapState, mapActions } from 'vuex'
 export default {
   name: 'lbp-image-judge',
@@ -162,6 +163,9 @@ export default {
   },
   created() {
     // this.setSocre(0)
+    this.fetchImageText().then(() => {
+      this.setImageJudge(this.pageIndex)
+    })
   },
   methods: {
     ...mapMutations('editor', ['setSocre', 'fetchImageText']),
@@ -228,7 +232,7 @@ export default {
     },
     setImageJudge(idx) {
       const item = this.imagetext[idx]
-      const work = window.__work
+      const work = currentWork
       console.log('imagetext', this.imagetext, work)
       work.pages = work.pages.map(page => {
         page.elements = page.elements.map(element => {

@@ -343,6 +343,18 @@ export default {
             text={this.btnText}
             onClick={() => this.submit()}
           ></LbpButton>
+          {this.btnText === '全部通关' && (
+            <span
+              style={{
+                position: `absolute`,
+                bottom: `76px`,
+                zIndex: '2000',
+                color: '#fff'
+              }}
+            >
+              请截图保存此页面，完成通关盖章
+            </span>
+          )}
         </div>
       </div>
     )

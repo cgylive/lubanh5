@@ -149,7 +149,7 @@ export default {
     background-size: contain;
     background-position: 50% 50%;
     background-origin: content-box;
-    background-image: url('http://hd.szyfd.xyz:1337/uploads/1_1_9f0a54385e.png');
+    background-image: url('/uploads/1_1_9f0a54385e.png');
     z-index: 1000; /* 设置一个高的 z-index 值确保 loading 显示在最上层 */
   }
   .phone-wrapper {

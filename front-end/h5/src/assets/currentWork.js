@@ -17,7 +17,7 @@ let currentWork = {
             uuid: 'lbp-background_307b3bfc-87b2-a353-3c83-feb9c8c25583',
             imgSrc: '/uploads/2_ce69f50e9f.png',
             backgroundColor: 'rgba(255, 255, 255, 0.2)',
-            waterMarkText: '水印文字',
+            waterMarkText: '',
             waterMarkFontSize: 16,
             waterMarkRotate: 10,
             waterMarkColor: 'rgba(184, 184, 184, 0.2)'
@@ -213,7 +213,7 @@ let currentWork = {
             uuid: 'lbp-background_67702d75-005d-2d65-8317-6b6b36d3530f',
             imgSrc: '/uploads/3_1_c04ec53082.png',
             backgroundColor: 'rgba(255, 255, 255, 0.2)',
-            waterMarkText: '水印文字',
+            waterMarkText: '',
             waterMarkFontSize: 16,
             waterMarkRotate: 10,
             waterMarkColor: 'rgba(184, 184, 184, 0.2)'
@@ -409,7 +409,7 @@ let currentWork = {
             uuid: 'lbp-background_7a18a827-8218-d0a8-8dc1-709dd30fe642',
             imgSrc: '/uploads/4_1_40cdb02c99.png',
             backgroundColor: 'rgba(255, 255, 255, 0.2)',
-            waterMarkText: '水印文字',
+            waterMarkText: '',
             waterMarkFontSize: 16,
             waterMarkRotate: 10,
             waterMarkColor: 'rgba(184, 184, 184, 0.2)'
@@ -605,7 +605,7 @@ let currentWork = {
             uuid: 'lbp-background_db4a7c4b-f4dd-690c-f7f7-3bd67ceeca2f',
             imgSrc: '/uploads/14_1_166a5162d7.png',
             backgroundColor: 'rgba(255, 255, 255, 0.2)',
-            waterMarkText: '水印文字',
+            waterMarkText: '',
             waterMarkFontSize: 16,
             waterMarkRotate: 10,
             waterMarkColor: 'rgba(184, 184, 184, 0.2)'
@@ -807,7 +807,7 @@ let currentWork = {
             uuid: 'lbp-background_abfa6825-79b3-959f-3787-4a4411c128bd',
             imgSrc: '/uploads/9_1_2dadc7f5c1.png',
             backgroundColor: 'rgba(255, 255, 255, 0.2)',
-            waterMarkText: '水印文字',
+            waterMarkText: '',
             waterMarkFontSize: 16,
             waterMarkRotate: 10,
             waterMarkColor: 'rgba(184, 184, 184, 0.2)'
@@ -1003,7 +1003,7 @@ let currentWork = {
             uuid: 'lbp-background_74b220b3-6087-b115-288b-d2ab0cb5fb75',
             imgSrc: '',
             backgroundColor: 'rgba(255, 255, 255, 0.2)',
-            waterMarkText: '水印文字',
+            waterMarkText: '',
             waterMarkFontSize: 16,
             waterMarkRotate: 10,
             waterMarkColor: 'rgba(184, 184, 184, 0.2)'
@@ -1185,7 +1185,7 @@ let currentWork = {
             uuid: 'lbp-background_06c2aefc-0688-0150-3cc5-9aa175b45b2d',
             imgSrc: '/uploads/13_1_50790707c2.png',
             backgroundColor: 'rgba(255, 255, 255, 0.2)',
-            waterMarkText: '水印文字',
+            waterMarkText: '',
             waterMarkFontSize: 16,
             waterMarkRotate: 10,
             waterMarkColor: 'rgba(184, 184, 184, 0.2)'
@@ -1381,7 +1381,7 @@ let currentWork = {
             uuid: 'lbp-background_1bea7fcb-43d1-cc7c-0b0e-fdfba686317b',
             imgSrc: '/uploads/14_1_423aba5d06.png',
             backgroundColor: 'rgba(255, 255, 255, 0.2)',
-            waterMarkText: '水印文字',
+            waterMarkText: '',
             waterMarkFontSize: 16,
             waterMarkRotate: 10,
             waterMarkColor: 'rgba(184, 184, 184, 0.2)'
@@ -1585,7 +1585,7 @@ let currentWork = {
     //         uuid: 'lbp-background_307b3bfc-87b2-a353-3c83-feb9c8c25583',
     //         imgSrc: '/uploads/2_ce69f50e9f.png',
     //         backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    //         waterMarkText: '水印文字',
+    //         waterMarkText: '',
     //         waterMarkFontSize: 16,
     //         waterMarkRotate: 10,
     //         waterMarkColor: 'rgba(184, 184, 184, 0.2)'
